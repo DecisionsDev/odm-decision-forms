@@ -1,6 +1,10 @@
 # HTDS Playground
 
-![Build Status]([[BUILD_STATUS_URL]])
+[![Build][travis-image]][travis-url]
+[![Dev dependencies][dependencies-badge]][dependencies]
+[![NPM Downloads][downloads-image]][downloads-url]
+[![MIT][license-badge]][LICENSE]
+[![Node.js version][nodejs-badge]][nodejs]
 
 A React-based UI to init and run Hosted Transparent Decision Services
 
@@ -18,12 +22,6 @@ ODM Decision Server Rules.
 This allows anyone to easily test a Decision Service, without having to write a JSON payload manually.
 From this UI, you can trigger the rule service and get a human-readable representation of the output data returned by 
 the service.
-
-## Install
-
-```bash
-npm install -g odm-htds-playground
-```
 
 ## Quick Start
 
@@ -69,3 +67,12 @@ The source files found in this project are licensed under the [Apache License 2.
 
 # Notice
 © Copyright IBM Corporation 2017.
+
+[travis-image]: https://img.shields.io/travis/amelki/cms-json/master.svg?label=build
+[travis-url]: https://travis-ci.org/amelki/cms-json
+[license-badge]: https://img.shields.io/badge/license-MIT-blue.svg
+[license]: https://github.com/amelki/json-pretty-html/blob/master/LICENSE
+[nodejs-badge]: https://img.shields.io/badge/node->=%206.9-blue.svg
+[nodejs]: https://nodejs.org/dist/latest-v6.x/docs/api/
+[npm-badge]: https://img.shields.io/badge/npm->=%203.10.8-blue.svg
+[npm]: https://docs.npmjs.com/
