@@ -1,9 +1,7 @@
 # HTDS Playground
 
 [![Build][travis-image]][travis-url]
-[![Dev dependencies][dependencies-badge]][dependencies]
-[![NPM Downloads][downloads-image]][downloads-url]
-[![MIT][license-badge]][LICENSE]
+[![Apache 2.0][license-badge]][LICENSE]
 [![Node.js version][nodejs-badge]][nodejs]
 
 A React-based UI to init and run Hosted Transparent Decision Services
