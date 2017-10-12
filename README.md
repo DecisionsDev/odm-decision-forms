@@ -35,11 +35,8 @@ Then open your browser at:
 
 ## Install
 
-After you have cloned this repository, run
-
 ```bash
-cd odm-htds-playground 
-npm install
+npm install -g odm-htds-playground
 ```
 
 ## Usage
