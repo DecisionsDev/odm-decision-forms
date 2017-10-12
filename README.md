@@ -8,9 +8,8 @@ A React-based UI to init and run Hosted Transparent Decision Services
 
 This package works on top of [IBM Operational Decision Manager](http://www-03.ibm.com/software/products/en/odm). 
 It has been tested with [ODM 8.9.0](https://www-01.ibm.com/common/ssi/cgi-bin/ssialias?infotype=OC&subtype=NA&htmlfid=897/ENUS5725-B69&appname=totalstorage#description).
-
-It is also aimed at working with [ODM on Cloud](http://www-03.ibm.com/software/products/en/ibm-operational-decision-manager-on-cloud)
-as well as [Business Rules for Bluemix](https://console.bluemix.net/catalog/services/business-rules).
+<br>It is also aimed at working with [IBM ODM on Cloud](http://www-03.ibm.com/software/products/en/ibm-operational-decision-manager-on-cloud)
+as well as [IBM Business Rules for Bluemix](https://console.bluemix.net/catalog/services/business-rules).
 
 ## Features
 
