@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",        // path to output directory
+    "sourceMap": true,          // allow sourcemap support
+    "strict": true,
+    "strictNullChecks": true,   // enable strict null checks as a best practice
+    "noImplicitAny": false,
+    "noFallthroughCasesInSwitch": true,
+    "module": "es6",            // specifiy module code generation
+    "jsx": "react",             // use typescript to transpile jsx to js
+    "target": "es5",            // specify ECMAScript target version
+    "allowJs": true,             // allow a partial TypeScript and JavaScript codebase
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true
+    //    "lib": ["es2017", "dom"]
+  },
+  "awesomeTypescriptLoaderOptions": {
+    "useBabel": true,
+    "useCache": true,
+    "useTranspileModule": true
+  },
+  "include": [
+    "./app/", "./test", "."
+  ]
+}
