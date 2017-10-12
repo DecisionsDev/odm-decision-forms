@@ -16,7 +16,7 @@ as well as [Business Rules for Bluemix](https://console.bluemix.net/catalog/serv
 
 This package offers a simple web-based UI serving a form representing the input data of a given Decision Service stored in 
 ODM Decision Server Rules.
-This allows any human user to easily test a Decision Service, without having to write a JSON payload manually.
+This allows anyone to easily test a Decision Service, without having to write a JSON payload manually.
 From this UI, you can trigger the rule service and get a human-readable representation of the output data returned by 
 the service.
 
@@ -44,8 +44,6 @@ Then open your browser at:
 Usage: odm-htds-playground <RULESETPATH> {OPTIONS} {CONFIG}
 
 RULESETPATH of the Decisison Service to invoke. Eg: /MyRuleApp/1.0/MyRuleset/2.0
-
---env development --port 3000 --url https://brsv2-3ed79a06.eu-gb.bluemix.net/DecisionService --username resAdmin --password vbt0gh82utrn
 
 OPTIONS:
 
