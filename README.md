@@ -33,6 +33,15 @@ Then open your browser at:
 
     http://localhost:3000
 
+## Install
+
+After you have cloned this repository, run
+
+```bash
+cd odm-htds-playground 
+npm install
+```
+
 ## Usage
 
 ```
