@@ -66,10 +66,10 @@ The source files found in this project are licensed under the [Apache License 2.
 # Notice
 © Copyright IBM Corporation 2017.
 
-[travis-image]: https://img.shields.io/travis/amelki/cms-json/master.svg?label=build
-[travis-url]: https://travis-ci.org/amelki/cms-json
-[license-badge]: https://img.shields.io/badge/license-MIT-blue.svg
-[license]: https://github.com/amelki/json-pretty-html/blob/master/LICENSE
+[travis-image]: https://img.shields.io/travis/ODMDev/odm-htds-playground/master.svg?label=build
+[travis-url]: https://travis-ci.org/ODMDev/odm-htds-playground
+[license-badge]: https://img.shields.io/badge/license-Apache%202.0-blue.svg
+[license]: https://github.com/ODMDev/odm-htds-playground/blob/master/LICENSE
 [nodejs-badge]: https://img.shields.io/badge/node->=%206.9-blue.svg
 [nodejs]: https://nodejs.org/dist/latest-v6.x/docs/api/
 [npm-badge]: https://img.shields.io/badge/npm->=%203.10.8-blue.svg
