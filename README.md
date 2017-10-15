@@ -26,12 +26,16 @@ the service.
 Run the server
 
 ```bash
-odm-htds-playground <RULESETPATH>
+odm-htds-playground
 ```
 
 Then open your browser at:
 
-    http://localhost:3000
+    http://localhost:3000/<rulesetpath>
+
+Where &lt;rulesetpath&gt; represents the Decisison Service to invoke. 
+Eg: MyRuleApp/1.0/MyRuleset/2.0
+
 
 ## Install
 
@@ -42,9 +46,7 @@ npm install -g odm-htds-playground
 ## Usage
 
 ```
-Usage: odm-htds-playground <RULESETPATH> {OPTIONS} {CONFIG}
-
-RULESETPATH of the Decisison Service to invoke. Eg: /MyRuleApp/1.0/MyRuleset/2.0
+Usage: odm-htds-playground {OPTIONS} {CONFIG}
 
 OPTIONS:
 

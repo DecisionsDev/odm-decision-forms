@@ -25,8 +25,8 @@ export const receiveResult: ActionCreator<ReceiveResultAction> = (payload) : Rec
 
 export const execute = (payload) => {
 	return (dispatch: (a: ReceiveResultAction | DisplayErrorAction) => ReceiveResultAction, getState: () => State) => {
-//		alert('Payload: ' + JSON.stringify(payload));
-		axios.post('/execute', payload).then(res => {
+		const rulesetPath = getState().router.location.pathname.substr('/ruleapp'.length);
+		axios.post('/execute' + rulesetPath, { request: payload }).then(res => {
 			dispatch(receiveResult(res.data));
 		}).catch(err => {
 			dispatch(displayError("Error executing Rule Service", err.response.data, err.response.statusText));

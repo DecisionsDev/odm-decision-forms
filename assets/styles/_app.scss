@@ -1,97 +1,60 @@
 @import "variables";
 
-html {
-//  background-color: $colorDefaultBackground;
-}
-
-body {
-  font-family: $fontMain;
-//  color: $colorFontAlmostWhite;
-  font-size: 15px;
-}
-
-a {
-  color: $colorAnotherDark;
-}
-
-a:active {
-  outline: none
-}
-
-a.blue {
-  color: $colorPastelBlue;
-  text-decoration: underline
-}
-
-a.blue:hover {
-  text-decoration: none
-}
-
-a.white {
-  color: #e0e0e0;
-  text-decoration: none
-}
-
-a.white:hover {
-  color: white;
-}
-
-small {
-  font-size: 12px
-}
-
-hr {
-  border: none;
-  height: 1px;
-  margin: 20px 0;
-  background-color: $colorFontLightGray
-}
-
-#output button[type="submit"] {
-  display: none;
-}
-
-fieldset {
-  border: 1px solid #aaa;
-}
-
-button[type="submit"], .btn {
-  display: inline-block;
-  cursor: pointer;
-  vertical-align: middle;
-  *zoom: 1;
-  *display: inline;
-  padding: 10px 25px;
-  background-color: #fff;
-  font-size: 13px;
-  border: 1px solid #bbb;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
-  &:active {
-    background-color: #f4f4f4;
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-    box-shadow: none
+#input, #output {
+  float:left;
+  width: calc(50% - 40px);
+  margin-bottom: 10px;
+  h1 {
+    font-size: 28px;
   }
-  outline: none;
-  &:hover {
-    opacity: 0.9;
+  form {
+    border: 1px solid #7f7f7f;
+    border-radius: 10px;
+    padding: 20px;
+    button[type="submit"] {
+      i.fa {
+        margin-right: 10px;
+        font-size: 18px;
+      }
+    }
+    .form-group {
+      &.field-integer, &.field-number {
+        float: left;
+        min-width: calc(50% - 10px);
+        margin-right: 10px;
+      }
+      &.field-string, &.field-boolean, &.field-array, &.field-object {
+        clear: both;
+        min-width: 100%;
+      }
+    }
   }
-  color: white;
-  background-color: $colorPastelBlue;
-  border-radius: 4px;
-  box-sizing: border-box;
-  border: none;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
-}
-
-form button[type="submit"], .btn {
-  margin-top: 15px;
-  margin-bottom: 15px;
-  i.fa {
-    margin-right: 10px;
-    font-size: 18px;
+  &#output {
+    [type="submit"] {
+      display: none;
+    }
+  }
+  &#input {
+    margin-right: 20px;
+    margin-left: 20px;
+  }
+  &#output {
+    margin-left: 20px;
+    margin-right: 20px;
+    form {
+      background-color: #f3f3f3;
+      .array-item .col-xs-9 {
+        width: 100%;
+      }
+      .array-item-toolbox {
+        display: none;
+      }
+      .array-item-add {
+        display: none;
+      }
+      & > .form-group {
+        border-bottom: 1px solid #aaa;
+      }
+    }
   }
 }

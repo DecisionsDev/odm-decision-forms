@@ -5,11 +5,12 @@ export enum Type {
 	TString = "string",
 	TArray = "array",
 	TNumber = "number",
+	TInteger = "integer",
 	TBoolean = "boolean"
 }
 
 export enum Format {
-	Html = "html", Markdown = "markdown", TextArea = "textarea", Double = "double"
+	Html = "html", Markdown = "markdown", TextArea = "textarea", Double = "double", Int32 = "int32"
 }
 
 export type SchemaProperties = { [s: string]: SchemaElement | SchemaElementRef; };

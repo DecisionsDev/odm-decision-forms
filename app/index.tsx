@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from 'react-dom'
+
 var ES6Promise = require("es6-promise");
 ES6Promise.polyfill();
 var axios = require("axios");
@@ -12,97 +13,58 @@ import {State} from "./state";
 import {errorReducer, resultReducer, schemaReducer} from "./reducers";
 import {Provider} from "react-redux";
 import App from './components/app';
-import thunkMiddleware from 'redux-thunk';
+import Error from './components/error';
+
 var Promise = require('bluebird');
+import loadSwagger from './swagger';
 //import 'babel-polyfill';
 //require('eventsource-polyfill');
+import thunkMiddleware from 'redux-thunk';
+import {ConnectedRouter, routerReducer, routerMiddleware, RouterState} from 'react-router-redux'
+import createHistory from 'history/createBrowserHistory';
 
-Promise.all([axios.get(`/swagger.json`), axios.get(`/data.json`)]).then(values => {
-	const swagger = values[0].data;
-	document.title = swagger.info.title.substr(0, swagger.info.title.length - ' API'.length);
-	const requestSchema = {
-		$schema: "http://json-schema.org/draft-06/schema#",
-		definitions: swagger.definitions,
-		type: Type.TObject,
-		properties: {
-			request: {
-				$ref: "#/definitions/Request"
-			}
-		}
-	} as RootSchemaElement;
-	normalizeSchema(requestSchema);
-	const responseSchema = {
-		$schema: "http://json-schema.org/draft-06/schema#",
-		definitions: swagger.definitions,
-		type: Type.TObject,
-		properties: {
-			response: {
-				$ref: "#/definitions/Response"
-			}
-		}
-	} as RootSchemaElement;
-	normalizeSchema(requestSchema);
-	normalizeSchema(responseSchema);
-	const data = values[1].data;
+const history = createHistory();
+const historyMiddleware = routerMiddleware(history);
 
-	const initialState: State = {
-		requestSchema: requestSchema,
-		responseSchema: responseSchema,
-		result: null,
-		error: null
-	};
-	const store = createStore<State>(combineReducers({
-			requestSchema: schemaReducer,
-			responseSchema: schemaReducer,
-			result: resultReducer,
-			error: errorReducer
-		}),
-		initialState,
-		applyMiddleware(thunkMiddleware)
-	);
+if (history && (history as any).location && ((history as any).location as any).pathname) {
+	const rulesetPath = ((history as any).location as any).pathname!;
+//const rulesetPath = '/miniloanv2/1.0/miniloan_rulesRuleset/1.0';
 
-	ReactDOM.render(
-		<Provider store={store}>
-			<App/>
-		</Provider>
-		,
-		document.getElementById('root')
-	);
-}).catch(error => {
-	console.log(error);
-	ReactDOM.render(
-		<div>
-			<h3>Error reading Swagger file</h3>
-			<div><b>Status:</b> {error.response.statusText.toUpperCase()}</div>
-			<div><b>Message:</b> {error.response.data}</div>
-		</div>
-		,
-		document.getElementById('root')
-	);
-});
+	loadSwagger(rulesetPath.substr('/ruleapp'.length))
+		.then(({request, response}) => {
+			const initialState: State = {
+				requestSchema: request,
+				responseSchema: response,
+				result: null,
+				error: null,
+				router: {}
+			};
+			const store = createStore<State>(combineReducers({
+					requestSchema: schemaReducer,
+					responseSchema: schemaReducer,
+					result: resultReducer,
+					error: errorReducer,
+					router: routerReducer
+				}),
+				initialState,
+				applyMiddleware(historyMiddleware, thunkMiddleware)
+			);
 
-const valuesPolyfill = function values (object) {
-	return Object.keys(object).map(key => object[key]);
-};
+			ReactDOM.render(
+				<Provider store={store}>
+					<ConnectedRouter history={history}>
+						<App/>
+					</ConnectedRouter>
+				</Provider>
+				,
+				document.getElementById('root')
+			);
+		})
+		.catch(error => {
+			console.log(error);
+			ReactDOM.render(<Error error={error}/>, document.getElementById('root'));
+		});
+} else {
+	ReactDOM.render(<div>No data yet</div>, document.getElementById('root'));
 
-
-const normalizeSchema = (schema: RootSchemaElement): void => {
-	if (schema.properties) {
-		valuesPolyfill(schema.properties).filter(s => !(s as any).$ref).map(s => _normalizeSchema(s as SchemaElement));
-	}
-	if (schema.definitions) {
-		delete (schema.definitions.Request as SchemaElement)!.properties!['__DecisionID__'];
-		delete (schema.definitions.Response as SchemaElement)!.properties!['__DecisionID__'];
-		valuesPolyfill(schema.definitions).filter(s => !(s as any).$ref).map(s => _normalizeSchema(s as SchemaElement));
-	}
-};
-
-const _normalizeSchema = (schema: SchemaElement): void => {
-	// The form generator does not seem to support this case...
-	if (schema.type === Type.TNumber && schema.format === Format.Double) {
-		delete schema.format;
-	}
-	if (schema.properties) {
-		valuesPolyfill(schema.properties).filter(s => !(s as any).$ref).map(s => _normalizeSchema(s as SchemaElement));
-	}
-};
+}

@@ -8,7 +8,9 @@ const cors = require('cors');
 const axios = require('axios');
 
 function sendErrorMessage(message, error, res) {
-	if (error.message) {
+	if (error.response && error.response.data && error.response.data.message) {
+		message = message + ": " + error.response.data.message;
+	} else if (error.message) {
 		message = message + ": " + error.message;
 	}
 	if (error.response && error.response.status) {
@@ -28,7 +30,6 @@ function sendErrorMessage(message, error, res) {
 module.exports.run = function (config, options) {
 	const port = options.port || 3000;
 	const isDeveloping = options.env === 'development';
-	const swaggerUrl = config.url + '/rest/v1' + config.path + '/OPENAPI?format=JSON';
 	const resConfig = {
 		auth: {
 			username: config.username,
@@ -38,8 +39,10 @@ module.exports.run = function (config, options) {
 	const app = express();
 	app.use(bodyParser.json());
 	app.use(cors());
-	app.options('/swagger.json', cors());
-	app.get('/swagger.json', function (req, res) {
+	app.options('/swagger/*', cors());
+	app.get('/swagger/*', function (req, res) {
+		const rulesetpath = req.params[0];
+		const swaggerUrl = config.url + '/rest/v1/' + rulesetpath + '/OPENAPI?format=JSON';
 		axios.get(swaggerUrl, resConfig)
 			.then(function (resp) {
 				res.send(resp.data);
@@ -48,9 +51,10 @@ module.exports.run = function (config, options) {
 				sendErrorMessage('Error reading swagger', error, res);
 			});
 	});
-	app.post('/execute', function (req, res) {
+	app.post('/execute/*', function (req, res) {
+		const rulesetpath = req.params[0];
 		var payload = req.body.request;
-		const resUrl = config.url + '/rest' + config.path;
+		const resUrl = config.url + '/rest/' + rulesetpath;
 		axios.post(resUrl, payload, resConfig)
 			.then(function (response) {
 				res.send(response.data);
