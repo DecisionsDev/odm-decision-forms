@@ -10,11 +10,16 @@ export interface Error {
 	status?: string;
 }
 
+export interface ResState {
+	paths: string[];
+}
+
 export interface State {
-	requestSchema: RootSchemaElement;
-	responseSchema: RootSchemaElement;
+	requestSchema: RootSchemaElement | null;
+	responseSchema: RootSchemaElement | null;
 	result: object | null;
 	error: Error | null;
 	router: RouterState;
+	res: ResState;
 }
 

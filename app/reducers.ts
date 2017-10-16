@@ -1,6 +1,7 @@
 
 import {ActionTypes, DefaultAction, DisplayErrorAction, ReceiveResultAction} from "./actions";
 import {RootSchemaElement, Type} from "./schema";
+import {ResState} from "./state";
 
 export const schemaReducer = (state : RootSchemaElement = { $schema: '',  type: Type.TObject },
 															action : DefaultAction) => {
@@ -24,4 +25,8 @@ export const errorReducer = (state : any = null, action : DisplayErrorAction | D
 		default:
 			return state;
 	}
+};
+
+export const resReducer = (state : ResState = { paths: [] }, action : DefaultAction) => {
+	return state;
 };

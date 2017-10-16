@@ -37,6 +37,11 @@
   &#input {
     margin-right: 20px;
     margin-left: 20px;
+    form {
+      & > .form-group {
+        border-bottom: 1px solid #aaa;
+      }
+    }
   }
   &#output {
     margin-left: 20px;
@@ -51,9 +56,6 @@
       }
       .array-item-add {
         display: none;
-      }
-      & > .form-group {
-        border-bottom: 1px solid #aaa;
       }
     }
   }

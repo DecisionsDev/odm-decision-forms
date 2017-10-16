@@ -1,3 +1,5 @@
+import {ResState} from "./state";
+
 var axios = require("axios");
 var Promise = require('bluebird');
 import {
@@ -5,7 +7,7 @@ import {
 	Type
 } from "./schema";
 
-const loadSwagger = (rulesetPath: string): Promise<any> => {
+export const loadSwagger = (rulesetPath: string): Promise<any> => {
 	return axios.get(`/swagger` + rulesetPath).then(res => {
 		const swagger = res.data;
 		document.title = swagger.info.title.substr(0, swagger.info.title.length - ' API'.length);
@@ -52,4 +54,8 @@ const _normalizeSchema = (schema: SchemaElement): void => {
 	}
 };
 
-export default loadSwagger;
+export const loadRulesetPaths = (): Promise<ResState> => {
+	return axios.get(`/rulesets`).then(res => {
+		return Promise.resolve({ paths: res.data.map(r => r.id) });
+	});
+};

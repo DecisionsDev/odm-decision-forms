@@ -9,14 +9,14 @@ import {
 	Type
 } from "./schema";
 import {applyMiddleware, combineReducers, createStore} from "redux";
-import {State} from "./state";
-import {errorReducer, resultReducer, schemaReducer} from "./reducers";
+import {ResState, State} from "./state";
+import {errorReducer, resReducer, resultReducer, schemaReducer} from "./reducers";
 import {Provider} from "react-redux";
 import App from './components/app';
 import Error from './components/error';
 
 var Promise = require('bluebird');
-import loadSwagger from './swagger';
+import {loadRulesetPaths, loadSwagger} from './resapi';
 //import 'babel-polyfill';
 //require('eventsource-polyfill');
 import thunkMiddleware from 'redux-thunk';
@@ -26,45 +26,73 @@ import createHistory from 'history/createBrowserHistory';
 const history = createHistory();
 const historyMiddleware = routerMiddleware(history);
 
-if (history && (history as any).location && ((history as any).location as any).pathname) {
-	const rulesetPath = ((history as any).location as any).pathname!;
-//const rulesetPath = '/miniloanv2/1.0/miniloan_rulesRuleset/1.0';
-
-	loadSwagger(rulesetPath.substr('/ruleapp'.length))
-		.then(({request, response}) => {
-			const initialState: State = {
-				requestSchema: request,
-				responseSchema: response,
-				result: null,
-				error: null,
-				router: {}
-			};
-			const store = createStore<State>(combineReducers({
-					requestSchema: schemaReducer,
-					responseSchema: schemaReducer,
-					result: resultReducer,
-					error: errorReducer,
-					router: routerReducer
-				}),
-				initialState,
-				applyMiddleware(historyMiddleware, thunkMiddleware)
-			);
-
-			ReactDOM.render(
-				<Provider store={store}>
-					<ConnectedRouter history={history}>
-						<App/>
-					</ConnectedRouter>
-				</Provider>
-				,
-				document.getElementById('root')
-			);
-		})
-		.catch(error => {
-			console.log(error);
-			ReactDOM.render(<Error error={error}/>, document.getElementById('root'));
-		});
-} else {
-	ReactDOM.render(<div>No data yet</div>, document.getElementById('root'));
-
-}
+loadRulesetPaths()
+	.then((resState: ResState) => {
+		if (history && (history as any).location && ((history as any).location as any).pathname) {
+			const rulesetPath = ((history as any).location as any).pathname!;
+			if (rulesetPath.indexOf('/ruleapp') == 0) {
+				return loadSwagger(rulesetPath.substr('/ruleapp'.length))
+					.then(({request, response}) => {
+						const initialState: State = {
+							requestSchema: request,
+							responseSchema: response,
+							result: null,
+							res: resState,
+							error: null,
+							router: {}
+						};
+						const store = createStore<State>(combineReducers({
+								requestSchema: schemaReducer,
+								responseSchema: schemaReducer,
+								result: resultReducer,
+								res: resReducer,
+								error: errorReducer,
+								router: routerReducer
+							}),
+							initialState,
+							applyMiddleware(historyMiddleware, thunkMiddleware)
+						);
+						ReactDOM.render(
+							<Provider store={store}>
+								<ConnectedRouter history={history}>
+									<App/>
+								</ConnectedRouter>
+							</Provider>
+							,
+							document.getElementById('root')
+						);
+					});
+			}
+		}
+		const initialState: State = {
+			requestSchema: null,
+			responseSchema: null,
+			result: null,
+			res: resState,
+			error: null,
+			router: {}
+		};
+		const store = createStore<State>(combineReducers({
+				requestSchema: schemaReducer,
+				responseSchema: schemaReducer,
+				result: resultReducer,
+				error: errorReducer,
+				res: resReducer,
+				router: routerReducer
+			}),
+			initialState,
+			applyMiddleware(historyMiddleware, thunkMiddleware)
+		);
+		ReactDOM.render(
+			<Provider store={store}>
+				<ConnectedRouter history={history}>
+					<App/>
+				</ConnectedRouter>
+			</Provider>
+			,
+			document.getElementById('root')
+		);
+	})
+	.catch(err => {
+		ReactDOM.render(<Error error={err}/>, document.getElementById('root'));
+	});

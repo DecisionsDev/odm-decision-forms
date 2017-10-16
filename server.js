@@ -51,6 +51,16 @@ module.exports.run = function (config, options) {
 				sendErrorMessage('Error reading swagger', error, res);
 			});
 	});
+	app.get('/rulesets', function (req, res) {
+		const rulesetsUrl = config.resUrl + '/api/v1/rulesets?accept=application%2Fjson';
+		axios.get(rulesetsUrl, resConfig)
+			.then(function (resp) {
+				res.send(resp.data);
+			})
+			.catch(function (error) {
+				sendErrorMessage('Error reading swagger', error, res);
+			});
+	});
 	app.post('/execute/*', function (req, res) {
 		const rulesetpath = req.params[0];
 		var payload = req.body.request;
@@ -63,7 +73,6 @@ module.exports.run = function (config, options) {
 				sendErrorMessage('Error executing Decision Service', error, res);
 			});
 	});
-
 	if (isDeveloping) {
 		// Include webpack only if needed, so that it is not loaded from modules than only need the production version
 		var withWebpack = require('./with-webpack');
@@ -74,12 +83,10 @@ module.exports.run = function (config, options) {
 			res.sendFile(path.join(__dirname, 'dist/index.html'));
 		});
 	}
-
 	app.listen(port, '0.0.0.0', function onStart(err) {
 		if (err) {
 			console.log(err);
 		}
 		console.info('==> 🌎 CMS Server Listening on port %s. Open up http://0.0.0.0:%s/ in your browser.', port, port);
 	});
-
 };

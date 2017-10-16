@@ -76,8 +76,8 @@ class Forms extends React.Component<DProps, any> {
 
 const mapStateToProps = (state: State): Props => {
 	return {
-		requestSchema: state.requestSchema,
-		responseSchema: state.responseSchema,
+		requestSchema: state.requestSchema!,
+		responseSchema: state.responseSchema!,
 		result: state.result ? state.result : null,
 		error: state.error,
 		router: state.router
