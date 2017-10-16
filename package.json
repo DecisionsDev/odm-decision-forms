@@ -1,6 +1,6 @@
 {
   "name": "odm-htds-playground",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "author": "Antoine Melki",
   "license": "IBM",
   "description": "A React-based UI to init and run Hosted Transparent Decision Services",
