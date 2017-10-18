@@ -18,7 +18,6 @@ import Error from './components/error';
 var Promise = require('bluebird');
 import {loadRulesetPaths, loadSwagger} from './resapi';
 //import 'babel-polyfill';
-//require('eventsource-polyfill');
 import thunkMiddleware from 'redux-thunk';
 import {ConnectedRouter, routerReducer, routerMiddleware, RouterState} from 'react-router-redux'
 import createHistory from 'history/createBrowserHistory';

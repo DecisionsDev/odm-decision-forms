@@ -9,6 +9,7 @@ module.exports = {
 	devtool: 'source-map',
 	entry: {
 		app: [
+			'event-source-polyfill',
 			"babel-polyfill",
 			path.join(__dirname, 'app/index.tsx'),
 			hotMiddlewareScript

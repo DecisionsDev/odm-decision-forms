@@ -42,7 +42,7 @@ class Forms extends React.Component<DProps, any> {
 			"ui:readonly": true
 		};
 		return <div>
-			<div id="input">
+			<div id="input" className="form-container">
 				<h1>Request</h1>
 				<Form schema={requestSchema}
 							uiSchema={inuiSchema}
@@ -58,7 +58,7 @@ class Forms extends React.Component<DProps, any> {
 			</div>
 			{
 				result &&
-				<div id="output">
+				<div id="output" className="form-container">
 					<h1>Response</h1>
 					<Form uiSchema={outuiSchema} formData={result} schema={responseSchema}/>
 				</div>
