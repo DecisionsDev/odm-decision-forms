@@ -26,27 +26,23 @@ the service.
 Run the server
 
 ```bash
-odm-htds-playground
+odm-decision-forms
 ```
 
 Then open your browser at:
 
-    http://localhost:3000/<rulesetpath>
-
-Where &lt;rulesetpath&gt; represents the Decisison Service to invoke. 
-Eg: MyRuleApp/1.0/MyRuleset/2.0
-
+    http://localhost:3000
 
 ## Install
 
 ```bash
-npm install -g odm-htds-playground
+npm install -g odm-decision-forms
 ```
 
 ## Usage
 
 ```
-Usage: odm-htds-playground {OPTIONS} {CONFIG}
+Usage: odm-decision-forms {OPTIONS} {CONFIG}
 
 OPTIONS:
 
@@ -74,10 +70,10 @@ The source files found in this project are licensed under the [Apache License 2.
 # Notice
 © Copyright IBM Corporation 2017.
 
-[travis-image]: https://img.shields.io/travis/ODMDev/odm-htds-playground/master.svg?label=build
-[travis-url]: https://travis-ci.org/ODMDev/odm-htds-playground
+[travis-image]: https://img.shields.io/travis/ODMDev/odm-decision-forms/master.svg?label=build
+[travis-url]: https://travis-ci.org/ODMDev/odm-decision-forms
 [license-badge]: https://img.shields.io/badge/license-Apache%202.0-blue.svg
-[license]: https://github.com/ODMDev/odm-htds-playground/blob/master/LICENSE
+[license]: https://github.com/ODMDev/odm-decision-forms/blob/master/LICENSE
 [nodejs-badge]: https://img.shields.io/badge/node->=%206.9-blue.svg
 [nodejs]: https://nodejs.org/dist/latest-v6.x/docs/api/
 [npm-badge]: https://img.shields.io/badge/npm->=%203.10.8-blue.svg
