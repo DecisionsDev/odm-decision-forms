@@ -2,7 +2,7 @@
   "name": "odm-decision-forms",
   "version": "0.1.0",
   "author": "Antoine Melki",
-  "license": "IBM",
+  "license": "Apache-2.0",
   "description": "A React-based UI to init and run Hosted Transparent Decision Services",
   "repository": {
     "type": "git",
