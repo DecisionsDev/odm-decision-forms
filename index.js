@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const program = require('commander');
 const server = require('./server');
 //const process = require('process');

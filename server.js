@@ -87,6 +87,6 @@ module.exports.run = function (config, options) {
 		if (err) {
 			console.log(err);
 		}
-		console.info('==> 🌎 CMS Server Listening on port %s. Open up http://0.0.0.0:%s/ in your browser.', port, port);
+		console.info('==> 🌎 Server Listening on port %s. Open up http://0.0.0.0:%s/ in your browser.', port, port);
 	});
 };

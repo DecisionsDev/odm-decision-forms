@@ -15,7 +15,7 @@
     "node": ">= 8.0.0"
   },
   "bin": {
-    "odm-decision-forms": "./server.js"
+    "odm-decision-forms": "./index.js"
   },
   "main": "index.js",
   "keywords": [
