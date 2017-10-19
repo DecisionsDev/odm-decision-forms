@@ -42,7 +42,7 @@ module.exports.run = function (config, options) {
 	app.options('/swagger/*', cors());
 	app.get('/swagger/*', function (req, res) {
 		const rulesetpath = req.params[0];
-		const swaggerUrl = config.url + '/rest/v1/' + rulesetpath + '/OPENAPI?format=JSON';
+		const swaggerUrl = config.decisionservice + '/rest/v1/' + rulesetpath + '/OPENAPI?format=JSON';
 		axios.get(swaggerUrl, resConfig)
 			.then(function (resp) {
 				res.send(resp.data);
@@ -52,7 +52,7 @@ module.exports.run = function (config, options) {
 			});
 	});
 	app.get('/rulesets', function (req, res) {
-		const rulesetsUrl = config.resUrl + '/api/v1/rulesets?accept=application%2Fjson';
+		const rulesetsUrl = config.console + '/api/v1/rulesets?accept=application%2Fjson';
 		axios.get(rulesetsUrl, resConfig)
 			.then(function (resp) {
 				res.send(resp.data);
@@ -64,7 +64,7 @@ module.exports.run = function (config, options) {
 	app.post('/execute/*', function (req, res) {
 		const rulesetpath = req.params[0];
 		var payload = req.body.request;
-		const resUrl = config.url + '/rest/' + rulesetpath;
+		const resUrl = config.decisionservice + '/rest/' + rulesetpath;
 		axios.post(resUrl, payload, resConfig)
 			.then(function (response) {
 				res.send(response.data);

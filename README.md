@@ -52,11 +52,13 @@ OPTIONS:
 
 CONFIG:
 
-    --url           Url of the Decision Service Runtime. Default is http://localhost:9080/DecisionService
+    --decisionservice   Url of the Decision Service Runtime. Default is http://localhost:9080/DecisionService
 
-    --username      Username to execute the Decision Service. Default is 'resAdmin'.
+    --console           Url of the RES console. Default is http://localhost:9080/res
 
-    --password      Username's password. Default is 'resAdmin'.
+    --username          Username to execute the Decision Service. Default is 'resAdmin'.
+
+    --password          Username's password. Default is 'resAdmin'.
 
 ```
 

@@ -7,8 +7,8 @@ const server = require('./server');
 program
 	.version('0.0.1')
 	.option('--port [port]', 'Server port. Default is 3000')
-	.option('--url [url]', 'URL of the Decision Service Runtime to invoke. Default is http://localhost:8080/DecisionService')
-	.option('--resUrl [resUrl]', 'URL of the RES console. Default is http://localhost:8080/res')
+	.option('--decisionservice [decisionservice]', 'URL of the Decision Service Runtime to invoke. Default is http://localhost:8080/DecisionService')
+	.option('--console [console]', 'URL of the RES console. Default is http://localhost:8080/res')
 	.option('--path [path]', 'Path of the ruleset to invoke. Eg: /myapp/2.0/myruleset/3.0')
 	.option('--username [username]', 'User name to use to invoke the Decision Service')
 	.option('--password [password]', 'Password to use to invoke the Deicsion Service')
@@ -17,8 +17,8 @@ program
 
 const port = program.port || 3000;
 const env = program.env || 'production';
-const url = program.url || 'http://localhost:8080/DecisionService';
-const resUrl = program.resUrl || 'http://localhost:8080/res';
+const decisionservice = program.decisionservice || program.url || 'http://localhost:8080/DecisionService';
+const console = program.console || program.resUrl || 'http://localhost:8080/res';
 const username = program.username || 'resAdmin';
 const password = program.password || 'resAdmin';
-server.run({ url: url, resUrl: resUrl, password: password, username: username }, { port: port, env: env});
+server.run({ decisionservice: decisionservice, console: console, password: password, username: username }, { port: port, env: env});
