@@ -46,7 +46,7 @@ const _normalizeSchema = (schema: SchemaElement): void => {
 	// The form generator does not seem to support these cases...
 	if (schema.type === Type.TNumber && schema.format === Format.Double) {
 		delete schema.format;
-	} else if (schema.type === Type.TInteger && schema.format === Format.Int32) {
+	} else if (schema.type === Type.TInteger && (schema.format === Format.Int32 || schema.format === Format.Int64)) {
 		delete schema.format;
 	}
 	if (schema.properties) {

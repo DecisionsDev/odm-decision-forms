@@ -10,7 +10,7 @@ export enum Type {
 }
 
 export enum Format {
-	Html = "html", Markdown = "markdown", TextArea = "textarea", Double = "double", Int32 = "int32"
+	Html = "html", Markdown = "markdown", TextArea = "textarea", Double = "double", Int32 = "int32", Int64 = "int64"
 }
 
 export type SchemaProperties = { [s: string]: SchemaElement | SchemaElementRef; };
