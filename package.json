@@ -15,7 +15,7 @@
     "node": ">= 8.0.0"
   },
   "bin": {
-    "odm-decision-forms": "./index.js"
+    "odm-decision-forms": "./index.js --env development"
   },
   "main": "index.js",
   "keywords": [
