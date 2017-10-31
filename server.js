@@ -29,7 +29,7 @@ function sendErrorMessage(message, error, res) {
  */
 module.exports.run = function (config, options) {
 	const port = options.port || 3000;
-	const isDeveloping = options.env !== 'production';
+	const isDeveloping = options.env === 'development';
 	const resConfig = {
 		auth: {
 			username: config.username,
