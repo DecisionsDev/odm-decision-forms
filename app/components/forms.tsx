@@ -6,6 +6,7 @@ import {execute} from "../actions";
 import {RootSchemaElement} from "../schema";
 import {RouterState} from 'react-router-redux'
 const styles = require('../main.scss');
+require('es6-object-assign').polyfill();
 
 interface Props {
 	requestSchema: RootSchemaElement;
