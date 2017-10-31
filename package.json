@@ -1,6 +1,6 @@
 {
   "name": "odm-decision-forms",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "author": "Antoine Melki",
   "license": "Apache-2.0",
   "description": "A React-based UI to init and run Hosted Transparent Decision Services",
