@@ -6,9 +6,13 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-	entry: [
-		path.join(__dirname, 'app/index.tsx')
-	],
+	entry: {
+		app: [
+			'event-source-polyfill',
+			"babel-polyfill",
+			path.join(__dirname, 'app/index.tsx')
+		]
+	},
 	output: {
 		path: path.join(__dirname, '/dist/'),
 		filename: '[name]-[hash].min.js',
