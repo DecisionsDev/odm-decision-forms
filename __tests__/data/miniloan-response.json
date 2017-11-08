@@ -1,0 +1,117 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "definitions": {
+    "Response": {
+      "type": "object",
+      "properties": {
+        "__DecisionID__": {
+          "type": "string",
+          "description": "Unique identifier representing the execution of the decision service operation. If it is not specified, it will be computed automatically."
+        },
+        "loan": {
+          "$ref": "#/definitions/Loan"
+        }
+      },
+      "description": "Response for the execution of the decision service operation. Contains notably the output parameters that are returned by the execution."
+    },
+    "Loan": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "duration": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "yearlyInterestRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "yearlyRepayment": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "approved": {
+          "type": "boolean",
+          "default": false
+        },
+        "messages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "approvalStatus": {
+          "type": "string"
+        }
+      }
+    },
+    "Borrower": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "creditScore": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "yearlyIncome": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "Request": {
+      "type": "object",
+      "properties": {
+        "__DecisionID__": {
+          "type": "string",
+          "description": "Unique identifier representing the execution of the decision service operation. If it is not specified, it will be computed automatically."
+        },
+        "borrower": {
+          "$ref": "#/definitions/Borrower"
+        },
+        "loan": {
+          "$ref": "#/definitions/Loan"
+        }
+      },
+      "description": "Request for the execution of the decision service operation. Contains notably the input parameters that are used for the execution."
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32",
+          "description": "HTTP error code."
+        },
+        "message": {
+          "type": "string",
+          "description": "Error message."
+        },
+        "details": {
+          "type": "string",
+          "description": "Detailed error message."
+        },
+        "errorCode": {
+          "type": "string",
+          "description": "Product error code."
+        }
+      },
+      "description": "Error occurring when invoking the execution of the decision service operation."
+    }
+  },
+  "type": "object",
+  "properties": {
+    "__DecisionID__": {
+      "type": "string",
+      "description": "Unique identifier representing the execution of the decision service operation. If it is not specified, it will be computed automatically."
+    },
+    "loan": {
+      "$ref": "#/definitions/Loan"
+    }
+  }
+}
