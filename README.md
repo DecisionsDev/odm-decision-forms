@@ -21,6 +21,8 @@ This allows anyone to easily test a Decision Service, without having to write a 
 From this UI, you can trigger the rule service and get a human-readable representation of the output data returned by 
 the service.
 
+![Screenshots](./screenshots/screenshot.png)
+
 ## Quick Start
 
 Run the server
