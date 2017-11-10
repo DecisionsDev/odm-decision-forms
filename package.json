@@ -34,15 +34,14 @@
     },
     "testRegex": "/__tests__/.*\\.(ts|tsx|js)$"
   },
+  "babel": {
+    "presets": ["es2015", "react"]
+  },
   "scripts": {
     "dev": "node index --env development",
     "start": "node index --env production",
     "build": "rimraf dist && cross-env NODE_ENV=production webpack --config ./webpack.production.config.js --progress --profile --colors",
     "patch": "npm build && npm version patch && npm publish",
-    "lint": "tslint -c tslint.json 'app/**/*.{ts,tsx}'",
-    "eslint": "eslint .",
-    "jscs": "jscs .",
-    "compile": "tsc",
     "test": "npm run test-only",
     "test-only": "jest --coverage",
     "test:watch": "jest --watch"
