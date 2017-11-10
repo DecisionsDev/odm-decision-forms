@@ -10,7 +10,7 @@ module.exports = {
 		app: [
 			'event-source-polyfill',
 			"babel-polyfill",
-			path.join(__dirname, 'app/index.tsx')
+			path.join(__dirname, 'src/app/index.tsx')
 		]
 	},
 	output: {
@@ -24,7 +24,7 @@ module.exports = {
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
-			template: 'app/index.tpl.html',
+			template: 'src/app/index.tpl.html',
 			inject: 'body',
 			filename: 'index.html'
 		}),

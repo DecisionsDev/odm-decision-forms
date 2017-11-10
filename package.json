@@ -15,9 +15,9 @@
     "node": ">= 8.0.0"
   },
   "bin": {
-    "odm-decision-forms": "./index.js"
+    "odm-decision-forms": "./src/index.js"
   },
-  "main": "index.js",
+  "main": "src/index.js",
   "keywords": [
     "odm",
     "htds",
@@ -32,7 +32,7 @@
     "transform": {
       "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
-    "testRegex": "/__tests__/.*\\.(ts|tsx|js)$"
+    "testRegex": "/test/.*\\.(ts|tsx|js)$"
   },
   "babel": {
     "presets": [
@@ -41,8 +41,8 @@
     ]
   },
   "scripts": {
-    "dev": "node index --env development",
-    "start": "node index --env production",
+    "dev": "node src/index --env development",
+    "start": "node src/index --env production",
     "build": "rimraf dist && cross-env NODE_ENV=production webpack --config ./webpack.production.config.js --progress --profile --colors",
     "patch": "npm build && npm version patch && npm publish",
     "test": "npm run test-only",

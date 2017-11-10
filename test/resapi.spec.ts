@@ -2,7 +2,7 @@ const decamelize = require('decamelize');
 import * as fs from 'fs';
 import * as Promise from 'bluebird';
 //const Promise = require("bluebird");
-import { normalizeSchema } from '../app/resapi';
+import { normalizeSchema } from '../src/app/resapi';
 
 const readFile = Promise.promisify(fs.readFile);
 
@@ -14,8 +14,8 @@ test('decamelize', () => {
 
 const testNormalize = (schemaName) => {
 	return Promise.all([
-		readFile(`./__tests__/data/${schemaName}.json`),
-		readFile(`./__tests__/data/${schemaName}-normalized.json`)
+		readFile(`./test/data/${schemaName}.json`),
+		readFile(`./test/data/${schemaName}-normalized.json`)
 	]).then(values => {
 		const source = JSON.parse(values[0].toString());
 		normalizeSchema(source);
