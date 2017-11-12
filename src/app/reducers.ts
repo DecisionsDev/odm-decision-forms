@@ -27,6 +27,6 @@ export const errorReducer = (state : any = null, action : DisplayErrorAction | D
 	}
 };
 
-export const resReducer = (state : ResState = { paths: [] }, action : DefaultAction) => {
+export const resReducer = (state : ResState = { ruleapps: {} }, action : DefaultAction) => {
 	return state;
 };

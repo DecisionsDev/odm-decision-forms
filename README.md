@@ -13,6 +13,8 @@ It has been tested with [ODM 8.9.0](https://www-01.ibm.com/common/ssi/cgi-bin/ss
 <br>It is also aimed at working with [IBM ODM on Cloud](http://www-03.ibm.com/software/products/en/ibm-operational-decision-manager-on-cloud)
 as well as [IBM Business Rules for Bluemix](https://console.bluemix.net/catalog/services/business-rules).
 
+Decision Server must be up and running when running the package.
+
 ## Features
 
 This package offers a simple web-based UI serving a form representing the input data of a given Decision Service stored in 
@@ -25,7 +27,8 @@ the service.
 
 ## Quick Start
 
-Run the server
+Assuming ODM Decision Server is running at http://localhost:9080, you can run the decision form
+express server as follows:
 
 ```bash
 odm-decision-forms
@@ -34,6 +37,8 @@ odm-decision-forms
 Then open your browser at:
 
     http://localhost:3000
+
+This will display the list of generated forms for each ruleset stored in Decision Server
 
 ## Install
 

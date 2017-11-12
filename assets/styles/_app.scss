@@ -60,3 +60,21 @@
     }
   }
 }
+
+#home {
+  padding: 20px;
+  table {
+    border-collapse: collapse;
+    border: 1px solid black;
+    thead {
+      td {
+        font-size: 16px;
+        font-weight: bold;
+      }
+    }
+    td {
+      border: 1px solid black;
+      padding: 3px 10px;
+    }
+  }
+}

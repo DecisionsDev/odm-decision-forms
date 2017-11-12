@@ -3,6 +3,7 @@ import {
 	Type
 } from "./schema";
 import { RouterState } from 'react-router-redux';
+require('es6-map/implement');
 
 export interface Error {
 	title: string;
@@ -11,7 +12,23 @@ export interface Error {
 }
 
 export interface ResState {
-	paths: string[];
+	ruleapps: { [key:string]:RuleApp; }
+}
+
+export interface RuleApp {
+	name: string;
+	rulesets: { [key:string]:Ruleset; };
+}
+
+export interface Ruleset {
+	name: string;
+	path: string;
+	versions: { [key:string]:RulesetVersion; }
+}
+
+export interface RulesetVersion {
+	version: string;
+	path: string;
 }
 
 export interface State {

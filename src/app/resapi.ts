@@ -35,9 +35,6 @@ export const loadSwagger = (rulesetPath: string): Promise<any> => {
 	})
 };
 
-const valuesPolyfill = function values (object) {
-	return Object.keys(object).map(key => object[key]);
-};
 export const normalizeSchema = (schema: RootSchemaElement): void => {
 	if (schema.properties) {
 		for (const key in schema.properties) {
@@ -85,6 +82,27 @@ const _title = (key: string) => {
 
 export const loadRulesetPaths = (): Promise<ResState> => {
 	return axios.get(`/rulesets`).then(res => {
-		return Promise.resolve({ paths: res.data.map(r => r.id) });
+		const rulesets = res.data;
+		const ruleapps = {};
+		for (let i = 0; i < rulesets.length; i++) {
+			const rs = rulesets[i];
+			const path = rs.id.split('/');
+			const ruleappName = path[0];
+//			const ruleappVersion = path[1];
+			const rulesetName = path[2];
+			const rulesetVersion = path[3];
+			let ruleapp = ruleapps[ruleappName];
+			if (!ruleapp) {
+				ruleapp = { name: ruleappName, rulesets: {} };
+				ruleapps[ruleappName] = ruleapp;
+			}
+			let ruleset = ruleapp.rulesets[rulesetName];
+			if (!ruleset) {
+				ruleset = { name: rulesetName, path: ruleappName + '/' + rulesetName, versions: {} };
+				ruleapp.rulesets[rulesetName] = ruleset;
+			}
+			ruleset.versions[rulesetVersion] = { version: rulesetVersion, path: rs.id }
+		}
+		return Promise.resolve(ruleapps);
 	});
 };

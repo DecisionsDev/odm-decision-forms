@@ -63,6 +63,7 @@
     "cors": "^2.8.4",
     "decamelize": "^1.2.0",
     "decamelize-keys": "^1.1.0",
+    "es6-map": "^0.1.5",
     "es6-object-assign": "^1.1.0",
     "es6-promise-promise": "^1.0.0",
     "event-source-polyfill": "0.0.11",
