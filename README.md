@@ -36,9 +36,13 @@ odm-decision-forms
 
 Then open your browser at:
 
-    http://localhost:3000
+    [http://localhost:3000](http://localhost:3000)
 
-This will display the list of generated forms for each ruleset stored in Decision Server
+This will display the list of generated forms for each ruleset stored in Decision Server:
+
+![Home](./screenshots/home.png)
+
+Click on one of the versions listed will open the generated form for the corresponding decision service version.
 
 ## Install
 
