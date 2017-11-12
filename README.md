@@ -25,9 +25,15 @@ the service.
 
 ![Screenshots](./screenshots/screenshot.png)
 
+## Install
+
+```bash
+npm install -g odm-decision-forms
+```
+
 ## Quick Start
 
-Assuming ODM Decision Server is running at http://localhost:9080, you can run the decision form
+Assuming ODM Decision Server is running at [http://localhost:9080](http://localhost:9080), you can run the decision form
 express server as follows:
 
 ```bash
@@ -40,15 +46,9 @@ Then open your browser at:
 
 This will display the list of generated forms for each ruleset stored in Decision Server:
 
-![Home](./screenshots/home.png)
+<img src="https://raw.githubusercontent.com/ODMDev/odm-decision-forms/master/screenshots/home.png" width="50%"></img>
 
 Click on one of the versions listed will open the generated form for the corresponding decision service version.
-
-## Install
-
-```bash
-npm install -g odm-decision-forms
-```
 
 ## Usage
 
