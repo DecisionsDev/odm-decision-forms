@@ -33,18 +33,18 @@ npm install -g odm-decision-forms
 
 ## Quick Start
 
-Assuming ODM Decision Server is running at [http://localhost:9080](http://localhost:9080), you can run the decision form
-express server as follows:
+Assuming ODM Decision Server is running at [http://localhost:9080](http://localhost:9080), you can run the decision 
+form (express) server as follows:
 
 ```bash
 odm-decision-forms
 ```
 
-Then open your browser at:
+Keeping the server running, open your browser at:
 
     [http://localhost:3000](http://localhost:3000)
 
-This will display the list of generated forms for each ruleset stored in Decision Server:
+This displays the list of generated forms for each ruleset stored in ODM Decision Server:
 
 <img src="https://raw.githubusercontent.com/ODMDev/odm-decision-forms/master/screenshots/home.png" width="50%"></img>
 
@@ -69,7 +69,7 @@ CONFIG:
 
     --username          Username to execute the Decision Service. Default is 'resAdmin'.
 
-    --password          Username's password. Default is 'resAdmin'.
+    --password          User password. Default is 'resAdmin'.
 
 ```
 
