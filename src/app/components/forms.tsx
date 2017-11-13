@@ -57,13 +57,10 @@ class Forms extends React.Component<DProps, any> {
 					</button>
 				</Form>
 			</div>
-			{
-				result &&
-				<div id="output" className="form-container">
-					<h1>Response</h1>
-					<Form uiSchema={outuiSchema} formData={result} schema={responseSchema}/>
-				</div>
-			}
+			<div id="output" className="form-container">
+				<h1>Response</h1>
+				<Form uiSchema={outuiSchema} formData={result} schema={responseSchema}/>
+			</div>
 			{
 				error && <div>
 					<h3>{error.title}</h3>
