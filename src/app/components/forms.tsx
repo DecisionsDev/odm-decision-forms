@@ -13,7 +13,6 @@ interface Props {
 	responseSchema: RootSchemaElement;
 	result: object | null;
 	error: Error | null;
-	router: RouterState
 }
 
 interface DProps extends Props {
@@ -77,8 +76,7 @@ const mapStateToProps = (state: State): Props => {
 		requestSchema: state.requestSchema!,
 		responseSchema: state.responseSchema!,
 		result: state.result ? state.result : null,
-		error: state.error,
-		router: state.router
+		error: state.error
 	};
 };
 

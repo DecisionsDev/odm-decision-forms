@@ -13,26 +13,30 @@ export const loadSwagger = (rulesetPath: string): Promise<any> => {
 	return axios.get(`/swagger` + rulesetPath).then(res => {
 		const swagger = res.data;
 		document.title = swagger.info.title.substr(0, swagger.info.title.length - ' API'.length);
-		const requestSchema = {
-			$schema: "http://json-schema.org/draft-06/schema#",
-			definitions: swagger.definitions,
-			type: Type.TObject,
-			properties: swagger.definitions.Request.properties
-		} as RootSchemaElement;
-		const normalizedRequest = JSON.parse(JSON.stringify(requestSchema));
-		delete (normalizedRequest as SchemaElement)!.properties!['__DecisionID__'];
-		normalizeSchema(normalizedRequest);
-		const responseSchema = {
-			$schema: "http://json-schema.org/draft-06/schema#",
-			definitions: swagger.definitions,
-			type: Type.TObject,
-			properties: swagger.definitions.Response.properties
-		} as RootSchemaElement;
-		const normalizedResponse = JSON.parse(JSON.stringify(responseSchema));
-		delete (normalizedResponse as SchemaElement)!.properties!['__DecisionID__'];
-		normalizeSchema(normalizedResponse);
-		return Promise.resolve({ request: normalizedRequest, response: normalizedResponse });
+		return Promise.resolve(readSwagger(swagger));
 	})
+};
+
+export const readSwagger = (swagger) => {
+	const requestSchema = {
+		$schema: "http://json-schema.org/draft-06/schema#",
+		definitions: swagger.definitions,
+		type: Type.TObject,
+		properties: swagger.definitions.Request.properties
+	} as RootSchemaElement;
+	const normalizedRequest = JSON.parse(JSON.stringify(requestSchema));
+	delete (normalizedRequest as SchemaElement)!.properties!['__DecisionID__'];
+	normalizeSchema(normalizedRequest);
+	const responseSchema = {
+		$schema: "http://json-schema.org/draft-06/schema#",
+		definitions: swagger.definitions,
+		type: Type.TObject,
+		properties: swagger.definitions.Response.properties
+	} as RootSchemaElement;
+	const normalizedResponse = JSON.parse(JSON.stringify(responseSchema));
+	delete (normalizedResponse as SchemaElement)!.properties!['__DecisionID__'];
+	normalizeSchema(normalizedResponse);
+	return { request: normalizedRequest, response: normalizedResponse };
 };
 
 export const normalizeSchema = (schema: RootSchemaElement): void => {
