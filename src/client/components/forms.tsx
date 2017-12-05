@@ -5,17 +5,16 @@ import Form from "react-jsonschema-form";
 import {execute} from "../actions";
 import {RootSchemaElement} from "../schema";
 import {RouterState} from 'react-router-redux'
-const styles = require('../main.scss');
 require('es6-object-assign').polyfill();
 
-interface Props {
+export interface Props {
 	requestSchema: RootSchemaElement;
 	responseSchema: RootSchemaElement;
 	result: object | null;
 	error: Error | null;
 }
 
-interface DProps extends Props {
+export interface DProps extends Props {
 	dispatch: Dispatch<any>;
 }
 

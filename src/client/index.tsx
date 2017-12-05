@@ -1,5 +1,6 @@
 import * as React from "react";
-import * as ReactDOM from 'react-dom'
+import * as ReactDOM from 'react-dom';
+var PropTypes = require('prop-types'); // ES5 with npm
 
 var ES6Promise = require("es6-promise");
 ES6Promise.polyfill();
@@ -10,10 +11,11 @@ import {
 } from "./schema";
 import {applyMiddleware, combineReducers, createStore} from "redux";
 import {ResState, State} from "./state";
-import {errorReducer, resReducer, resultReducer, schemaReducer} from "./reducers";
+import {errorReducer, requestReducer, resReducer, resultReducer, schemaReducer} from "./reducers";
 import {Provider} from "react-redux";
 import App from './components/app';
 import Error from './components/error';
+const styles = require('./main.scss');
 
 var Promise = require('bluebird');
 import {loadRulesetPaths, loadSwagger} from './resapi';
@@ -35,6 +37,11 @@ loadRulesetPaths()
 						const initialState: State = {
 							requestSchema: request,
 							responseSchema: response,
+							executeRequest: {
+								url: '/execute' + rulesetPath.substr('/ruleapp'.length),
+								transformPayload: payload => ({ request: payload }),
+								transformResult: result => result
+							},
 							result: null,
 							res: resState,
 							error: null,
@@ -43,6 +50,7 @@ loadRulesetPaths()
 						const store = createStore<State>(combineReducers({
 								requestSchema: schemaReducer,
 								responseSchema: schemaReducer,
+								executeRequest: requestReducer,
 								result: resultReducer,
 								res: resReducer,
 								error: errorReducer,
@@ -66,6 +74,7 @@ loadRulesetPaths()
 		const initialState: State = {
 			requestSchema: null,
 			responseSchema: null,
+			executeRequest: null,
 			result: null,
 			res: resState,
 			error: null,
@@ -74,6 +83,7 @@ loadRulesetPaths()
 		const store = createStore<State>(combineReducers({
 				requestSchema: schemaReducer,
 				responseSchema: schemaReducer,
+				executeRequest: requestReducer,
 				result: resultReducer,
 				error: errorReducer,
 				res: resReducer,

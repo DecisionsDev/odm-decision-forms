@@ -1,26 +1,26 @@
 {
   "compilerOptions": {
-    "outDir": "./dist/",
+    "outDir": "lib",
     "sourceMap": true,
     "strict": true,
     "strictNullChecks": true,
     "noImplicitAny": false,
     "noFallthroughCasesInSwitch": true,
-    "module": "es6",
     "jsx": "react",
     "target": "es5",
-    "allowJs": true,
+    "module": "es6",
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "declaration": true
   },
   "awesomeTypescriptLoaderOptions": {
     "useBabel": true,
     "useCache": true,
     "useTranspileModule": true
   },
-  "include": [
-    "./app/", "./test", "."
+  "files": [
+    "./src/client/index.tsx"
   ]
 }

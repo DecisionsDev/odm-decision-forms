@@ -11,7 +11,7 @@ module.exports = {
 		app: [
 			'event-source-polyfill',
 			"babel-polyfill",
-			path.join(__dirname, 'src/app/index.tsx'),
+			path.join(__dirname, 'src/client/index.tsx'),
 			hotMiddlewareScript
 		]
 	},
@@ -32,7 +32,7 @@ module.exports = {
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
-			template: 'src/app/index.tpl.html',
+			template: 'src/client/index.tpl.html',
 			inject: 'body',
 			filename: 'index.html'
 		}),

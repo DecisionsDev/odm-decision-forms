@@ -1,7 +1,6 @@
 import * as React from 'react';
-const styles = require('../main.scss');
 
-interface Props {
+export interface Props {
 	error: any;
 }
 

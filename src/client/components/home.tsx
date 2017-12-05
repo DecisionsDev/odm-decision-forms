@@ -4,9 +4,7 @@ import {ResState, RuleApp, Ruleset, RulesetVersion, State} from "../state";
 import {ReactElement} from "react";
 require('es6-map/implement');
 
-const styles = require('../main.scss');
-
-interface Props {
+export interface Props {
 	res: ResState;
 }
 
@@ -25,7 +23,9 @@ const Home: React.SFC<Props> = ({res}) => {
 					<td>Version</td>
 				</tr>
 			</thead>
+			<tbody>
 			{ruleapps}
+			</tbody>
 		</table>
 	</div>;
 };
@@ -43,9 +43,10 @@ const renderRuleApp = (ruleapp: RuleApp) => {
 };
 
 const renderRuleset = (ruleapp: RuleApp, ruleset: Ruleset, rulesetIndex: number) => {
-	let latest = <RulesetVersionSFC name='latest' path={ruleset.path} ruleapp={ruleapp} ruleset={ruleset} versionIndex={0} rulesetIndex={rulesetIndex} />;
+	let latest = <RulesetVersionSFC key={ruleapp.name + '_' + rulesetIndex + '_latest'} name='latest' path={ruleset.path} ruleapp={ruleapp} ruleset={ruleset} versionIndex={0} rulesetIndex={rulesetIndex} />;
 	const versions = valuesPolyfill(ruleset.versions).map((version, versionIndex) => {
-		return (<RulesetVersionSFC name={version.version} path={version.path} ruleapp={ruleapp} ruleset={ruleset} rulesetIndex={rulesetIndex} versionIndex={versionIndex + 1} />);
+		const key = ruleapp.name + '_' + rulesetIndex + '_' + versionIndex;
+		return (<RulesetVersionSFC key={key} name={version.version} path={version.path} ruleapp={ruleapp} ruleset={ruleset} rulesetIndex={rulesetIndex} versionIndex={versionIndex + 1} />);
 	});
 	return [ latest, ...versions];
 };

@@ -15,9 +15,15 @@
     "node": ">= 8.0.0"
   },
   "bin": {
-    "odm-decision-forms": "./src/index.js"
+    "odm-decision-forms": "./src/server/index.js"
   },
-  "main": "src/index.js",
+  "main": "./lib/index.js",
+  "module": "./lib/index.js",
+  "files": [
+    "dist",
+    "lib",
+    "lib-esm"
+  ],
   "keywords": [
     "odm",
     "htds",
@@ -41,17 +47,23 @@
     ]
   },
   "scripts": {
-    "dev": "node src/index --env development",
-    "start": "node src/index --env production",
-    "build": "rimraf dist && cross-env NODE_ENV=production webpack --config ./webpack.production.config.js --progress --profile --colors",
+    "dev": "node src/server/index --env development",
+    "start": "node src/server/index --env production",
+    "clean": "shx rm -rf _bundles lib lib-esm dist",
+    "build:dist": "rimraf dist && cross-env NODE_ENV=production webpack --config ./webpack.production.config.js --progress --profile --colors",
+    "build:lib": "rimraf lib && npm run compile && cross-env NODE_ENV=production webpack --config ./webpack.lib.config.js --progress --profile --colors",
+    "build": "npm run clean && npm run build:lib && npm run build:dist",
     "patch": "npm build && npm version patch && npm publish",
     "test": "npm run test-only",
     "test-only": "jest --coverage",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "compile:commonjs": "tsc -m commonjs --outDir lib",
+    "compile:es6": "tsc -m es6 --outDir lib-esm",
+    "compile": "npm run compile:commonjs && npm run compile:es6"
   },
   "dependencies": {
-    "@types/react": "^16.0.10",
-    "@types/react-dom": "^16.0.1",
+    "@types/react": "^16.0.25",
+    "@types/react-dom": "^16.0.3",
     "axios": "^0.16.2",
     "babel-polyfill": "^6.26.0",
     "babel-preset-node6": "^11.0.0",
@@ -75,26 +87,27 @@
     "immutable": "^3.8.1",
     "isomorphic-fetch": "^2.2.1",
     "jquery": "^3.2.1",
+    "jsonp": "^0.2.1",
     "lodash": "^4.17.4",
     "object-path": "^0.11.4",
     "object.values": "^1.0.4",
-    "prop-types": "^15.5.10",
-    "react": "^16.0.0",
+    "prop-types": "^15.6.0",
+    "react": "^16.1.1",
     "react-dnd": "^2.4.0",
     "react-dnd-html5-backend": "^2.4.1",
-    "react-dom": "^16.0.0",
+    "react-dom": "^16.1.1",
     "react-json-pretty": "^1.6.3",
     "react-jsonschema-form": "^0.50.1",
     "react-redux": "^5.0.6",
-    "react-redux-form": "^1.14.1",
     "react-router": "^4.1.2",
     "react-router-config": "^1.0.0-beta.4",
     "react-router-dom": "^4.2.2",
-    "react-router-redux": "^5.0.0-alpha.6",
+    "react-router-redux": "^5.0.0-alpha.8",
     "react-transform-hmr": "^1.0.0",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
-    "redux-watch": "^1.1.1"
+    "redux-watch": "^1.1.1",
+    "solar-popup": "^0.4.6"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.82",
@@ -103,6 +116,7 @@
     "@types/jquery": "^3.2.13",
     "@types/react-dnd": "^2.0.34",
     "@types/react-redux": "^5.0.8",
+    "shx": "^0.2.2",
     "autoprefixer": "^7.1.2",
     "awesome-typescript-loader": "^3.2.3",
     "babel-cli": "^6.26.0",
@@ -119,8 +133,6 @@
     "chai": "^4.1.1",
     "cross-env": "^5.0.5",
     "css-loader": "^0.28.5",
-    "eslint": "^4.7.0",
-    "eslint-plugin-react": "^7.2.1",
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^0.11.2",
     "html-webpack-plugin": "^2.30.1",

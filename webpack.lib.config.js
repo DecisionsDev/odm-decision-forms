@@ -5,38 +5,43 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+var PATHS = {
+	entryPoint: path.resolve(__dirname, 'src/client/index.tsx'),
+	bundles: path.resolve(__dirname, '_bundles')
+};
+
+
 module.exports = {
 	entry: {
-		app: [
-			'event-source-polyfill',
-			"babel-polyfill",
-			path.join(__dirname, 'src/client/index.tsx')
-		]
+		'odm-decision-forms-lib': [PATHS.entryPoint],
+		'odm-decision-forms-lib.min': [PATHS.entryPoint]
 	},
 	output: {
-		path: path.join(__dirname, '/dist/'),
-		filename: '[name]-[hash].min.js',
-		publicPath: '/'
+		path: PATHS.bundles,
+		filename: '[name].js',
+		library: 'DecisionForms',
+		libraryTarget: 'umd',
+		umdNamedDefine: true
 	},
 	resolve: {
 		// Add '.ts' and '.tsx' as resolvable extensions.
 		extensions: [".ts", ".tsx", ".js", ".json"]
 	},
+	// Activate source maps for the bundles in order to preserve the original
+	// source when the user debugs the application
+	devtool: 'source-map',
 	plugins: [
-		new HtmlWebpackPlugin({
-			template: 'src/client/index.tpl.html',
-			inject: 'body',
-			filename: 'index.html'
-		}),
-		new ExtractTextPlugin('[name]-[hash].min.css'),
-		new webpack.optimize.UglifyJsPlugin({
-			compressor: {
-				warnings: false,
-				screw_ie8: true
-			}
-		}),
 		new webpack.DefinePlugin({
 			'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+		}),
+		// Apply minification only on the second bundle by
+		// using a RegEx on the name, which must end with `.min.js`
+		// NB: Remember to activate sourceMaps in UglifyJsPlugin
+		// since they are disabled by default!
+		new webpack.optimize.UglifyJsPlugin({
+			minimize: true,
+			sourceMap: true,
+			include: /\.min\.js$/,
 		})
 	],
 	module: {
@@ -67,7 +72,19 @@ module.exports = {
 					loader: "less-loader" // compiles Less to CSS
 				}]
 			},
-			{ test: /\.(t|j)sx?$/, use: { loader: 'awesome-typescript-loader' } },
+			{
+				test: /\.(t|j)sx?$/,
+				exclude: /node_modules/,
+				use: {
+					loader: 'awesome-typescript-loader',
+					query: {
+						// we don't want any declaration file in the bundles
+						// folder since it wouldn't be of any use ans the source
+						// map already include everything for debugging
+						declaration: false
+					}
+				}
+			},
 			{ enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
 		]
 	}

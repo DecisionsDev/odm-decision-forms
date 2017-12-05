@@ -4,3 +4,7 @@ node_modules
 coverage
 .idea
 *.iml
+.*
+**/tsconfig.json
+**/webpack.config.js
+src

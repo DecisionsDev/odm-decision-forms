@@ -1,9 +1,14 @@
 
 import {ActionTypes, DefaultAction, DisplayErrorAction, ReceiveResultAction} from "./actions";
 import {RootSchemaElement, Type} from "./schema";
-import {ResState} from "./state";
+import {ExecuteRequest, ResState} from "./state";
 
 export const schemaReducer = (state : RootSchemaElement = { $schema: '',  type: Type.TObject },
+															action : DefaultAction) => {
+	return state;
+};
+
+export const requestReducer = (state : ExecuteRequest = { url: '',  headers: {}, transformPayload: data => data, transformResult: result => result },
 															action : DefaultAction) => {
 	return state;
 };

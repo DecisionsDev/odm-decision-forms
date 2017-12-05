@@ -2,6 +2,7 @@ import {Action} from "redux";
 import {State} from "./state";
 import axios from 'axios';
 import {ActionCreator} from "react-redux";
+import jsonp from 'jsonp';
 
 export const enum ActionTypes {
 	RECEIVE_RESULT,
@@ -25,9 +26,10 @@ export const receiveResult: ActionCreator<ReceiveResultAction> = (payload) : Rec
 
 export const execute = (payload) => {
 	return (dispatch: (a: ReceiveResultAction | DisplayErrorAction) => ReceiveResultAction, getState: () => State) => {
-		const rulesetPath = getState().router.location.pathname.substr('/ruleapp'.length);
-		axios.post('/execute' + rulesetPath, { request: payload }).then(res => {
-			dispatch(receiveResult(res.data));
+		// axios.post(getState().executeRequest!.url, { request: payload }).then(res => {
+		const executeRequest = getState().executeRequest;
+		axios.post(executeRequest!.url, executeRequest!.transformPayload(payload)).then(res => {
+			dispatch(receiveResult(executeRequest!.transformResult(res.data)));
 		}).catch(err => {
 			dispatch(displayError("Error executing Rule Service", err.response.data, err.response.statusText));
 			console.log('Error while invoking decision service: ' + err);
