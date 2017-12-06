@@ -6,5 +6,4 @@ coverage
 *.iml
 .*
 **/tsconfig.json
-**/webpack.config.js
-src
+**/webpack.*.config.js
