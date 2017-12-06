@@ -20,7 +20,7 @@
     "useCache": true,
     "useTranspileModule": true
   },
-  "files": [
-    "./src/client/index.tsx"
+  "include": [
+    "./src/client/lib.ts"
   ]
 }

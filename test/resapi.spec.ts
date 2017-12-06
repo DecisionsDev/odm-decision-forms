@@ -2,7 +2,7 @@ const decamelize = require('decamelize');
 import * as fs from 'fs';
 import * as Promise from 'bluebird';
 //const Promise = require("bluebird");
-import { normalizeSchema } from '../src/app/resapi';
+import { normalizeSchema } from '../src/client/resapi';
 
 const readFile = Promise.promisify(fs.readFile);
 

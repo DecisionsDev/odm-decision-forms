@@ -2,7 +2,6 @@ import {Action} from "redux";
 import {State} from "./state";
 import axios from 'axios';
 import {ActionCreator} from "react-redux";
-import jsonp from 'jsonp';
 
 export const enum ActionTypes {
 	RECEIVE_RESULT,
@@ -24,7 +23,7 @@ export const receiveResult: ActionCreator<ReceiveResultAction> = (payload) : Rec
 	payload: payload
 });
 
-export const execute = (payload) => {
+export const execute: any = (payload) => {
 	return (dispatch: (a: ReceiveResultAction | DisplayErrorAction) => ReceiveResultAction, getState: () => State) => {
 		// axios.post(getState().executeRequest!.url, { request: payload }).then(res => {
 		const executeRequest = getState().executeRequest;

@@ -4,22 +4,17 @@ var PropTypes = require('prop-types'); // ES5 with npm
 
 var ES6Promise = require("es6-promise");
 ES6Promise.polyfill();
-var axios = require("axios");
-import {
-	Format, RootSchemaElement, SchemaElement, SchemaElementRef, SchemaPatternProperty, SchemaProperties, schemaVersion,
-	Type
-} from "./schema";
 import {applyMiddleware, combineReducers, createStore} from "redux";
-import {ResState, State} from "./state";
-import {errorReducer, requestReducer, resReducer, resultReducer, schemaReducer} from "./reducers";
+import {
+	ResState, State,
+	errorReducer, requestReducer, resReducer, resultReducer, schemaReducer,
+	App, Error,
+	loadRulesetPaths, loadSwagger
+} from "./lib";
 import {Provider} from "react-redux";
-import App from './components/app';
-import Error from './components/error';
 const styles = require('./main.scss');
 
 var Promise = require('bluebird');
-import {loadRulesetPaths, loadSwagger} from './resapi';
-//import 'babel-polyfill';
 import thunkMiddleware from 'redux-thunk';
 import {ConnectedRouter, routerReducer, routerMiddleware, RouterState} from 'react-router-redux'
 import createHistory from 'history/createBrowserHistory';
