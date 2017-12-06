@@ -19,11 +19,6 @@
   },
   "main": "./lib/lib.js",
   "module": "./lib/lib.js",
-  "files": [
-    "dist",
-    "lib",
-    "src"
-  ],
   "keywords": [
     "odm",
     "ibm",
