@@ -1,5 +1,5 @@
 import {ResState} from "./state";
-import startCase from "lodash.startcase";
+var startCase = require('lodash.startcase');
 
 var axios = require("axios");
 var Promise = require('bluebird');
