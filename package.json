@@ -21,7 +21,8 @@
   "module": "./lib/lib.js",
   "files": [
     "dist",
-    "lib"
+    "lib",
+    "src"
   ],
   "keywords": [
     "odm",
