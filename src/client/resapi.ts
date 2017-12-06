@@ -1,5 +1,5 @@
 import {ResState} from "./state";
-import * as _ from "lodash";
+import startCase from "lodash.startcase";
 
 var axios = require("axios");
 var Promise = require('bluebird');
@@ -79,7 +79,7 @@ const _normalizeSchema = (schema: SchemaElement, title?: string): void => {
 };
 
 const _title = (key: string) => {
-	return _.startCase(decamelize(key, ' '));
+	return startCase(decamelize(key, ' '));
 };
 
 export const loadRulesetPaths = (): Promise<ResState> => {

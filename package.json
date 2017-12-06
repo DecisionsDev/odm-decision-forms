@@ -69,7 +69,7 @@
     "event-source-polyfill": "0.0.11",
     "express": "^4.15.4",
     "history": "^4.7.2",
-    "lodash": "^4.17.4",
+    "lodash.startcase": "^4.4.0",
     "prop-types": "^15.6.0",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
