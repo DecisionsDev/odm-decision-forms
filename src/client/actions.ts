@@ -27,8 +27,12 @@ export const execute: any = (payload) => {
 	return (dispatch: (a: ReceiveResultAction | DisplayErrorAction) => ReceiveResultAction, getState: () => State) => {
 		// axios.post(getState().executeRequest!.url, { request: payload }).then(res => {
 		const executeRequest = getState().executeRequest;
-		axios.post(executeRequest!.url, executeRequest!.transformPayload(payload)).then(res => {
-			dispatch(receiveResult(executeRequest!.transformResult(res.data)));
+		let identity = a => a;
+		let transformPayload = executeRequest!.transformPayload || identity;
+		let transformResult = executeRequest!.transformResult || identity;
+		let headers = executeRequest!.headers || {};
+		axios.post(executeRequest!.url, transformPayload(payload), { headers: headers }).then(res => {
+			dispatch(receiveResult(transformResult(res.data)));
 		}).catch(err => {
 			dispatch(displayError("Error executing Rule Service", err.response.data, err.response.statusText));
 			console.log('Error while invoking decision service: ' + err);
