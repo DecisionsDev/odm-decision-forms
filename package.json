@@ -116,6 +116,7 @@
     "style-loader": "^0.18.2",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
+    "ts-jest": "^21.2.4",
     "typescript": "^2.5.2",
     "webpack": "^3.6.0",
     "webpack-dev-middleware": "^1.12.0",
