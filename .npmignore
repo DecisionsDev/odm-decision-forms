@@ -7,3 +7,4 @@ coverage
 .*
 **/tsconfig.json
 **/webpack.*.config.js
+_output
