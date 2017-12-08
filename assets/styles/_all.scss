@@ -1,5 +1,39 @@
 @import "variables";
-//@import "global";
-//@import "json";
-//@import "tags";
 @import "app";
+@import 'fontawesome/font-awesome';
+
+$gl-font-path:        "../../assets/fonts" !default;
+$gl-version:          "1.0" !default;
+
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('#{$gl-font-path}/glyphicons-halflings-regular.eot?v=#{$gl-version}');
+  src: url('#{$gl-font-path}/glyphicons-halflings-regular.eot?#iefix&v=#{$gl-version}') format('embedded-opentype'),
+  url('#{$gl-font-path}/glyphicons-halflings-regular.woff2?v=#{$gl-version}') format('woff2'),
+  url('#{$gl-font-path}/glyphicons-halflings-regular.woff?v=#{$gl-version}') format('woff'),
+  url('#{$gl-font-path}/glyphicons-halflings-regular.ttf?v=#{$gl-version}') format('truetype'),
+  url('#{$gl-font-path}/glyphicons-halflings-regular.svg?v=#{$gl-version}#glyphicons_halflingsregular') format('svg');
+  //  src: url('#{$fa-font-path}/FontAwesome.otf') format('opentype'); // used when developing fonts
+  //  font-weight: normal;
+  //  font-style: normal;
+}
+.odm-decision-forms {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  margin: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #333333;
+  background-color: #ffffff;
+  @import 'bootstrap/bootstrap';
+  h1 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.1;
+    color: inherit;
+  }
+}

@@ -1,7 +1,8 @@
 @import "variables";
 
+
 .form-container {
-  float:left;
+  float: left;
   width: calc(50% - 40px);
   margin-bottom: 10px;
   h1 {
@@ -62,7 +63,23 @@
 }
 
 #home {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #333;
+  background-color: #fff;
   padding: 20px;
+  a {
+    color: #337ab7;
+    text-decoration: none;
+  }
+  a:focus, a:hover {
+    color: #23527c;
+    text-decoration: underline;
+  }
+  a:active, a:hover {
+    outline: 0;
+  }
   table {
     border-collapse: collapse;
     border: 1px solid black;

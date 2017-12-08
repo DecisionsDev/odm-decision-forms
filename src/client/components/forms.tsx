@@ -40,7 +40,7 @@ class Forms extends React.Component<DProps, any> {
 			"ui:rootFieldId": "out",
 			"ui:readonly": true
 		};
-		return <div>
+		return <div className="odm-decision-forms">
 			<div id="input" className="form-container">
 				<h1>Request</h1>
 				<Form schema={requestSchema}

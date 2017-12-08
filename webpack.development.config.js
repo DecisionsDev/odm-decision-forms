@@ -60,19 +60,19 @@ module.exports = {
 					name: 'assets/fonts/[name].[ext]',
 				}
 			},
-			{
-				test: /\.less$/,
-				include: [
-					path.resolve(__dirname, 'node_modules/font-awesome-webpack/less')
-				],
-				use: [{
-					loader: "style-loader" // creates style nodes from JS strings
-				}, {
-					loader: "css-loader" // translates CSS into CommonJS
-				}, {
-					loader: "less-loader" // compiles Less to CSS
-				}]
-			},
+			// {
+			// 	test: /\.less$/,
+			// 	include: [
+			// 		path.resolve(__dirname, 'node_modules/font-awesome-webpack/less')
+			// 	],
+			// 	use: [{
+			// 		loader: "style-loader" // creates style nodes from JS strings
+			// 	}, {
+			// 		loader: "css-loader" // translates CSS into CommonJS
+			// 	}, {
+			// 		loader: "less-loader" // compiles Less to CSS
+			// 	}]
+			// },
 			{ test: /\.(t|j)sx?$/, use: { loader: 'awesome-typescript-loader' } },
 			{ enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
 		]

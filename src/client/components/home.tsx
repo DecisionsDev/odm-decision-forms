@@ -14,7 +14,7 @@ const valuesPolyfill = function values (object) {
 
 const Home: React.SFC<Props> = ({res}) => {
 	const ruleapps = flatMap(ruleapp => renderRuleApp(ruleapp), valuesPolyfill(res));
-	return <div id="home">
+	return <div id="home" className="odm-decision-forms">
 		<table>
 			<thead>
 				<tr>
