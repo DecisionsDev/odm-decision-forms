@@ -23,7 +23,7 @@ module.exports = {
 		extensions: [".ts", ".tsx", ".js", ".json"]
 	},
 	plugins: [
-		new ExtractTextPlugin('[name]-[hash].min.css'),
+		new ExtractTextPlugin("styles.css"),
 		new webpack.optimize.UglifyJsPlugin({
 			compressor: {
 				warnings: false,
@@ -35,13 +35,7 @@ module.exports = {
 		})
 	],
 	module: {
-		loaders: [
-			{test: /\.json$/, loader: "json-loader"},
-			{test: /\.styl$/, loader: "style-loader!css-loader!stylus-loader"},
-			{
-				test: /(\.css|\.scss)$/,
-				loaders: ['style-loader', 'css-loader?sourceMap', 'sass-loader?sourceMap']
-			},
+		rules: [
 			{
 				test: /\.(ttf|eot|woff|woff2|svg)$/,
 				loader: 'file-loader',
@@ -49,21 +43,23 @@ module.exports = {
 					name: 'assets/fonts/[name].[ext]',
 				}
 			},
-			{
-				test: /\.less$/,
-				include: [
-					path.resolve(__dirname, 'node_modules/font-awesome-webpack/less')
-				],
-				use: [{
-					loader: "style-loader" // creates style nodes from JS strings
-				}, {
-					loader: "css-loader" // translates CSS into CommonJS
-				}, {
-					loader: "less-loader" // compiles Less to CSS
-				}]
-			},
 			{ test: /\.(t|j)sx?$/, use: { loader: 'awesome-typescript-loader' } },
-			{ enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
+			{ enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
+			{
+				test: /\.css$/,
+				exclude: /node_modules/,
+				use: ExtractTextPlugin.extract({
+					fallback: 'style-loader',
+					use: 'css-loader'
+				})
+			},
+			{
+				test: /\.scss$/,
+				exclude: /node_modules/,
+				use: ExtractTextPlugin.extract({
+					use: ['css-loader', 'sass-loader']
+				})
+			}
 		]
 	},
 	node: {

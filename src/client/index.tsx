@@ -12,6 +12,7 @@ import {
 	loadRulesetPaths, loadSwagger
 } from "./lib";
 import {Provider} from "react-redux";
+
 const styles = require('./main.scss');
 
 var Promise = require('bluebird');
