@@ -23,7 +23,7 @@ module.exports = {
 		extensions: [".ts", ".tsx", ".js", ".json"]
 	},
 	plugins: [
-		new ExtractTextPlugin("styles.css"),
+			new ExtractTextPlugin("styles.css"),
 		new webpack.optimize.UglifyJsPlugin({
 			compressor: {
 				warnings: false,
@@ -50,14 +50,14 @@ module.exports = {
 				exclude: /node_modules/,
 				use: ExtractTextPlugin.extract({
 					fallback: 'style-loader',
-					use: 'css-loader'
+					use: { loader: 'css-loader', options: { minimize: true } }
 				})
 			},
 			{
 				test: /\.scss$/,
 				exclude: /node_modules/,
 				use: ExtractTextPlugin.extract({
-					use: ['css-loader', 'sass-loader']
+					use: [{ loader: 'css-loader', options: { minimize: true } }, { loader: 'sass-loader', options: { minimize: true }}]
 				})
 			}
 		]

@@ -59,14 +59,14 @@ module.exports = {
 				exclude: /node_modules/,
 				use: ExtractTextPlugin.extract({
 					fallback: 'style-loader',
-					use: 'css-loader'
+            use: { loader: 'css-loader', options: { minimize: true } }
 				})
 			},
 			{
 				test: /\.scss$/,
 				exclude: /node_modules/,
 				use: ExtractTextPlugin.extract({
-					use: ['css-loader', 'sass-loader']
+            use: [{ loader: 'css-loader', options: { minimize: true } }, { loader: 'sass-loader', options: { minimize: true }}]
 				})
 			}
 		]
