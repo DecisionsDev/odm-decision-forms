@@ -28,17 +28,20 @@ export interface RulesetVersion {
 	path: string;
 }
 
-export interface ExecuteRequest {
+export interface Request {
 	url: string;
 	headers?: { [key:string]:string; },
 	transformPayload: (payload) => {},
 	transformResult: (result) => {}
 }
 
+export type ExecuteRequest = Request;
+export type SwaggerRequest = Request;
+
 export interface State {
 	requestSchema: RootSchemaElement | null;
 	responseSchema: RootSchemaElement | null;
-	executeRequest: ExecuteRequest | null;
+	executeRequest: ExecuteRequest;
 	result: object | null;
 	error: Error | null;
 	router: RouterState;
