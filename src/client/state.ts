@@ -28,20 +28,17 @@ export interface RulesetVersion {
 	path: string;
 }
 
-export interface Request {
+export interface WebRequest {
 	url: string;
 	headers?: { [key:string]:string; },
 	transformPayload: (payload) => {},
 	transformResult: (result) => {}
 }
 
-export type ExecuteRequest = Request;
-export type SwaggerRequest = Request;
-
 export interface State {
 	requestSchema: RootSchemaElement | null;
 	responseSchema: RootSchemaElement | null;
-	executeRequest: ExecuteRequest;
+	executeRequest: WebRequest;
 	result: object | null;
 	error: Error | null;
 	router: RouterState;

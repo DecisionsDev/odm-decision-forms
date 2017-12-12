@@ -18,9 +18,9 @@ const styles = require('./main.scss');
 import axios from "axios";
 import { readSwagger } from "./resapi";
 import {errorReducer, requestReducer, resReducer, resultReducer, schemaReducer} from "./reducers";
-import {ExecuteRequest, SwaggerRequest} from "./state";
+import {WebRequest} from "./state";
 
-const renderForms = (rootId : string, swaggerRequest: SwaggerRequest, executeRequest: ExecuteRequest) => {
+const renderForms = (rootId : string, swaggerRequest: WebRequest, executeRequest: WebRequest) => {
 	let identity = a => a;
 	let transformResult = swaggerRequest.transformResult || identity;
 	let headers = swaggerRequest.headers || {};
