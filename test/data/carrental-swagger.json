@@ -1,0 +1,214 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "API to invoke the execution of the decision service operation ruleset.",
+    "version" : "1.0.0",
+    "title" : "ruleset API"
+  },
+  "host" : "localhost:9090",
+  "basePath" : "/DecisionService/rest",
+  "schemes" : [ "http" ],
+  "consumes" : [ "application/json" ],
+  "produces" : [ "application/json" ],
+  "paths" : {
+    "/CarRental_2a26e4b3_fc00_436c_8f00_f2f64c93c7b2/1.0/ruleset/1.0" : {
+      "post" : {
+        "summary" : "Invokes the execution of the decision service operation ruleset.",
+        "description" : "Executes the decision service operation ruleset with the path /CarRental_2a26e4b3_fc00_436c_8f00_f2f64c93c7b2/1.0/ruleset/1.0.",
+        "operationId" : "callrulesetDecisionServiceOperation",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "Request",
+          "description" : "Request for the execution of the decision service operation. Contains notably the input parameters that are used for the execution.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Request"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response for the execution of the decision service operation. Contains notably the output parameters that are returned by the execution.",
+            "schema" : {
+              "$ref" : "#/definitions/Response"
+            }
+          },
+          "default" : {
+            "description" : "Error occurring when invoking the execution of the decision service operation.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Response" : {
+      "type" : "object",
+      "properties" : {
+        "__DecisionID__" : {
+          "type" : "string",
+          "description" : "Unique identifier representing the execution of the decision service operation. If it is not specified, it will be computed automatically."
+        },
+        "Car_Return_dispatch" : {
+          "type" : "string",
+          "enum" : [ "in need of maintenance", "available", "not available" ]
+        }
+      },
+      "description" : "Response for the execution of the decision service operation. Contains notably the output parameters that are returned by the execution."
+    },
+    "CarBlackBox" : {
+      "type" : "object",
+      "properties" : {
+        "max engine temperature" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "last maintenance record" : {
+          "$ref" : "#/definitions/CarMaintenanceRecord"
+        },
+        "distance driven last week" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "ID" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "oil level" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "current mileage" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "average speed last week" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "tyre pressure" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "max speed last Week" : {
+          "type" : "number",
+          "format" : "double"
+        }
+      }
+    },
+    "CarMaintenanceRecord" : {
+      "type" : "object",
+      "properties" : {
+        "service mileage" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "ID" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "last oil change date" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "last full service date" : {
+          "type" : "string",
+          "format" : "date-time"
+        }
+      }
+    },
+    "Car" : {
+      "type" : "object",
+      "properties" : {
+        "serial number" : {
+          "type" : "string"
+        },
+        "category" : {
+          "type" : "string",
+          "enum" : [ "premium", "compact", "full size" ]
+        },
+        "ID" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "status" : {
+          "type" : "string",
+          "enum" : [ "in need of maintenance", "available", "not available" ]
+        },
+        "model" : {
+          "type" : "string"
+        },
+        "brand" : {
+          "type" : "string"
+        },
+        "car black box" : {
+          "$ref" : "#/definitions/CarBlackBox"
+        }
+      }
+    },
+    "Request" : {
+      "type" : "object",
+      "properties" : {
+        "__DecisionID__" : {
+          "type" : "string",
+          "description" : "Unique identifier representing the execution of the decision service operation. If it is not specified, it will be computed automatically."
+        },
+        "Car" : {
+          "$ref" : "#/definitions/Car"
+        },
+        "Car_Maintenance_Record" : {
+          "$ref" : "#/definitions/CarMaintenanceRecord"
+        },
+        "Car_Return_Record" : {
+          "$ref" : "#/definitions/CarReturnRecord"
+        }
+      },
+      "description" : "Request for the execution of the decision service operation. Contains notably the input parameters that are used for the execution."
+    },
+    "CarReturnRecord" : {
+      "type" : "object",
+      "properties" : {
+        "interior condition" : {
+          "type" : "string",
+          "enum" : [ "dirty", "excellent", "fair" ]
+        },
+        "body is dirty" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "ID" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "fuel level" : {
+          "type" : "number",
+          "format" : "double"
+        }
+      }
+    },
+    "Error" : {
+      "type" : "object",
+      "properties" : {
+        "code" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "HTTP error code."
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "Error message."
+        },
+        "details" : {
+          "type" : "string",
+          "description" : "Detailed error message."
+        },
+        "errorCode" : {
+          "type" : "string",
+          "description" : "Product error code."
+        }
+      },
+      "description" : "Error occurring when invoking the execution of the decision service operation."
+    }
+  }
+}

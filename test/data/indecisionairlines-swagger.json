@@ -1,0 +1,173 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "API to invoke the execution of the decision service operation IndecisionAirlines_Ruleset.",
+    "version" : "1.0.0",
+    "title" : "IndecisionAirlines_Ruleset API"
+  },
+  "host" : "localhost:9090",
+  "basePath" : "/DecisionService/rest",
+  "schemes" : [ "http" ],
+  "consumes" : [ "application/json" ],
+  "produces" : [ "application/json" ],
+  "paths" : {
+    "/IndecisionAirlines_Ruleapp/1.0/IndecisionAirlines_Ruleset/1.1" : {
+      "post" : {
+        "summary" : "Invokes the execution of the decision service operation IndecisionAirlines_Ruleset.",
+        "description" : "Executes the decision service operation IndecisionAirlines_Ruleset with the path /IndecisionAirlines_Ruleapp/1.0/IndecisionAirlines_Ruleset/1.1.",
+        "operationId" : "callIndecisionAirlines_RulesetDecisionServiceOperation",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "Request",
+          "description" : "Request for the execution of the decision service operation. Contains notably the input parameters that are used for the execution.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Request"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response for the execution of the decision service operation. Contains notably the output parameters that are returned by the execution.",
+            "schema" : {
+              "$ref" : "#/definitions/Response"
+            }
+          },
+          "default" : {
+            "description" : "Error occurring when invoking the execution of the decision service operation.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Response" : {
+      "type" : "object",
+      "properties" : {
+        "__DecisionID__" : {
+          "type" : "string",
+          "description" : "Unique identifier representing the execution of the decision service operation. If it is not specified, it will be computed automatically."
+        },
+        "Fee" : {
+          "$ref" : "#/definitions/BaggageFeeResult"
+        }
+      },
+      "description" : "Response for the execution of the decision service operation. Contains notably the output parameters that are returned by the execution."
+    },
+    "Customer" : {
+      "type" : "object",
+      "properties" : {
+        "status" : {
+          "type" : "string",
+          "enum" : [ "Bronze", "Gold", "Silver", "Platinum", "None" ]
+        }
+      }
+    },
+    "BaggageFeeResult" : {
+      "type" : "object",
+      "properties" : {
+        "totalBaggageFee" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "status" : {
+          "type" : "string",
+          "enum" : [ "NoCharge", "AdditionalCharge", "Rejected" ]
+        },
+        "discount" : {
+          "type" : "string"
+        },
+        "reasons" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "Request" : {
+      "type" : "object",
+      "properties" : {
+        "__DecisionID__" : {
+          "type" : "string",
+          "description" : "Unique identifier representing the execution of the decision service operation. If it is not specified, it will be computed automatically."
+        },
+        "Booking" : {
+          "$ref" : "#/definitions/Booking"
+        },
+        "Customer" : {
+          "$ref" : "#/definitions/Customer"
+        },
+        "Fee_per_extra_kilogram" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "Maximum_spec_for_a_piece" : {
+          "$ref" : "#/definitions/BaggageItem"
+        }
+      },
+      "description" : "Request for the execution of the decision service operation. Contains notably the input parameters that are used for the execution."
+    },
+    "Error" : {
+      "type" : "object",
+      "properties" : {
+        "code" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "HTTP error code."
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "Error message."
+        },
+        "details" : {
+          "type" : "string",
+          "description" : "Detailed error message."
+        },
+        "errorCode" : {
+          "type" : "string",
+          "description" : "Product error code."
+        }
+      },
+      "description" : "Error occurring when invoking the execution of the decision service operation."
+    },
+    "Booking" : {
+      "type" : "object",
+      "properties" : {
+        "baggageItems" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/BaggageItem"
+          }
+        },
+        "fareClass" : {
+          "type" : "string",
+          "enum" : [ "Economy", "Business", "PremiumEconomy", "First" ]
+        }
+      }
+    },
+    "BaggageItem" : {
+      "type" : "object",
+      "properties" : {
+        "depth" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "width" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "height" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "weight" : {
+          "type" : "number",
+          "format" : "double"
+        }
+      }
+    }
+  }
+}

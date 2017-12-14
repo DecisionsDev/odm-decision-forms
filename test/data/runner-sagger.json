@@ -1,0 +1,143 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "API to invoke the execution of the decision service operation ruleset.",
+    "version" : "1.0.0",
+    "title" : "ruleset API"
+  },
+  "host" : "localhost:9090",
+  "basePath" : "/DecisionService/rest",
+  "schemes" : [ "http" ],
+  "consumes" : [ "application/json" ],
+  "produces" : [ "application/json" ],
+  "paths" : {
+    "/Runner_c3f9baff_4deb_49f4_b1a6_31a3875e60c9/1.0/ruleset/1.0" : {
+      "post" : {
+        "summary" : "Invokes the execution of the decision service operation ruleset.",
+        "description" : "Executes the decision service operation ruleset with the path /Runner_c3f9baff_4deb_49f4_b1a6_31a3875e60c9/1.0/ruleset/1.0.",
+        "operationId" : "callrulesetDecisionServiceOperation",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "Request",
+          "description" : "Request for the execution of the decision service operation. Contains notably the input parameters that are used for the execution.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Request"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response for the execution of the decision service operation. Contains notably the output parameters that are returned by the execution.",
+            "schema" : {
+              "$ref" : "#/definitions/Response"
+            }
+          },
+          "default" : {
+            "description" : "Error occurring when invoking the execution of the decision service operation.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Response" : {
+      "type" : "object",
+      "properties" : {
+        "__DecisionID__" : {
+          "type" : "string",
+          "description" : "Unique identifier representing the execution of the decision service operation. If it is not specified, it will be computed automatically."
+        },
+        "Matching_race" : {
+          "type" : "array",
+          "items" : {
+            "type" : "object"
+          }
+        }
+      },
+      "description" : "Response for the execution of the decision service operation. Contains notably the output parameters that are returned by the execution."
+    },
+    "Runner" : {
+      "type" : "object",
+      "properties" : {
+        "average speed" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "area" : {
+          "type" : "string"
+        },
+        "category" : {
+          "type" : "string",
+          "enum" : [ "upper intermediate", "advanced", "beginner", "intermediate", "pre intermediate" ]
+        },
+        "weekly mileage" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Race" : {
+      "type" : "object",
+      "properties" : {
+        "area" : {
+          "type" : "string"
+        },
+        "category" : {
+          "type" : "string",
+          "enum" : [ "upper intermediate", "advanced", "beginner", "intermediate", "pre intermediate" ]
+        },
+        "name" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Request" : {
+      "type" : "object",
+      "properties" : {
+        "__DecisionID__" : {
+          "type" : "string",
+          "description" : "Unique identifier representing the execution of the decision service operation. If it is not specified, it will be computed automatically."
+        },
+        "Races" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Race"
+          }
+        },
+        "Runner" : {
+          "$ref" : "#/definitions/Runner"
+        }
+      },
+      "description" : "Request for the execution of the decision service operation. Contains notably the input parameters that are used for the execution."
+    },
+    "Error" : {
+      "type" : "object",
+      "properties" : {
+        "code" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "HTTP error code."
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "Error message."
+        },
+        "details" : {
+          "type" : "string",
+          "description" : "Detailed error message."
+        },
+        "errorCode" : {
+          "type" : "string",
+          "description" : "Product error code."
+        }
+      },
+      "description" : "Error occurring when invoking the execution of the decision service operation."
+    }
+  }
+}

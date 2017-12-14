@@ -28,7 +28,7 @@ export interface SchemaElement {
 	description?: string,
 	minimum?: number,
 	required?: string[],
-	items?: SchemaElement,
+	items?: SchemaElement | SchemaElementRef,
 	format?: Format,
 	className?: string // custom extension
 }

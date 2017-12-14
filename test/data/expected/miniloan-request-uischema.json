@@ -1,0 +1,23 @@
+{
+  "ui:order": [
+    "*"
+  ],
+  "borrower": {
+    "ui:order": [
+      "yearlyIncome",
+      "creditScore",
+      "name",
+      "*"
+    ]
+  },
+  "loan": {
+    "ui:order": [
+      "approved",
+      "yearlyRepayment",
+      "yearlyInterestRate",
+      "duration",
+      "amount",
+      "*"
+    ]
+  }
+}

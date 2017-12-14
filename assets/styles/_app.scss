@@ -1,6 +1,5 @@
 @import "variables";
 
-
 .form-container {
   float: left;
   width: calc(50% - 40px);
@@ -18,15 +17,25 @@
         font-size: 18px;
       }
     }
-    .form-group {
-      &.field-integer, &.field-number {
-        float: left;
-        min-width: calc(50% - 10px);
-        margin-right: 10px;
+    .form-grid {
+      display: grid;
+      grid-template-columns: 50% 50%;
+      grid-gap: 10px;
+      padding-right: 10px;
+      .field {
+        grid-column-start: span 2;
+      }
+      .field-integer, .field-number, .field-string, .field-boolean {
+        grid-column-start: span 1;
+        //float: left;
+        //min-width: calc(50% - 10px);
+        //margin-right: 10px;
+        //          grid-column-start: span 1;
       }
       &.field-string, &.field-boolean, &.field-array, &.field-object {
-        clear: both;
-        min-width: 100%;
+        //          grid-column-start: span 2;
+        //clear: both;
+        //min-width: 100%;
       }
     }
   }

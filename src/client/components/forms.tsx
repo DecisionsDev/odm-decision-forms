@@ -45,6 +45,8 @@ class Forms extends React.Component<DProps, any> {
 				<h1>Request</h1>
 				<Form schema={requestSchema}
 							uiSchema={inuiSchema}
+							ObjectFieldTemplate={MyObjectFieldTemplate}
+							liveValidate={true}
 							formData={this.state}
 							onChange={({formData}) => this.setState(formData)}
 							onSubmit={data => this.handleOnSubtmit(data)}
@@ -57,7 +59,10 @@ class Forms extends React.Component<DProps, any> {
 			</div>
 			<div id="output" className="form-container">
 				<h1>Response</h1>
-				<Form uiSchema={outuiSchema} formData={result} schema={responseSchema}/>
+				<Form uiSchema={outuiSchema}
+							ObjectFieldTemplate={MyObjectFieldTemplate}
+							formData={result}
+							schema={responseSchema}/>
 			</div>
 			{
 				error && <div>
@@ -69,6 +74,36 @@ class Forms extends React.Component<DProps, any> {
 		</div>
 	}
 }
+
+// Redefine the object field template to add a 'form-grid' div because CSS directive 'display:grid' does not work
+// on <fieldset>
+function MyObjectFieldTemplate(props) {
+	const { TitleField, DescriptionField } = props;
+	return (
+		<fieldset>
+			{(props.uiSchema["ui:title"] || props.title) && (
+				<TitleField
+					id={`${props.idSchema.$id}__title`}
+					title={props.title || props.uiSchema["ui:title"]}
+					required={props.required}
+					formContext={props.formContext}
+				/>
+			)}
+			{props.description && (
+				<DescriptionField
+					id={`${props.idSchema.$id}__description`}
+					description={props.description}
+					formContext={props.formContext}
+				/>
+			)}
+			<div className="form-grid">
+				{props.properties.map(prop => prop.content)}
+			</div>
+		</fieldset>
+	);
+}
+
+
 
 const mapStateToProps = (state: State): Props => {
 	return {

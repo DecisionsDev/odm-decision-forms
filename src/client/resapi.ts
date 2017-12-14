@@ -4,7 +4,7 @@ var startCase = require('lodash.startcase');
 var axios = require("axios");
 var Promise = require('bluebird');
 import {
-	Format, RootSchemaElement, SchemaElement, Type
+	Format, RootSchemaElement, SchemaElement, Type, SchemaElementRef
 } from "./schema";
 
 export const loadSwagger = (rulesetPath: string): Promise<any> => {
@@ -73,6 +73,71 @@ const _normalizeSchema = (schema: SchemaElement, title?: string): void => {
 			const value = schema.properties[key];
 			if (!(value as any).$ref) {
 				_normalizeSchema(value as SchemaElement, _title(key));
+			}
+		}
+	}
+};
+
+const isPrimitive = (t: Type) : boolean => {
+	switch (t) {
+		case Type.TNumber:
+		case Type.TInteger:
+		case Type.TBoolean:
+		case Type.TString:
+			return true;
+	}
+	return false;
+};
+
+export const buildUiSchema = (root: RootSchemaElement): object => {
+	const uiSchema = {
+		"ui:order": ["*"]
+	};
+	_buildUiSchema(root, root, null, uiSchema);
+	return uiSchema;
+};
+
+const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: RootSchemaElement, key: string | null, uiSchema: object): void => {
+	if ((schemaOrRef as any).$ref) {
+		const ref : SchemaElementRef = schemaOrRef as SchemaElementRef;
+		if (key) {
+			uiSchema[key] = {
+				"ui:order": ["*"]
+			};
+		}
+		const definitionName = ref.$ref.substr("#/definitions/".length);
+		const definition: SchemaElement | SchemaElementRef = root.definitions![definitionName];
+		_buildUiSchema(definition, root, key, uiSchema);
+	} else {
+		const schema : SchemaElement = schemaOrRef as SchemaElement;
+		const type: Type = schema.type;
+		if (isPrimitive(type)) {
+			if (key) {
+				uiSchema["ui:order"].splice(0, 0, key);
+			}
+		} else if (type === Type.TObject) {
+			if (key) {
+				uiSchema[key] = {
+					"ui:order": ["*"]
+				};
+			}
+			if (schema.properties) {
+				for (const k in schema.properties) {
+					const schemaOrRefChild = schema.properties[k];
+					_buildUiSchema(schemaOrRefChild, root, k, key ? uiSchema[key] : uiSchema);
+				}
+			}
+		} else if (type === Type.TArray && schema.items) {
+			if ((schema.items as any).$ref || (schema.items as SchemaElement).type === Type.TObject || (schema.items as SchemaElement).type === Type.TArray) {
+				if (key) {
+					uiSchema[key] = {
+						items: {
+							"ui:order": ["*"]
+						}
+					};
+				}
+				const schemaOrRefItem : SchemaElement | SchemaElementRef = schema.items;
+				_buildUiSchema(schemaOrRefItem, root, null, key ? uiSchema[key].items : uiSchema);
 			}
 		}
 	}

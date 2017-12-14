@@ -1,0 +1,15 @@
+{
+  "ui:order": [
+    "*"
+  ],
+  "loan": {
+    "ui:order": [
+      "approved",
+      "yearlyRepayment",
+      "yearlyInterestRate",
+      "duration",
+      "amount",
+      "*"
+    ]
+  }
+}
