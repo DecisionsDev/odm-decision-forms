@@ -57,7 +57,7 @@
     "test": "npm run test-only",
     "test-only": "jest --coverage",
     "test:watch": "jest --watch",
-    "compile": "tsc -m commonjs --outDir _output"
+    "compile": "tsc -m commonjs --noEmit"
   },
   "dependencies": {
     "axios": "^0.16.2",
