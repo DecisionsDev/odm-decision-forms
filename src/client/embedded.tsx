@@ -2,6 +2,7 @@ import * as React from "react";
 import * as ReactDOM from 'react-dom'
 
 import Forms from './components/forms';
+import Error from './components/error';
 
 import {applyMiddleware, combineReducers, createStore} from "redux";
 import {Provider} from "react-redux";
@@ -14,18 +15,17 @@ const historyMiddleware = routerMiddleware(history);
 
 const styles = require('./main.scss');
 
-// const projectId = "354b76c4ced84ee1b81f7cbb425068ec";
-// const apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzY29wZXMiOlsiZnVsbCJdLCJ1c2VySWQiOiIwYTI5YjM2YzMyOTQ0YzEzYmVmYTBlYTQ1MTQ5MzJjOCIsImp0aSI6IjYyMGJkMWQ3ZTZmMzRiNWE5ZjAyYTViZWE4YzVkZDk0IiwidXNlcm5hbWUiOiJhbnRvaW5lLm1lbGtpQGlibS5jb20ifQ.XnUeVNOWZRKDRAGLVeFBd4EAG51TbJIc05F2DY41VTo";
-
 import axios from "axios";
 import { readSwagger } from "./resapi";
 import {errorReducer, requestReducer, resReducer, resultReducer, schemaReducer} from "./reducers";
+import {WebRequest} from "./state";
 
-const renderForms = (rootId, swaggerUri, executeRequest) => {
-	// const swaggerUri = `${baseUrl}/execution/${projectId}/api/v1?apiKey=${token}`;
-	// const executeUri = `${baseUrl}/execution/${projectId}/execute/v1?apiKey=${token}`;
-	axios.get(swaggerUri).then(({data}) => {
-		const swagger = data;
+const renderForms = (rootId : string, swaggerRequest: WebRequest, executeRequest: WebRequest) => {
+	let identity = a => a;
+	let transformResult = swaggerRequest.transformResult || identity;
+	let headers = swaggerRequest.headers || {};
+	axios.get(swaggerRequest.url, { headers }).then(({data}) => {
+		const swagger = transformResult(data);
 		let res = readSwagger(swagger);
 		const initialState = {
 			requestSchema: res.request,
@@ -56,8 +56,7 @@ const renderForms = (rootId, swaggerUri, executeRequest) => {
 			document.getElementById(rootId)
 		);
 	}).catch(error => {
-		console.log(error);
-		alert(error);
+		ReactDOM.render(<Error error={error}/>, document.getElementById(rootId));
 	});
 };
 

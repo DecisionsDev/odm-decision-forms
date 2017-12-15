@@ -36,4 +36,12 @@ $gl-version:          "1.0" !default;
     line-height: 1.1;
     color: inherit;
   }
+  form > .form-group.field-object .form-group.field-object {
+    padding: 10px;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    &:hover {
+      border: 1px solid darken(#dddddd, 20%);
+    }
+  }
 }

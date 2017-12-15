@@ -28,7 +28,7 @@ export interface RulesetVersion {
 	path: string;
 }
 
-export interface ExecuteRequest {
+export interface WebRequest {
 	url: string;
 	headers?: { [key:string]:string; },
 	transformPayload: (payload) => {},
@@ -38,7 +38,7 @@ export interface ExecuteRequest {
 export interface State {
 	requestSchema: RootSchemaElement | null;
 	responseSchema: RootSchemaElement | null;
-	executeRequest: ExecuteRequest | null;
+	executeRequest: WebRequest;
 	result: object | null;
 	error: Error | null;
 	router: RouterState;

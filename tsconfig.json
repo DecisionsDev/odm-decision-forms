@@ -19,8 +19,5 @@
     "useBabel": true,
     "useCache": true,
     "useTranspileModule": true
-  },
-  "include": [
-    "./src/client/lib.ts"
-  ]
+  }
 }

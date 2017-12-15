@@ -5,13 +5,9 @@ var PropTypes = require('prop-types'); // ES5 with npm
 var ES6Promise = require("es6-promise");
 ES6Promise.polyfill();
 import {applyMiddleware, combineReducers, createStore} from "redux";
-import {
-	ResState, State,
-	errorReducer, requestReducer, resReducer, resultReducer, schemaReducer,
-	App, Error,
-	loadRulesetPaths, loadSwagger
-} from "./lib";
 import {Provider} from "react-redux";
+import App from "./components/App";
+import Error from "./components/Error";
 
 const styles = require('./main.scss');
 
@@ -19,6 +15,9 @@ var Promise = require('bluebird');
 import thunkMiddleware from 'redux-thunk';
 import {ConnectedRouter, routerReducer, routerMiddleware, RouterState} from 'react-router-redux'
 import createHistory from 'history/createBrowserHistory';
+import {loadRulesetPaths, loadSwagger} from "./resapi";
+import {ResState, State} from "./state";
+import {errorReducer, requestReducer, resReducer, resultReducer, schemaReducer} from "./reducers";
 
 const history = createHistory();
 const historyMiddleware = routerMiddleware(history);
@@ -70,7 +69,7 @@ loadRulesetPaths()
 		const initialState: State = {
 			requestSchema: null,
 			responseSchema: null,
-			executeRequest: null,
+			executeRequest: { url: '', transformResult: x=>x, transformPayload: x=>x, headers: {} },
 			result: null,
 			res: resState,
 			error: null,
