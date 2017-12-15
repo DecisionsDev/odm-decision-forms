@@ -5,7 +5,7 @@ const startCase = require('lodash.startcase');
 const axios = require("axios");
 const Promise = require('bluebird');
 import {
-	Format, RootSchemaElement, SchemaElement, Type, SchemaElementRef, SchemaProperties, SchemaDefinitions
+	Format, RootSchemaElement, SchemaElement, Type, SchemaElementRef, SchemaDefinitions
 } from "./schema";
 
 export const loadSwagger = (rulesetPath: string): Promise<any> => {
@@ -60,38 +60,19 @@ export const normalizeSchema = (schema: RootSchemaElement): void => {
 			delete (schema.definitions.Response as SchemaElement)!.properties!['__DecisionID__'];
 		}
 	}
-	if (schema.properties) {
-		for (const key in schema.properties) {
-			let value = schema.properties[key];
-			if ((value as any).items) {
-				(value as SchemaElement).title = _title(key);
-				value = (value as any).items;
-			}
-			if ((value as any).$ref) {
-				const ref = resolveRef((value as any).$ref);
-				const processedDefinition = context.definitions[ref];
-				if (!processedDefinition) {
-					const schemaElement = schema.definitions![ref] as SchemaElement;
-					context.current = ref;
-					_normalizeSchema(schemaElement, context, _title(ref));
-					context.definitions[ref] = schemaElement;
-				}
-			} else {
-				_normalizeSchema(value as SchemaElement, context, _title(key));
-			}
-		}
-	}
-	// Once all used definitions are processed, assign them to the schema instead of the initial set
+	_normalizeSchema(schema, context);
 	schema.definitions = context.definitions;
 };
 
 
 const _normalizeSchema = (schema: SchemaElement, context: Context, title?: string): void => {
 	// The form generator does not seem to support these cases...
-	if (schema.type === Type.TNumber && schema.format === Format.Double) {
-		delete schema.format;
-	} else if (schema.type === Type.TInteger && (schema.format === Format.Int32 || schema.format === Format.Int64)) {
-		delete schema.format;
+	if (schema.type) {
+		if (schema.type === Type.TNumber && schema.format === Format.Double) {
+			delete schema.format;
+		} else if (schema.type === Type.TInteger && (schema.format === Format.Int32 || schema.format === Format.Int64)) {
+			delete schema.format;
+		}
 	}
 	if (title && !schema.title) {
 		schema.title = title;

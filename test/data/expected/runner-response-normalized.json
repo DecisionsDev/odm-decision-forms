@@ -6,8 +6,7 @@
     "Matching_race": {
       "type": "array",
       "items": {
-        "type": "object",
-        "title": "Matching Race"
+        "type": "object"
       },
       "title": "Matching Race"
     }

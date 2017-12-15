@@ -1,28 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
   "definitions": {
-    "BaggageItem": {
-      "type": "object",
-      "properties": {
-        "depth": {
-          "type": "number",
-          "title": "Depth"
-        },
-        "width": {
-          "type": "number",
-          "title": "Width"
-        },
-        "height": {
-          "type": "number",
-          "title": "Height"
-        },
-        "weight": {
-          "type": "number",
-          "title": "Weight"
-        }
-      },
-      "title": "Baggage Item"
-    },
     "Booking": {
       "type": "object",
       "properties": {
@@ -45,6 +23,28 @@
         }
       },
       "title": "Booking"
+    },
+    "BaggageItem": {
+      "type": "object",
+      "properties": {
+        "depth": {
+          "type": "number",
+          "title": "Depth"
+        },
+        "width": {
+          "type": "number",
+          "title": "Width"
+        },
+        "height": {
+          "type": "number",
+          "title": "Height"
+        },
+        "weight": {
+          "type": "number",
+          "title": "Weight"
+        }
+      },
+      "title": "Baggage Item"
     },
     "Customer": {
       "type": "object",

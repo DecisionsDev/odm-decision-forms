@@ -1,6 +1,49 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
   "definitions": {
+    "Car": {
+      "type": "object",
+      "properties": {
+        "serial number": {
+          "type": "string",
+          "title": "Serial Number"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "premium",
+            "compact",
+            "full size"
+          ],
+          "title": "Category"
+        },
+        "ID": {
+          "type": "number",
+          "title": "Id"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "in need of maintenance",
+            "available",
+            "not available"
+          ],
+          "title": "Status"
+        },
+        "model": {
+          "type": "string",
+          "title": "Model"
+        },
+        "brand": {
+          "type": "string",
+          "title": "Brand"
+        },
+        "car black box": {
+          "$ref": "#/definitions/CarBlackBox"
+        }
+      },
+      "title": "Car"
+    },
     "CarBlackBox": {
       "type": "object",
       "properties": {
@@ -65,49 +108,6 @@
         }
       },
       "title": "Car Maintenance Record"
-    },
-    "Car": {
-      "type": "object",
-      "properties": {
-        "serial number": {
-          "type": "string",
-          "title": "Serial Number"
-        },
-        "category": {
-          "type": "string",
-          "enum": [
-            "premium",
-            "compact",
-            "full size"
-          ],
-          "title": "Category"
-        },
-        "ID": {
-          "type": "number",
-          "title": "Id"
-        },
-        "status": {
-          "type": "string",
-          "enum": [
-            "in need of maintenance",
-            "available",
-            "not available"
-          ],
-          "title": "Status"
-        },
-        "model": {
-          "type": "string",
-          "title": "Model"
-        },
-        "brand": {
-          "type": "string",
-          "title": "Brand"
-        },
-        "car black box": {
-          "$ref": "#/definitions/CarBlackBox"
-        }
-      },
-      "title": "Car"
     },
     "CarReturnRecord": {
       "type": "object",
