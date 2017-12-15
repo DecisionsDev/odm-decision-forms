@@ -1,0 +1,43 @@
+{
+  "ui:order": [
+    "current_time",
+    "*"
+  ],
+  "Borrower": {
+    "ui:order": [
+      "spouse",
+      "creditScore",
+      "zipCode",
+      "yearlyIncome",
+      "birthDate",
+      "lastName",
+      "firstName",
+      "*"
+    ],
+    "latestBankruptcy": {
+      "ui:order": [
+        "reason",
+        "chapter",
+        "date",
+        "*"
+      ]
+    },
+    "SSN": {
+      "ui:order": [
+        "serialNumber",
+        "groupCode",
+        "areaNumber",
+        "*"
+      ]
+    }
+  },
+  "Loan": {
+    "ui:order": [
+      "loanToValue",
+      "amount",
+      "startDate",
+      "numberOfMonthlyPayments",
+      "*"
+    ]
+  }
+}

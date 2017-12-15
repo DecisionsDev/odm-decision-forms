@@ -38,40 +38,39 @@ export const readSwagger = (swagger) => {
 	return {request: normalizedRequest, response: normalizedResponse};
 };
 
+interface Context {
+	dependencies: { [s: string]: string[]; },
+	current: string | null
+}
+
 export const normalizeSchema = (schema: RootSchemaElement): void => {
+	const context: Context = {
+		dependencies: {},
+		current: null
+	};
 	if (schema.properties) {
 		for (const key in schema.properties) {
 			const value = schema.properties[key];
 			if (!(value as any).$ref) {
-				_normalizeSchema(value as SchemaElement, [], _title(key));
+				_normalizeSchema(value as SchemaElement, context, _title(key));
 			}
 		}
 	}
-	const graph: Dependency = { key: '', dependencies: [], parent: null };
 	if (schema.definitions) {
 		delete (schema.definitions.Request as SchemaElement)!.properties!['__DecisionID__'];
 		delete (schema.definitions.Response as SchemaElement)!.properties!['__DecisionID__'];
 		for (const key in schema.definitions) {
 			const value = schema.definitions[key];
-			graph.dependencies.push({
-				key: key,
-				dependencies: [],
-				parent: graph
-			});
+			context.current = key;
 			if (!(value as any).$ref) {
-				_normalizeSchema(value as SchemaElement, [ key ], _title(key));
+				_normalizeSchema(value as SchemaElement, context, _title(key));
 			}
 		}
 	}
 };
 
-interface Dependency {
-	key: string;
-	dependencies: Dependency[];
-	parent: Dependency | null;
-}
 
-const _normalizeSchema = (schema: SchemaElement, stack: string[], title?: string): void => {
+const _normalizeSchema = (schema: SchemaElement, context: Context, title?: string): void => {
 	// The form generator does not seem to support these cases...
 	if (schema.type === Type.TNumber && schema.format === Format.Double) {
 		delete schema.format;
@@ -84,14 +83,44 @@ const _normalizeSchema = (schema: SchemaElement, stack: string[], title?: string
 	if (schema.properties) {
 		for (const key in schema.properties) {
 			const value = schema.properties[key];
-			if (!(value as any).$ref) {
-				_normalizeSchema(value as SchemaElement, stack, _title(key));
+			if ((value as any).$ref) {
+				const ref: SchemaElementRef = value as SchemaElementRef;
+				const name = resolveRef(ref.$ref);
+				const current = context.current;
+				if (current) {
+					const defDependencies = context.dependencies[name];
+					if (name === current || (defDependencies && defDependencies.indexOf(current) != -1)) {
+						// This referenced definition has already been explored
+						// If the current definition being explored is already a dependency of the referenced definition,
+						// we have a cyclic dependency.
+						// Replace by a string, with a warning in the description
+						const message = `Warning: replaced cyclic reference (${current} => ${key}: ${name}) with a string property`;
+						console.log(message);
+						schema.properties[key] = {
+							type: Type.TString,
+							title: _title(key),
+							description: message
+						} as SchemaElement;
+					} else {
+						if (context.dependencies[current]) {
+							context.dependencies[current].push(name);
+						} else {
+							context.dependencies[current] = [ name ];
+						}
+					}
+				}
+			} else {
+				_normalizeSchema(value as SchemaElement, context, _title(key));
 			}
 		}
 	}
 };
 
-const isPrimitive = (t: Type) : boolean => {
+const resolveRef = ($ref: string): string => {
+	return $ref.substr("#/definitions/".length);
+};
+
+const isPrimitive = (t: Type): boolean => {
 	switch (t) {
 		case Type.TNumber:
 		case Type.TInteger:
@@ -112,7 +141,7 @@ export const buildUiSchema = (root: RootSchemaElement): object => {
 
 const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: RootSchemaElement, key: string | null, uiSchema: object): void => {
 	if ((schemaOrRef as any).$ref) {
-		const ref : SchemaElementRef = schemaOrRef as SchemaElementRef;
+		const ref: SchemaElementRef = schemaOrRef as SchemaElementRef;
 		if (key) {
 			uiSchema[key] = {
 				"ui:order": ["*"]
@@ -122,7 +151,7 @@ const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: Roo
 		const definition: SchemaElement | SchemaElementRef = root.definitions![definitionName];
 		_buildUiSchema(definition, root, key, uiSchema);
 	} else {
-		const schema : SchemaElement = schemaOrRef as SchemaElement;
+		const schema: SchemaElement = schemaOrRef as SchemaElement;
 		const type: Type = schema.type;
 		if (isPrimitive(type)) {
 			if (key) {
@@ -149,7 +178,7 @@ const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: Roo
 						}
 					};
 				}
-				const schemaOrRefItem : SchemaElement | SchemaElementRef = schema.items;
+				const schemaOrRefItem: SchemaElement | SchemaElementRef = schema.items;
 				_buildUiSchema(schemaOrRefItem, root, null, key ? uiSchema[key].items : uiSchema);
 			}
 		}

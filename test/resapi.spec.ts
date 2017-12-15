@@ -109,6 +109,6 @@ runTest('miniloan');
 runTest('carrental');
 runTest('greetings');
 runTest('indecisionairlines');
-//runTest('loanvalidation');
+runTest('loanvalidation');
 runTest('runner');
 

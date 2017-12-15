@@ -66,7 +66,9 @@
           "title": "Credit Score"
         },
         "spouse": {
-          "$ref": "#/definitions/Borrower"
+          "type": "string",
+          "title": "Spouse",
+          "description": "Warning: replaced cyclic reference (Borrower => spouse: Borrower) with a string property"
         },
         "latestBankruptcy": {
           "$ref": "#/definitions/Bankruptcy"

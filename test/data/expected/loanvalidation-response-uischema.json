@@ -1,0 +1,19 @@
+{
+  "ui:order": [
+    "*"
+  ],
+  "Approval": {
+    "ui:order": [
+      "message",
+      "approved",
+      "*"
+    ]
+  },
+  "Insurance": {
+    "ui:order": [
+      "rate",
+      "required",
+      "*"
+    ]
+  }
+}
