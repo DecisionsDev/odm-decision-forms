@@ -6,7 +6,7 @@ import {buildUiSchema, normalizeSchema, readSwagger} from '../src/client/resapi'
 const readFile = BPromise.promisify(fs.readFile);
 
 // Set this to true in order to regenerate expected files
-const overwrite = false;
+const overwrite = true;
 
 test('decamelize', () => {
 	expect(decamelize('fooBar', ' ')).toBe('foo bar');
@@ -72,8 +72,6 @@ const testNormalize = (name) => {
 	test(`testNormalize(${name})`, async () => {
 		const data = await fetch(name);
 		const { request, response } = readSwagger(data.swagger.json);
-		normalizeSchema(request);
-		normalizeSchema(response);
 		if (overwrite) {
 			fs.writeFile(data.request.normalized.name, JSON.stringify(request, null, 2));
 			fs.writeFile(data.response.normalized.name, JSON.stringify(response, null, 2));
@@ -88,8 +86,6 @@ const testBuildUISchema = (name) => {
 	test(`testBuildUISchema(${name})`, async () => {
 		const data = await fetch(name);
 		const { request, response } = readSwagger(data.swagger.json);
-		normalizeSchema(request);
-		normalizeSchema(response);
 		if (overwrite) {
 			fs.writeFile(data.request.uischema.name, JSON.stringify(buildUiSchema(request), null, 2));
 			fs.writeFile(data.response.uischema.name, JSON.stringify(buildUiSchema(response), null, 2));

@@ -1,19 +1,30 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
   "definitions": {
-    "Response": {
+    "Race": {
       "type": "object",
       "properties": {
-        "Matching_race": {
-          "type": "array",
-          "items": {
-            "type": "object"
-          },
-          "title": "Matching Race"
+        "area": {
+          "type": "string",
+          "title": "Area"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "upper intermediate",
+            "advanced",
+            "beginner",
+            "intermediate",
+            "pre intermediate"
+          ],
+          "title": "Category"
+        },
+        "name": {
+          "type": "string",
+          "title": "Name"
         }
       },
-      "description": "Response for the execution of the decision service operation. Contains notably the output parameters that are returned by the execution.",
-      "title": "Response"
+      "title": "Race"
     },
     "Runner": {
       "type": "object",
@@ -47,75 +58,6 @@
         }
       },
       "title": "Runner"
-    },
-    "Race": {
-      "type": "object",
-      "properties": {
-        "area": {
-          "type": "string",
-          "title": "Area"
-        },
-        "category": {
-          "type": "string",
-          "enum": [
-            "upper intermediate",
-            "advanced",
-            "beginner",
-            "intermediate",
-            "pre intermediate"
-          ],
-          "title": "Category"
-        },
-        "name": {
-          "type": "string",
-          "title": "Name"
-        }
-      },
-      "title": "Race"
-    },
-    "Request": {
-      "type": "object",
-      "properties": {
-        "Races": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Race"
-          },
-          "title": "Races"
-        },
-        "Runner": {
-          "$ref": "#/definitions/Runner"
-        }
-      },
-      "description": "Request for the execution of the decision service operation. Contains notably the input parameters that are used for the execution.",
-      "title": "Request"
-    },
-    "Error": {
-      "type": "object",
-      "properties": {
-        "code": {
-          "type": "integer",
-          "description": "HTTP error code.",
-          "title": "Code"
-        },
-        "message": {
-          "type": "string",
-          "description": "Error message.",
-          "title": "Message"
-        },
-        "details": {
-          "type": "string",
-          "description": "Detailed error message.",
-          "title": "Details"
-        },
-        "errorCode": {
-          "type": "string",
-          "description": "Product error code.",
-          "title": "Error Code"
-        }
-      },
-      "description": "Error occurring when invoking the execution of the decision service operation.",
-      "title": "Error"
     }
   },
   "type": "object",

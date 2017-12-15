@@ -5,7 +5,7 @@ const startCase = require('lodash.startcase');
 const axios = require("axios");
 const Promise = require('bluebird');
 import {
-	Format, RootSchemaElement, SchemaElement, Type, SchemaElementRef
+	Format, RootSchemaElement, SchemaElement, Type, SchemaElementRef, SchemaProperties, SchemaDefinitions
 } from "./schema";
 
 export const loadSwagger = (rulesetPath: string): Promise<any> => {
@@ -40,33 +40,49 @@ export const readSwagger = (swagger) => {
 
 interface Context {
 	dependencies: { [s: string]: string[]; },
-	current: string | null
+	current: string | null,
+	definitions: SchemaDefinitions,
+	schema: RootSchemaElement
 }
 
 export const normalizeSchema = (schema: RootSchemaElement): void => {
 	const context: Context = {
 		dependencies: {},
-		current: null
+		current: null,
+		definitions: {},
+		schema: schema
 	};
+	if (schema.definitions) {
+		if (schema.definitions.Request) {
+			delete (schema.definitions.Request as SchemaElement)!.properties!['__DecisionID__'];
+		}
+		if (schema.definitions.Response) {
+			delete (schema.definitions.Response as SchemaElement)!.properties!['__DecisionID__'];
+		}
+	}
 	if (schema.properties) {
 		for (const key in schema.properties) {
-			const value = schema.properties[key];
-			if (!(value as any).$ref) {
+			let value = schema.properties[key];
+			if ((value as any).items) {
+				(value as SchemaElement).title = _title(key);
+				value = (value as any).items;
+			}
+			if ((value as any).$ref) {
+				const ref = resolveRef((value as any).$ref);
+				const processedDefinition = context.definitions[ref];
+				if (!processedDefinition) {
+					const schemaElement = schema.definitions![ref] as SchemaElement;
+					context.current = ref;
+					_normalizeSchema(schemaElement, context, _title(ref));
+					context.definitions[ref] = schemaElement;
+				}
+			} else {
 				_normalizeSchema(value as SchemaElement, context, _title(key));
 			}
 		}
 	}
-	if (schema.definitions) {
-		delete (schema.definitions.Request as SchemaElement)!.properties!['__DecisionID__'];
-		delete (schema.definitions.Response as SchemaElement)!.properties!['__DecisionID__'];
-		for (const key in schema.definitions) {
-			const value = schema.definitions[key];
-			context.current = key;
-			if (!(value as any).$ref) {
-				_normalizeSchema(value as SchemaElement, context, _title(key));
-			}
-		}
-	}
+	// Once all used definitions are processed, assign them to the schema instead of the initial set
+	schema.definitions = context.definitions;
 };
 
 
@@ -82,11 +98,25 @@ const _normalizeSchema = (schema: SchemaElement, context: Context, title?: strin
 	}
 	if (schema.properties) {
 		for (const key in schema.properties) {
-			const value = schema.properties[key];
+			let value : SchemaElement | SchemaElementRef = schema.properties[key];
+			let title = _title(key);
+			if ((value as any).items) {
+				(value as SchemaElement).title = title;
+				value = (value as any).items;
+				title = null;
+			}
 			if ((value as any).$ref) {
 				const ref: SchemaElementRef = value as SchemaElementRef;
 				const name = resolveRef(ref.$ref);
+				let processedDefinition = context.definitions[name];
 				const current = context.current;
+				if (!processedDefinition) {
+					context.current = name;
+					processedDefinition = context.schema.definitions![name];
+					context.definitions[name] = processedDefinition;
+					_normalizeSchema(processedDefinition as SchemaElement, context, _title(name));
+					context.current = current;
+				}
 				if (current) {
 					const defDependencies = context.dependencies[name];
 					if (name === current || (defDependencies && defDependencies.indexOf(current) != -1)) {
@@ -98,7 +128,7 @@ const _normalizeSchema = (schema: SchemaElement, context: Context, title?: strin
 						console.log(message);
 						schema.properties[key] = {
 							type: Type.TString,
-							title: _title(key),
+							title: title,
 							description: message
 						} as SchemaElement;
 					} else {
@@ -110,7 +140,8 @@ const _normalizeSchema = (schema: SchemaElement, context: Context, title?: strin
 					}
 				}
 			} else {
-				_normalizeSchema(value as SchemaElement, context, _title(key));
+				const childSchemaElement = value as SchemaElement;
+				_normalizeSchema(childSchemaElement, context, title);
 			}
 		}
 	}
@@ -147,7 +178,7 @@ const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: Roo
 				"ui:order": ["*"]
 			};
 		}
-		const definitionName = ref.$ref.substr("#/definitions/".length);
+		const definitionName = resolveRef(ref.$ref);
 		const definition: SchemaElement | SchemaElementRef = root.definitions![definitionName];
 		_buildUiSchema(definition, root, key, uiSchema);
 	} else {

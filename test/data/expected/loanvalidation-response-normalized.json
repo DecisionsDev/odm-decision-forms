@@ -1,144 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
   "definitions": {
-    "Response": {
-      "type": "object",
-      "properties": {
-        "Approval": {
-          "$ref": "#/definitions/Approval"
-        },
-        "Insurance": {
-          "$ref": "#/definitions/Insurance"
-        }
-      },
-      "description": "Response for the execution of the decision service operation. Contains notably the output parameters that are returned by the execution.",
-      "title": "Response"
-    },
-    "Loan": {
-      "type": "object",
-      "properties": {
-        "numberOfMonthlyPayments": {
-          "type": "integer",
-          "title": "Number Of Monthly Payments"
-        },
-        "startDate": {
-          "type": "string",
-          "format": "date-time",
-          "title": "Start Date"
-        },
-        "amount": {
-          "type": "integer",
-          "title": "Amount"
-        },
-        "loanToValue": {
-          "type": "number",
-          "title": "Loan To Value"
-        }
-      },
-      "title": "Loan"
-    },
-    "Borrower": {
-      "type": "object",
-      "properties": {
-        "firstName": {
-          "type": "string",
-          "title": "First Name"
-        },
-        "lastName": {
-          "type": "string",
-          "title": "Last Name"
-        },
-        "birthDate": {
-          "type": "string",
-          "format": "date-time",
-          "title": "Birth Date"
-        },
-        "yearlyIncome": {
-          "type": "integer",
-          "title": "Yearly Income"
-        },
-        "zipCode": {
-          "type": "string",
-          "title": "Zip Code"
-        },
-        "creditScore": {
-          "type": "integer",
-          "title": "Credit Score"
-        },
-        "spouse": {
-          "type": "string",
-          "title": "Spouse",
-          "description": "Warning: replaced cyclic reference (Borrower => spouse: Borrower) with a string property"
-        },
-        "latestBankruptcy": {
-          "$ref": "#/definitions/Bankruptcy"
-        },
-        "SSN": {
-          "$ref": "#/definitions/SSN"
-        }
-      },
-      "title": "Borrower"
-    },
-    "Insurance": {
-      "type": "object",
-      "properties": {
-        "required": {
-          "type": "boolean",
-          "default": false,
-          "title": "Required"
-        },
-        "rate": {
-          "type": "number",
-          "title": "Rate"
-        }
-      },
-      "title": "Insurance"
-    },
-    "Request": {
-      "type": "object",
-      "properties": {
-        "Borrower": {
-          "$ref": "#/definitions/Borrower"
-        },
-        "Loan": {
-          "$ref": "#/definitions/Loan"
-        },
-        "current_time": {
-          "type": "string",
-          "format": "date-time",
-          "title": "Current Time"
-        }
-      },
-      "description": "Request for the execution of the decision service operation. Contains notably the input parameters that are used for the execution.",
-      "title": "Request"
-    },
-    "Error": {
-      "type": "object",
-      "properties": {
-        "code": {
-          "type": "integer",
-          "description": "HTTP error code.",
-          "title": "Code"
-        },
-        "message": {
-          "type": "string",
-          "description": "Error message.",
-          "title": "Message"
-        },
-        "details": {
-          "type": "string",
-          "description": "Detailed error message.",
-          "title": "Details"
-        },
-        "errorCode": {
-          "type": "string",
-          "description": "Product error code.",
-          "title": "Error Code"
-        }
-      },
-      "description": "Error occurring when invoking the execution of the decision service operation.",
-      "title": "Error"
-    },
     "Approval": {
       "type": "object",
       "properties": {
@@ -154,42 +16,20 @@
       },
       "title": "Approval"
     },
-    "Bankruptcy": {
+    "Insurance": {
       "type": "object",
       "properties": {
-        "date": {
-          "type": "string",
-          "format": "date-time",
-          "title": "Date"
+        "required": {
+          "type": "boolean",
+          "default": false,
+          "title": "Required"
         },
-        "chapter": {
-          "type": "integer",
-          "title": "Chapter"
-        },
-        "reason": {
-          "type": "string",
-          "title": "Reason"
+        "rate": {
+          "type": "number",
+          "title": "Rate"
         }
       },
-      "title": "Bankruptcy"
-    },
-    "SSN": {
-      "type": "object",
-      "properties": {
-        "areaNumber": {
-          "type": "string",
-          "title": "Area Number"
-        },
-        "groupCode": {
-          "type": "string",
-          "title": "Group Code"
-        },
-        "serialNumber": {
-          "type": "string",
-          "title": "Serial Number"
-        }
-      },
-      "title": "Ssn"
+      "title": "Insurance"
     }
   },
   "type": "object",

@@ -1,15 +1,23 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
   "definitions": {
-    "Response": {
+    "Borrower": {
       "type": "object",
       "properties": {
-        "loan": {
-          "$ref": "#/definitions/Loan"
+        "name": {
+          "type": "string",
+          "title": "Name"
+        },
+        "creditScore": {
+          "type": "integer",
+          "title": "Credit Score"
+        },
+        "yearlyIncome": {
+          "type": "integer",
+          "title": "Yearly Income"
         }
       },
-      "description": "Response for the execution of the decision service operation. Contains notably the output parameters that are returned by the execution.",
-      "title": "Response"
+      "title": "Borrower"
     },
     "Loan": {
       "type": "object",
@@ -44,64 +52,6 @@
         }
       },
       "title": "Loan"
-    },
-    "Borrower": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "title": "Name"
-        },
-        "creditScore": {
-          "type": "integer",
-          "title": "Credit Score"
-        },
-        "yearlyIncome": {
-          "type": "integer",
-          "title": "Yearly Income"
-        }
-      },
-      "title": "Borrower"
-    },
-    "Request": {
-      "type": "object",
-      "properties": {
-        "borrower": {
-          "$ref": "#/definitions/Borrower"
-        },
-        "loan": {
-          "$ref": "#/definitions/Loan"
-        }
-      },
-      "description": "Request for the execution of the decision service operation. Contains notably the input parameters that are used for the execution.",
-      "title": "Request"
-    },
-    "Error": {
-      "type": "object",
-      "properties": {
-        "code": {
-          "type": "integer",
-          "description": "HTTP error code.",
-          "title": "Code"
-        },
-        "message": {
-          "type": "string",
-          "description": "Error message.",
-          "title": "Message"
-        },
-        "details": {
-          "type": "string",
-          "description": "Detailed error message.",
-          "title": "Details"
-        },
-        "errorCode": {
-          "type": "string",
-          "description": "Product error code.",
-          "title": "Error Code"
-        }
-      },
-      "description": "Error occurring when invoking the execution of the decision service operation.",
-      "title": "Error"
     }
   },
   "type": "object",

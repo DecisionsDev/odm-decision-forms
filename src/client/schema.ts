@@ -13,6 +13,7 @@ export enum Format {
 	Html = "html", Markdown = "markdown", TextArea = "textarea", Double = "double", Int32 = "int32", Int64 = "int64"
 }
 
+export type SchemaDefinitions = { [s: string]: SchemaElement; };
 export type SchemaProperties = { [s: string]: SchemaElement | SchemaElementRef; };
 export type SchemaPatternProperties = { [s: string]: SchemaPatternProperty | SchemaElementRef; };
 
@@ -40,5 +41,5 @@ export interface SchemaPatternProperty extends SchemaElement{
 
 export interface RootSchemaElement extends SchemaElement {
 	$schema: string,
-	definitions?: SchemaProperties,
+	definitions?: SchemaDefinitions
 }
