@@ -5,6 +5,7 @@ import Form from "react-jsonschema-form";
 import {execute} from "../actions";
 import {RootSchemaElement} from "../schema";
 import {RouterState} from 'react-router-redux'
+import {buildUiSchema} from "../resapi";
 require('es6-object-assign').polyfill();
 
 export interface Props {
@@ -34,9 +35,11 @@ class Forms extends React.Component<DProps, any> {
 	render() {
 		const {requestSchema, responseSchema, result, error, dispatch} = this.props;
 		const inuiSchema = {
-			"ui:rootFieldId": "in",
+			...buildUiSchema(requestSchema),
+			"ui:rootFieldId": "in"
 		};
 		const outuiSchema = {
+			...buildUiSchema(responseSchema),
 			"ui:rootFieldId": "out",
 			"ui:readonly": true
 		};

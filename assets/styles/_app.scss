@@ -1,5 +1,27 @@
 @import "variables";
 
+.odm-decision-forms {
+  .form-group.field-object {
+    //    margin: 10px !important;
+    //    padding-right: 10px !important;
+    //    border: 1px solid red !important;
+  }
+  /*
+  fieldset {
+    border: 1px solid red;
+  }
+  .form-group {
+    .form-group {
+      .form-group {
+        .form-group {
+          margin-left: 20px;
+        }
+      }
+    }
+  }
+  */
+}
+
 .form-container {
   float: left;
   width: calc(50% - 40px);
