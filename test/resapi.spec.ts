@@ -6,7 +6,7 @@ import {buildUiSchema, normalizeSchema, readSwagger} from '../src/client/resapi'
 const readFile = BPromise.promisify(fs.readFile);
 
 // Set this to true in order to regenerate expected files
-const overwrite = true;
+const overwrite = false;
 
 test('decamelize', () => {
 	expect(decamelize('fooBar', ' ')).toBe('foo bar');
