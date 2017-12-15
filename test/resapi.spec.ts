@@ -1,10 +1,12 @@
 const decamelize = require('decamelize');
 import * as fs from 'fs';
 import * as BPromise from 'bluebird';
-//const Promise = require("bluebird");
 import {buildUiSchema, normalizeSchema, readSwagger} from '../src/client/resapi';
 
 const readFile = BPromise.promisify(fs.readFile);
+
+// Set this to true in order to regenerate expected files
+const overwrite = false;
 
 test('decamelize', () => {
 	expect(decamelize('fooBar', ' ')).toBe('foo bar');
@@ -35,44 +37,34 @@ const fetch = (name: string): Promise<Data> => {
 	if (allData[name]) {
 		return Promise.resolve(allData[name]);
 	}
-	return Promise.all([
-		readFile(`./test/data/${name}-swagger.json`),
-		readFile(`./test/data/expected/${name}-request-normalized.json`),
-		readFile(`./test/data/expected/${name}-request-uischema.json`),
-		readFile(`./test/data/expected/${name}-response-normalized.json`),
-		readFile(`./test/data/expected/${name}-response-uischema.json`)
-	]).then(values => {
-		return {
-			swagger: {
-				name: `${name}-swagger.json`,
-				content: values[0].toString(),
-				json: JSON.parse(values[0].toString())
-			},
+	const files = [
+		`./test/data/${name}-swagger.json`,
+		`./test/data/expected/${name}-request-normalized.json`,
+		`./test/data/expected/${name}-request-uischema.json`,
+		`./test/data/expected/${name}-response-normalized.json`,
+		`./test/data/expected/${name}-response-uischema.json`
+	];
+	return Promise.all(files.map((f, index) => {
+		return (overwrite && index > 0) ? Promise.resolve("{}") : readFile(f);
+	})).then(values => {
+		const fill = index => ({
+			name: files[index],
+			content: values[index].toString(),
+			json: JSON.parse(values[index].toString())
+		});
+		const data = {
+			swagger: fill(0),
 			request: {
-				normalized: {
-					name: `${name}-request-normalized.json`,
-					content: values[1].toString(),
-					json: JSON.parse(values[1].toString())
-				},
-				uischema: {
-					name: `${name}-request-uischema.json`,
-					content: values[2].toString(),
-					json: JSON.parse(values[2].toString())
-				}
+				normalized: fill(1),
+				uischema: fill(2)
 			},
 			response: {
-				normalized: {
-					name: `${name}-response-normalized.json`,
-					content: values[3].toString(),
-					json: JSON.parse(values[3].toString())
-				},
-				uischema: {
-					name: `${name}-response-uischema.json`,
-					content: values[4].toString(),
-					json: JSON.parse(values[4].toString())
-				}
+				normalized: fill(3),
+				uischema: fill(4)
 			}
-		}
+		};
+		allData[name] = data;
+		return data;
 	});
 };
 
@@ -81,9 +73,14 @@ const testNormalize = (name) => {
 		const data = await fetch(name);
 		const { request, response } = readSwagger(data.swagger.json);
 		normalizeSchema(request);
-		expect(JSON.stringify(request, null, 2)).toBe(data.request.normalized.content);
 		normalizeSchema(response);
-		expect(JSON.stringify(response, null, 2)).toBe(data.response.normalized.content);
+		if (overwrite) {
+			fs.writeFile(data.request.normalized.name, JSON.stringify(request, null, 2));
+			fs.writeFile(data.response.normalized.name, JSON.stringify(response, null, 2));
+		} else {
+			expect(JSON.stringify(request, null, 2)).toBe(data.request.normalized.content);
+			expect(JSON.stringify(response, null, 2)).toBe(data.response.normalized.content);
+		}
 	});
 };
 
@@ -93,8 +90,13 @@ const testBuildUISchema = (name) => {
 		const { request, response } = readSwagger(data.swagger.json);
 		normalizeSchema(request);
 		normalizeSchema(response);
-		expect(JSON.stringify(buildUiSchema(request), null, 2)).toBe(data.request.uischema.content);
-		expect(JSON.stringify(buildUiSchema(response), null, 2)).toBe(data.response.uischema.content);
+		if (overwrite) {
+			fs.writeFile(data.request.uischema.name, JSON.stringify(buildUiSchema(request), null, 2));
+			fs.writeFile(data.response.uischema.name, JSON.stringify(buildUiSchema(response), null, 2));
+		} else {
+			expect(JSON.stringify(buildUiSchema(request), null, 2)).toBe(data.request.uischema.content);
+			expect(JSON.stringify(buildUiSchema(response), null, 2)).toBe(data.response.uischema.content);
+		}
 	});
 };
 
@@ -104,4 +106,9 @@ const runTest = name => {
 };
 
 runTest('miniloan');
+runTest('carrental');
+runTest('greetings');
+runTest('indecisionairlines');
+//runTest('loanvalidation');
+runTest('runner');
 

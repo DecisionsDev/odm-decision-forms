@@ -1,8 +1,9 @@
 import {ResState} from "./state";
-var startCase = require('lodash.startcase');
 
-var axios = require("axios");
-var Promise = require('bluebird');
+const startCase = require('lodash.startcase');
+
+const axios = require("axios");
+const Promise = require('bluebird');
 import {
 	Format, RootSchemaElement, SchemaElement, Type, SchemaElementRef
 } from "./schema";
@@ -42,37 +43,49 @@ export const normalizeSchema = (schema: RootSchemaElement): void => {
 		for (const key in schema.properties) {
 			const value = schema.properties[key];
 			if (!(value as any).$ref) {
-				_normalizeSchema(value as SchemaElement, _title(key));
+				_normalizeSchema(value as SchemaElement, [], _title(key));
 			}
 		}
 	}
+	const graph: Dependency = { key: '', dependencies: [], parent: null };
 	if (schema.definitions) {
 		delete (schema.definitions.Request as SchemaElement)!.properties!['__DecisionID__'];
 		delete (schema.definitions.Response as SchemaElement)!.properties!['__DecisionID__'];
 		for (const key in schema.definitions) {
 			const value = schema.definitions[key];
+			graph.dependencies.push({
+				key: key,
+				dependencies: [],
+				parent: graph
+			});
 			if (!(value as any).$ref) {
-				_normalizeSchema(value as SchemaElement, _title(key));
+				_normalizeSchema(value as SchemaElement, [ key ], _title(key));
 			}
 		}
-//		valuesPolyfill(schema.definitions).filter(s => !(s as any).$ref).map(s => _normalizeSchema(s as SchemaElement));
 	}
 };
-const _normalizeSchema = (schema: SchemaElement, title?: string): void => {
+
+interface Dependency {
+	key: string;
+	dependencies: Dependency[];
+	parent: Dependency | null;
+}
+
+const _normalizeSchema = (schema: SchemaElement, stack: string[], title?: string): void => {
 	// The form generator does not seem to support these cases...
 	if (schema.type === Type.TNumber && schema.format === Format.Double) {
 		delete schema.format;
 	} else if (schema.type === Type.TInteger && (schema.format === Format.Int32 || schema.format === Format.Int64)) {
 		delete schema.format;
 	}
-	if (title) {
+	if (title && !schema.title) {
 		schema.title = title;
 	}
 	if (schema.properties) {
 		for (const key in schema.properties) {
 			const value = schema.properties[key];
 			if (!(value as any).$ref) {
-				_normalizeSchema(value as SchemaElement, _title(key));
+				_normalizeSchema(value as SchemaElement, stack, _title(key));
 			}
 		}
 	}

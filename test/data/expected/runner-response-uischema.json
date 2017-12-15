@@ -1,0 +1,12 @@
+{
+  "ui:order": [
+    "*"
+  ],
+  "Matching_race": {
+    "items": {
+      "ui:order": [
+        "*"
+      ]
+    }
+  }
+}

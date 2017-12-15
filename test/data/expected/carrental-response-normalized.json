@@ -1,0 +1,212 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "definitions": {
+    "Response": {
+      "type": "object",
+      "properties": {
+        "Car_Return_dispatch": {
+          "type": "string",
+          "enum": [
+            "in need of maintenance",
+            "available",
+            "not available"
+          ],
+          "title": "Car Return Dispatch"
+        }
+      },
+      "description": "Response for the execution of the decision service operation. Contains notably the output parameters that are returned by the execution.",
+      "title": "Response"
+    },
+    "CarBlackBox": {
+      "type": "object",
+      "properties": {
+        "max engine temperature": {
+          "type": "number",
+          "title": "Max Engine Temperature"
+        },
+        "last maintenance record": {
+          "$ref": "#/definitions/CarMaintenanceRecord"
+        },
+        "distance driven last week": {
+          "type": "number",
+          "title": "Distance Driven Last Week"
+        },
+        "ID": {
+          "type": "number",
+          "title": "Id"
+        },
+        "oil level": {
+          "type": "number",
+          "title": "Oil Level"
+        },
+        "current mileage": {
+          "type": "number",
+          "title": "Current Mileage"
+        },
+        "average speed last week": {
+          "type": "number",
+          "title": "Average Speed Last Week"
+        },
+        "tyre pressure": {
+          "type": "number",
+          "title": "Tyre Pressure"
+        },
+        "max speed last Week": {
+          "type": "number",
+          "title": "Max Speed Last Week"
+        }
+      },
+      "title": "Car Black Box"
+    },
+    "CarMaintenanceRecord": {
+      "type": "object",
+      "properties": {
+        "service mileage": {
+          "type": "number",
+          "title": "Service Mileage"
+        },
+        "ID": {
+          "type": "number",
+          "title": "Id"
+        },
+        "last oil change date": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Last Oil Change Date"
+        },
+        "last full service date": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Last Full Service Date"
+        }
+      },
+      "title": "Car Maintenance Record"
+    },
+    "Car": {
+      "type": "object",
+      "properties": {
+        "serial number": {
+          "type": "string",
+          "title": "Serial Number"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "premium",
+            "compact",
+            "full size"
+          ],
+          "title": "Category"
+        },
+        "ID": {
+          "type": "number",
+          "title": "Id"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "in need of maintenance",
+            "available",
+            "not available"
+          ],
+          "title": "Status"
+        },
+        "model": {
+          "type": "string",
+          "title": "Model"
+        },
+        "brand": {
+          "type": "string",
+          "title": "Brand"
+        },
+        "car black box": {
+          "$ref": "#/definitions/CarBlackBox"
+        }
+      },
+      "title": "Car"
+    },
+    "Request": {
+      "type": "object",
+      "properties": {
+        "Car": {
+          "$ref": "#/definitions/Car"
+        },
+        "Car_Maintenance_Record": {
+          "$ref": "#/definitions/CarMaintenanceRecord"
+        },
+        "Car_Return_Record": {
+          "$ref": "#/definitions/CarReturnRecord"
+        }
+      },
+      "description": "Request for the execution of the decision service operation. Contains notably the input parameters that are used for the execution.",
+      "title": "Request"
+    },
+    "CarReturnRecord": {
+      "type": "object",
+      "properties": {
+        "interior condition": {
+          "type": "string",
+          "enum": [
+            "dirty",
+            "excellent",
+            "fair"
+          ],
+          "title": "Interior Condition"
+        },
+        "body is dirty": {
+          "type": "boolean",
+          "default": false,
+          "title": "Body Is Dirty"
+        },
+        "ID": {
+          "type": "number",
+          "title": "Id"
+        },
+        "fuel level": {
+          "type": "number",
+          "title": "Fuel Level"
+        }
+      },
+      "title": "Car Return Record"
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "description": "HTTP error code.",
+          "title": "Code"
+        },
+        "message": {
+          "type": "string",
+          "description": "Error message.",
+          "title": "Message"
+        },
+        "details": {
+          "type": "string",
+          "description": "Detailed error message.",
+          "title": "Details"
+        },
+        "errorCode": {
+          "type": "string",
+          "description": "Product error code.",
+          "title": "Error Code"
+        }
+      },
+      "description": "Error occurring when invoking the execution of the decision service operation.",
+      "title": "Error"
+    }
+  },
+  "type": "object",
+  "properties": {
+    "Car_Return_dispatch": {
+      "type": "string",
+      "enum": [
+        "in need of maintenance",
+        "available",
+        "not available"
+      ],
+      "title": "Car Return Dispatch"
+    }
+  }
+}

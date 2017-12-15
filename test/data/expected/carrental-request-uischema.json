@@ -1,0 +1,56 @@
+{
+  "ui:order": [
+    "*"
+  ],
+  "Car": {
+    "ui:order": [
+      "brand",
+      "model",
+      "status",
+      "ID",
+      "category",
+      "serial number",
+      "*"
+    ],
+    "car black box": {
+      "ui:order": [
+        "max speed last Week",
+        "tyre pressure",
+        "average speed last week",
+        "current mileage",
+        "oil level",
+        "ID",
+        "distance driven last week",
+        "max engine temperature",
+        "*"
+      ],
+      "last maintenance record": {
+        "ui:order": [
+          "last full service date",
+          "last oil change date",
+          "ID",
+          "service mileage",
+          "*"
+        ]
+      }
+    }
+  },
+  "Car_Maintenance_Record": {
+    "ui:order": [
+      "last full service date",
+      "last oil change date",
+      "ID",
+      "service mileage",
+      "*"
+    ]
+  },
+  "Car_Return_Record": {
+    "ui:order": [
+      "fuel level",
+      "ID",
+      "body is dirty",
+      "interior condition",
+      "*"
+    ]
+  }
+}

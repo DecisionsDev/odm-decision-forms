@@ -1,0 +1,25 @@
+{
+  "ui:order": [
+    "*"
+  ],
+  "Races": {
+    "items": {
+      "ui:order": [
+        "name",
+        "category",
+        "area",
+        "*"
+      ]
+    }
+  },
+  "Runner": {
+    "ui:order": [
+      "name",
+      "weekly mileage",
+      "category",
+      "area",
+      "average speed",
+      "*"
+    ]
+  }
+}

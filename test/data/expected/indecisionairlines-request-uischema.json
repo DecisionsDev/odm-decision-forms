@@ -1,0 +1,38 @@
+{
+  "ui:order": [
+    "Fee_per_extra_kilogram",
+    "*"
+  ],
+  "Booking": {
+    "ui:order": [
+      "fareClass",
+      "*"
+    ],
+    "baggageItems": {
+      "items": {
+        "ui:order": [
+          "weight",
+          "height",
+          "width",
+          "depth",
+          "*"
+        ]
+      }
+    }
+  },
+  "Customer": {
+    "ui:order": [
+      "status",
+      "*"
+    ]
+  },
+  "Maximum_spec_for_a_piece": {
+    "ui:order": [
+      "weight",
+      "height",
+      "width",
+      "depth",
+      "*"
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "ui:order": [
+    "Name",
+    "Hour",
+    "Gender",
+    "Degree",
+    "*"
+  ]
+}

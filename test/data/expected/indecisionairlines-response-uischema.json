@@ -1,0 +1,13 @@
+{
+  "ui:order": [
+    "*"
+  ],
+  "Fee": {
+    "ui:order": [
+      "discount",
+      "status",
+      "totalBaggageFee",
+      "*"
+    ]
+  }
+}
