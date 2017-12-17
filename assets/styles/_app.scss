@@ -1,27 +1,5 @@
 @import "variables";
 
-.odm-decision-forms {
-  .form-group.field-object {
-    //    margin: 10px !important;
-    //    padding-right: 10px !important;
-    //    border: 1px solid red !important;
-  }
-  /*
-  fieldset {
-    border: 1px solid red;
-  }
-  .form-group {
-    .form-group {
-      .form-group {
-        .form-group {
-          margin-left: 20px;
-        }
-      }
-    }
-  }
-  */
-}
-
 .form-container {
   float: left;
   width: calc(50% - 40px);
@@ -49,15 +27,13 @@
       }
       .field-integer, .field-number, .field-string, .field-boolean {
         grid-column-start: span 1;
-        //float: left;
-        //min-width: calc(50% - 10px);
-        //margin-right: 10px;
-        //          grid-column-start: span 1;
       }
-      &.field-string, &.field-boolean, &.field-array, &.field-object {
-        //          grid-column-start: span 2;
-        //clear: both;
-        //min-width: 100%;
+      //&.field-string, &.field-boolean, &.field-array, &.field-object {
+      //}
+    }
+    .field-array {
+      .array-item {
+        width: 100%;
       }
     }
   }
