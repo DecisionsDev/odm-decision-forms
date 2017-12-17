@@ -5,7 +5,7 @@ import {buildUiSchema, normalizeSchema, readSwagger} from '../src/client/resapi'
 
 const readFile = BPromise.promisify(fs.readFile);
 
-// Set this to true in order to regenerate expected files
+// Set this to true in order to regenerate expected files (if true, tests will fail at the end, which is expected)
 const overwrite = false;
 
 test('decamelize', () => {
@@ -107,4 +107,9 @@ runTest('greetings');
 runTest('indecisionairlines');
 runTest('loanvalidation');
 runTest('runner');
+runTest('br4bxfilter');
 
+test('Verifying overwrite is false', () => {
+	// Reminder: fail at the end as lon as overwrite is true
+	expect(overwrite).toBe(false);
+});

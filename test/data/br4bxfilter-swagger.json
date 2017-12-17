@@ -1,0 +1,162 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "API to invoke the execution of the decision service operation ruleset.",
+    "version" : "1.0.0",
+    "title" : "ruleset API"
+  },
+  "basePath" : "/Project/1e2a14c95b864197a43414e3e3ed271b",
+  "schemes" : [
+    "http"
+  ],
+  "consumes" : [
+    "application/json"
+  ],
+  "produces" : [
+    "application/json"
+  ],
+  "paths" : {
+    "/execute" : {
+      "post" : {
+        "summary" : "Invokes the execution of the decision service operation ruleset.",
+        "description" : "Executes the decision service operation ruleset with the path /br4bxfilter_192d6b72_ca5e_4788_8973_05082c953557/1.0/ruleset/1.0.",
+        "operationId" : "callrulesetDecisionServiceOperation",
+        "parameters" : [
+          {
+            "in" : "body",
+            "name" : "Request",
+            "description" : "Request for the execution of the decision service operation. Contains notably the input parameters that are used for the execution.",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/definitions/Request"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Response for the execution of the decision service operation. Contains notably the output parameters that are returned by the execution.",
+            "schema" : {
+              "$ref" : "#/definitions/Response"
+            }
+          },
+          "default" : {
+            "description" : "Error occurring when invoking the execution of the decision service operation.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Response" : {
+      "type" : "object",
+      "properties" : {
+        "__DecisionID__" : {
+          "type" : "string",
+          "description" : "Unique identifier representing the execution of the decision service operation. If it is not specified, it will be computed automatically."
+        },
+        "filtered_instances" : {
+          "type" : "array",
+          "items" : {
+            "type" : "object"
+          }
+        }
+      },
+      "description" : "Response for the execution of the decision service operation. Contains notably the output parameters that are returned by the execution."
+    },
+    "Instance" : {
+      "type" : "object",
+      "properties" : {
+        "status" : {
+          "type" : "string"
+        },
+        "instanceId" : {
+          "type" : "string"
+        },
+        "org" : {
+          "type" : "string"
+        },
+        "version" : {
+          "type" : "string"
+        },
+        "uuid" : {
+          "type" : "string"
+        },
+        "provisioned" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "appbind" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "last_used" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "rulesets" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "user" : {
+          "type" : "string"
+        },
+        "last_start" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "executions" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "Request" : {
+      "type" : "object",
+      "properties" : {
+        "__DecisionID__" : {
+          "type" : "string",
+          "description" : "Unique identifier representing the execution of the decision service operation. If it is not specified, it will be computed automatically."
+        },
+        "Instances" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Instance"
+          }
+        },
+        "cutOffDay" : {
+          "type" : "string",
+          "format" : "date-time"
+        }
+      },
+      "description" : "Request for the execution of the decision service operation. Contains notably the input parameters that are used for the execution."
+    },
+    "Error" : {
+      "type" : "object",
+      "properties" : {
+        "code" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "HTTP error code."
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "Error message."
+        },
+        "details" : {
+          "type" : "string",
+          "description" : "Detailed error message."
+        },
+        "errorCode" : {
+          "type" : "string",
+          "description" : "Product error code."
+        }
+      },
+      "description" : "Error occurring when invoking the execution of the decision service operation."
+    }
+  }
+}

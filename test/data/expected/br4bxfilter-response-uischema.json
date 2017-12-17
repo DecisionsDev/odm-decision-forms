@@ -1,0 +1,12 @@
+{
+  "ui:order": [
+    "*"
+  ],
+  "filtered_instances": {
+    "items": {
+      "ui:order": [
+        "*"
+      ]
+    }
+  }
+}

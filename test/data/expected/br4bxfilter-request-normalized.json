@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "definitions": {
+    "Instance": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Status"
+        },
+        "instanceId": {
+          "type": "string",
+          "title": "Instance Id"
+        },
+        "org": {
+          "type": "string",
+          "title": "Org"
+        },
+        "version": {
+          "type": "string",
+          "title": "Version"
+        },
+        "uuid": {
+          "type": "string",
+          "title": "Uuid"
+        },
+        "provisioned": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Provisioned"
+        },
+        "appbind": {
+          "type": "string",
+          "title": "Appbind"
+        },
+        "name": {
+          "type": "string",
+          "title": "Name"
+        },
+        "last_used": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Last Used"
+        },
+        "rulesets": {
+          "type": "integer",
+          "title": "Rulesets"
+        },
+        "user": {
+          "type": "string",
+          "title": "User"
+        },
+        "last_start": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Last Start"
+        },
+        "executions": {
+          "type": "integer",
+          "title": "Executions"
+        }
+      },
+      "title": "Instance"
+    }
+  },
+  "type": "object",
+  "properties": {
+    "Instances": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Instance"
+      },
+      "title": "Instances"
+    },
+    "cutOffDay": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Cut Off Day"
+    }
+  }
+}

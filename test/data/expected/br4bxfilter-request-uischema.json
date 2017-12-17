@@ -1,0 +1,26 @@
+{
+  "ui:order": [
+    "cutOffDay",
+    "*"
+  ],
+  "Instances": {
+    "items": {
+      "ui:order": [
+        "executions",
+        "last_start",
+        "user",
+        "rulesets",
+        "last_used",
+        "name",
+        "appbind",
+        "provisioned",
+        "uuid",
+        "version",
+        "org",
+        "instanceId",
+        "status",
+        "*"
+      ]
+    }
+  }
+}
