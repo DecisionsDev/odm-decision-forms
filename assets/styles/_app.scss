@@ -28,8 +28,6 @@
       .field-integer, .field-number, .field-string, .field-boolean {
         grid-column-start: span 1;
       }
-      //&.field-string, &.field-boolean, &.field-array, &.field-object {
-      //}
     }
     .field-array {
       .array-item {
@@ -64,6 +62,18 @@
       }
       .array-item-add {
         display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .form-container {
+    form {
+      .form-grid {
+        .field-integer, .field-number, .field-string, .field-boolean {
+          grid-column-start: span 2;
+        }
       }
     }
   }
