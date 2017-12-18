@@ -3,6 +3,7 @@
     "cutOffDay",
     "*"
   ],
+  "classNames": "field-depth-0",
   "Instances": {
     "items": {
       "ui:order": [
@@ -20,7 +21,8 @@
         "instanceId",
         "status",
         "*"
-      ]
+      ],
+      "classNames": "field-depth-1"
     }
   }
 }

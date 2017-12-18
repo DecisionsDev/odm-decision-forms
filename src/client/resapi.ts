@@ -80,14 +80,19 @@ const _normalizeSchema = (schema: SchemaElement, context: Context, title?: strin
 	if (schema.properties) {
 		for (const key in schema.properties) {
 			let value : SchemaElement | SchemaElementRef = schema.properties[key];
-			let title = _title(key);
+			let propertyTitle = _title(key);
 			if ((value as any).items) {
-				(value as SchemaElement).title = title;
+				if (propertyTitle && !(value as SchemaElement).title) {
+					(value as SchemaElement).title = propertyTitle;
+				}
 				value = (value as any).items;
-				title = null;
+				propertyTitle = null;
 			}
 			if ((value as any).$ref) {
 				const ref: SchemaElementRef = value as SchemaElementRef;
+				if (propertyTitle && !ref.title) {
+					ref.title = propertyTitle;
+				}
 				const name = resolveRef(ref.$ref);
 				let processedDefinition = context.definitions[name];
 				const current = context.current;
@@ -109,7 +114,7 @@ const _normalizeSchema = (schema: SchemaElement, context: Context, title?: strin
 						console.log(message);
 						schema.properties[key] = {
 							type: Type.TString,
-							title: title,
+							title: propertyTitle,
 							description: message
 						} as SchemaElement;
 					} else {
@@ -122,7 +127,7 @@ const _normalizeSchema = (schema: SchemaElement, context: Context, title?: strin
 				}
 			} else {
 				const childSchemaElement = value as SchemaElement;
-				_normalizeSchema(childSchemaElement, context, title);
+				_normalizeSchema(childSchemaElement, context, propertyTitle);
 			}
 		}
 	}
@@ -145,23 +150,25 @@ const isPrimitive = (t: Type): boolean => {
 
 export const buildUiSchema = (root: RootSchemaElement): object => {
 	const uiSchema = {
-		"ui:order": ["*"]
+		"ui:order": ["*"],
+		"classNames": `field-depth-0`
 	};
-	_buildUiSchema(root, root, null, uiSchema);
+	_buildUiSchema(root, root, null, uiSchema, 0);
 	return uiSchema;
 };
 
-const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: RootSchemaElement, key: string | null, uiSchema: object): void => {
+const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: RootSchemaElement, key: string | null, uiSchema: object, depth: number): void => {
 	if ((schemaOrRef as any).$ref) {
 		const ref: SchemaElementRef = schemaOrRef as SchemaElementRef;
 		if (key) {
 			uiSchema[key] = {
-				"ui:order": ["*"]
+				"ui:order": ["*"],
+				"classNames": `field-depth-${depth}`
 			};
 		}
 		const definitionName = resolveRef(ref.$ref);
 		const definition: SchemaElement | SchemaElementRef = root.definitions![definitionName];
-		_buildUiSchema(definition, root, key, uiSchema);
+		_buildUiSchema(definition, root, key, uiSchema, depth);
 	} else {
 		const schema: SchemaElement = schemaOrRef as SchemaElement;
 		const type: Type = schema.type;
@@ -172,13 +179,14 @@ const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: Roo
 		} else if (type === Type.TObject) {
 			if (key) {
 				uiSchema[key] = {
-					"ui:order": ["*"]
+					"ui:order": ["*"],
+					"classNames": `field-depth-${depth}`
 				};
 			}
 			if (schema.properties) {
 				for (const k in schema.properties) {
 					const schemaOrRefChild = schema.properties[k];
-					_buildUiSchema(schemaOrRefChild, root, k, key ? uiSchema[key] : uiSchema);
+					_buildUiSchema(schemaOrRefChild, root, k, key ? uiSchema[key] : uiSchema, depth + 1);
 				}
 			}
 		} else if (type === Type.TArray && schema.items) {
@@ -186,12 +194,13 @@ const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: Roo
 				if (key) {
 					uiSchema[key] = {
 						items: {
-							"ui:order": ["*"]
+							"ui:order": ["*"],
+							"classNames": `field-depth-${depth}`
 						}
 					};
 				}
 				const schemaOrRefItem: SchemaElement | SchemaElementRef = schema.items;
-				_buildUiSchema(schemaOrRefItem, root, null, key ? uiSchema[key].items : uiSchema);
+				_buildUiSchema(schemaOrRefItem, root, null, key ? uiSchema[key].items : uiSchema, depth +1);
 			}
 		}
 	}
@@ -200,6 +209,13 @@ const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: Roo
 const _title = (key: string) => {
 	return startCase(decamelize(key, ' '));
 };
+
+interface LocalTime {
+	hour: number;
+	minute: number;
+	second: number;
+	nano: number;
+}
 
 export const loadRulesetPaths = (): Promise<ResState> => {
 	return axios.get(`/rulesets`).then(res => {

@@ -64,9 +64,19 @@ module.exports.run = function (config, options) {
 	app.post('/execute/*', function (req, res) {
 		const rulesetpath = req.params[0];
 		var payload = req.body.request;
+		if (isDeveloping) {
+			console.log('=== Sending payload [ ===');
+			console.log(JSON.stringify(payload, null, 2));
+			console.log('=== ] End payload ===');
+		}
 		const resUrl = config.decisionservice + '/rest/' + rulesetpath;
 		axios.post(resUrl, payload, resConfig)
 			.then(function (response) {
+				if (isDeveloping) {
+					console.log('=== Receiving result [ ===');
+					console.log(JSON.stringify(response.data, null, 2));
+					console.log('=== ] End result ===');
+        }
 				res.send(response.data);
 			})
 			.catch(function(error) {

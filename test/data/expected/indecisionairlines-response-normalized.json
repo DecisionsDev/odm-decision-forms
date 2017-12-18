@@ -35,7 +35,8 @@
   "type": "object",
   "properties": {
     "Fee": {
-      "$ref": "#/definitions/BaggageFeeResult"
+      "$ref": "#/definitions/BaggageFeeResult",
+      "title": "Fee"
     }
   }
 }

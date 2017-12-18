@@ -35,10 +35,12 @@
   "type": "object",
   "properties": {
     "Approval": {
-      "$ref": "#/definitions/Approval"
+      "$ref": "#/definitions/Approval",
+      "title": "Approval"
     },
     "Insurance": {
-      "$ref": "#/definitions/Insurance"
+      "$ref": "#/definitions/Insurance",
+      "title": "Insurance"
     }
   }
 }

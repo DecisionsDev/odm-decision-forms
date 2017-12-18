@@ -2,6 +2,7 @@
   "ui:order": [
     "*"
   ],
+  "classNames": "field-depth-0",
   "Car": {
     "ui:order": [
       "brand",
@@ -12,6 +13,7 @@
       "serial number",
       "*"
     ],
+    "classNames": "field-depth-1",
     "car black box": {
       "ui:order": [
         "max speed last Week",
@@ -24,6 +26,7 @@
         "max engine temperature",
         "*"
       ],
+      "classNames": "field-depth-2",
       "last maintenance record": {
         "ui:order": [
           "last full service date",
@@ -31,7 +34,8 @@
           "ID",
           "service mileage",
           "*"
-        ]
+        ],
+        "classNames": "field-depth-3"
       }
     }
   },
@@ -42,7 +46,8 @@
       "ID",
       "service mileage",
       "*"
-    ]
+    ],
+    "classNames": "field-depth-1"
   },
   "Car_Return_Record": {
     "ui:order": [
@@ -51,6 +56,7 @@
       "body is dirty",
       "interior condition",
       "*"
-    ]
+    ],
+    "classNames": "field-depth-1"
   }
 }

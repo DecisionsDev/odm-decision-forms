@@ -1,0 +1,222 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "definitions": {
+    "AnObject": {
+      "type": "object",
+      "properties": {
+        "aMonthOfYear": {
+          "type": "string",
+          "enum": [
+            "JANUARY",
+            "FEBRUARY",
+            "MARCH",
+            "APRIL",
+            "MAY",
+            "JUNE",
+            "JULY",
+            "AUGUST",
+            "SEPTEMBER",
+            "OCTOBER",
+            "NOVEMBER",
+            "DECEMBER"
+          ],
+          "title": "A Month Of Year"
+        },
+        "anObject": {
+          "type": "string",
+          "title": "An Object",
+          "description": "Warning: replaced cyclic reference (AnObject => anObject: AnObject) with a string property"
+        },
+        "aDateTime": {
+          "type": "string",
+          "format": "date-time",
+          "title": "A Date Time"
+        },
+        "aBoolean": {
+          "type": "boolean",
+          "default": false,
+          "title": "A Boolean"
+        },
+        "aDate": {
+          "type": "string",
+          "format": "date",
+          "title": "A Date"
+        },
+        "anEnum": {
+          "type": "string",
+          "enum": [
+            "and another One",
+            "another Enum Value",
+            "an Enum Value"
+          ],
+          "title": "An Enum"
+        },
+        "aTime": {
+          "$ref": "#/definitions/LocalTime",
+          "title": "A Time"
+        },
+        "aStringList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "A String List"
+        },
+        "aDayOfWeek": {
+          "type": "string",
+          "enum": [
+            "MONDAY",
+            "TUESDAY",
+            "WEDNESDAY",
+            "THURSDAY",
+            "FRIDAY",
+            "SATURDAY",
+            "SUNDAY"
+          ],
+          "title": "A Day Of Week"
+        },
+        "depth 1 array": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnInnerObject"
+          },
+          "title": "Depth 1 Array"
+        },
+        "anInteger": {
+          "type": "integer",
+          "title": "An Integer"
+        },
+        "aCharacter": {
+          "type": "string",
+          "title": "A Character"
+        },
+        "depth 1": {
+          "$ref": "#/definitions/AnInnerObject",
+          "title": "Depth 1"
+        },
+        "aYear": {
+          "$ref": "#/definitions/Year",
+          "title": "A Year"
+        },
+        "aString": {
+          "type": "string",
+          "title": "A String"
+        },
+        "aNumber": {
+          "type": "number",
+          "title": "A Number"
+        }
+      },
+      "title": "An Object"
+    },
+    "LocalTime": {
+      "type": "object",
+      "properties": {
+        "hour": {
+          "type": "integer",
+          "title": "Hour"
+        },
+        "minute": {
+          "type": "integer",
+          "title": "Minute"
+        },
+        "second": {
+          "type": "integer",
+          "title": "Second"
+        },
+        "nano": {
+          "type": "integer",
+          "title": "Nano"
+        }
+      },
+      "title": "Local Time"
+    },
+    "AnInnerObject": {
+      "type": "object",
+      "properties": {
+        "depth 2": {
+          "$ref": "#/definitions/AnInnerInnerObject",
+          "title": "Depth 2"
+        },
+        "depth 2 array": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnInnerInnerObject"
+          },
+          "title": "Depth 2 Array"
+        },
+        "new attribute": {
+          "type": "string",
+          "title": "New Attribute"
+        }
+      },
+      "title": "An Inner Object"
+    },
+    "AnInnerInnerObject": {
+      "type": "object",
+      "properties": {
+        "foo": {
+          "type": "string",
+          "title": "Foo"
+        },
+        "depth 3 array": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnInnerInnerInnerObject"
+          },
+          "title": "Depth 3 Array"
+        },
+        "depth 3": {
+          "$ref": "#/definitions/AnInnerInnerInnerObject",
+          "title": "Depth 3"
+        }
+      },
+      "title": "An Inner Inner Object"
+    },
+    "AnInnerInnerInnerObject": {
+      "type": "object",
+      "properties": {
+        "bar": {
+          "type": "string",
+          "title": "Bar"
+        }
+      },
+      "title": "An Inner Inner Inner Object"
+    },
+    "Year": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "integer",
+          "title": "Value"
+        },
+        "leap": {
+          "type": "boolean",
+          "default": false,
+          "title": "Leap"
+        }
+      },
+      "title": "Year"
+    }
+  },
+  "type": "object",
+  "properties": {
+    "A_String": {
+      "type": "string",
+      "title": "A String"
+    },
+    "An_Enum": {
+      "type": "string",
+      "enum": [
+        "and another One",
+        "another Enum Value",
+        "an Enum Value"
+      ],
+      "title": "An Enum"
+    },
+    "An_Object": {
+      "$ref": "#/definitions/AnObject",
+      "title": "An Object"
+    }
+  }
+}

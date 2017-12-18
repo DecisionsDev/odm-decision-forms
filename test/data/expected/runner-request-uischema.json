@@ -2,6 +2,7 @@
   "ui:order": [
     "*"
   ],
+  "classNames": "field-depth-0",
   "Races": {
     "items": {
       "ui:order": [
@@ -9,7 +10,8 @@
         "category",
         "area",
         "*"
-      ]
+      ],
+      "classNames": "field-depth-1"
     }
   },
   "Runner": {
@@ -20,6 +22,7 @@
       "area",
       "average speed",
       "*"
-    ]
+    ],
+    "classNames": "field-depth-1"
   }
 }

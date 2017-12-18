@@ -39,7 +39,8 @@
   "type": "object",
   "properties": {
     "loan": {
-      "$ref": "#/definitions/Loan"
+      "$ref": "#/definitions/Loan",
+      "title": "Loan"
     }
   }
 }

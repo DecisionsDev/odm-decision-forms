@@ -1,0 +1,155 @@
+{
+  "ui:order": [
+    "An_Enum",
+    "A_String",
+    "*"
+  ],
+  "classNames": "field-depth-0",
+  "An_Object": {
+    "ui:order": [
+      "aNumber",
+      "aString",
+      "aCharacter",
+      "anInteger",
+      "aDayOfWeek",
+      "anEnum",
+      "aDate",
+      "aBoolean",
+      "aDateTime",
+      "anObject",
+      "aMonthOfYear",
+      "*"
+    ],
+    "classNames": "field-depth-1",
+    "aTime": {
+      "ui:order": [
+        "nano",
+        "second",
+        "minute",
+        "hour",
+        "*"
+      ],
+      "classNames": "field-depth-2"
+    },
+    "depth 1 array": {
+      "items": {
+        "ui:order": [
+          "new attribute",
+          "*"
+        ],
+        "classNames": "field-depth-2",
+        "depth 2": {
+          "ui:order": [
+            "foo",
+            "*"
+          ],
+          "classNames": "field-depth-4",
+          "depth 3 array": {
+            "items": {
+              "ui:order": [
+                "bar",
+                "*"
+              ],
+              "classNames": "field-depth-5"
+            }
+          },
+          "depth 3": {
+            "ui:order": [
+              "bar",
+              "*"
+            ],
+            "classNames": "field-depth-5"
+          }
+        },
+        "depth 2 array": {
+          "items": {
+            "ui:order": [
+              "foo",
+              "*"
+            ],
+            "classNames": "field-depth-4",
+            "depth 3 array": {
+              "items": {
+                "ui:order": [
+                  "bar",
+                  "*"
+                ],
+                "classNames": "field-depth-6"
+              }
+            },
+            "depth 3": {
+              "ui:order": [
+                "bar",
+                "*"
+              ],
+              "classNames": "field-depth-6"
+            }
+          }
+        }
+      }
+    },
+    "depth 1": {
+      "ui:order": [
+        "new attribute",
+        "*"
+      ],
+      "classNames": "field-depth-2",
+      "depth 2": {
+        "ui:order": [
+          "foo",
+          "*"
+        ],
+        "classNames": "field-depth-3",
+        "depth 3 array": {
+          "items": {
+            "ui:order": [
+              "bar",
+              "*"
+            ],
+            "classNames": "field-depth-4"
+          }
+        },
+        "depth 3": {
+          "ui:order": [
+            "bar",
+            "*"
+          ],
+          "classNames": "field-depth-4"
+        }
+      },
+      "depth 2 array": {
+        "items": {
+          "ui:order": [
+            "foo",
+            "*"
+          ],
+          "classNames": "field-depth-3",
+          "depth 3 array": {
+            "items": {
+              "ui:order": [
+                "bar",
+                "*"
+              ],
+              "classNames": "field-depth-5"
+            }
+          },
+          "depth 3": {
+            "ui:order": [
+              "bar",
+              "*"
+            ],
+            "classNames": "field-depth-5"
+          }
+        }
+      }
+    },
+    "aYear": {
+      "ui:order": [
+        "leap",
+        "value",
+        "*"
+      ],
+      "classNames": "field-depth-2"
+    }
+  }
+}

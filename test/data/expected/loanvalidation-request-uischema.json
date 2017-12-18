@@ -3,6 +3,7 @@
     "current_time",
     "*"
   ],
+  "classNames": "field-depth-0",
   "Borrower": {
     "ui:order": [
       "spouse",
@@ -14,13 +15,15 @@
       "firstName",
       "*"
     ],
+    "classNames": "field-depth-1",
     "latestBankruptcy": {
       "ui:order": [
         "reason",
         "chapter",
         "date",
         "*"
-      ]
+      ],
+      "classNames": "field-depth-2"
     },
     "SSN": {
       "ui:order": [
@@ -28,7 +31,8 @@
         "groupCode",
         "areaNumber",
         "*"
-      ]
+      ],
+      "classNames": "field-depth-2"
     }
   },
   "Loan": {
@@ -38,6 +42,7 @@
       "startDate",
       "numberOfMonthlyPayments",
       "*"
-    ]
+    ],
+    "classNames": "field-depth-1"
   }
 }

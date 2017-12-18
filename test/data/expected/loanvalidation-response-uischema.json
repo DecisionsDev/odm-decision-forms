@@ -2,18 +2,21 @@
   "ui:order": [
     "*"
   ],
+  "classNames": "field-depth-0",
   "Approval": {
     "ui:order": [
       "message",
       "approved",
       "*"
-    ]
+    ],
+    "classNames": "field-depth-1"
   },
   "Insurance": {
     "ui:order": [
       "rate",
       "required",
       "*"
-    ]
+    ],
+    "classNames": "field-depth-1"
   }
 }

@@ -25,8 +25,12 @@
       .field {
         grid-column-start: span 2;
       }
-      .field-integer, .field-number, .field-string, .field-boolean {
-        grid-column-start: span 1;
+    }
+    .field-depth-0, .field-depth-1, .field-depth-2, .field-depth-3 {
+      & > fieldset > .form-grid {
+        & > .field-integer, & > .field-number, & > .field-string, & > .field-boolean {
+          grid-column-start: span 1;
+        }
       }
     }
     .field-array {
