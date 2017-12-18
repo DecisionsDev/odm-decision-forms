@@ -35,10 +35,12 @@
           "description": "Warning: replaced cyclic reference (Borrower => spouse: Borrower) with a string property"
         },
         "latestBankruptcy": {
-          "$ref": "#/definitions/Bankruptcy"
+          "$ref": "#/definitions/Bankruptcy",
+          "title": "Latest Bankruptcy"
         },
         "SSN": {
-          "$ref": "#/definitions/SSN"
+          "$ref": "#/definitions/SSN",
+          "title": "Ssn"
         }
       },
       "title": "Borrower"
@@ -107,10 +109,12 @@
   "type": "object",
   "properties": {
     "Borrower": {
-      "$ref": "#/definitions/Borrower"
+      "$ref": "#/definitions/Borrower",
+      "title": "Borrower"
     },
     "Loan": {
-      "$ref": "#/definitions/Loan"
+      "$ref": "#/definitions/Loan",
+      "title": "Loan"
     },
     "current_time": {
       "type": "string",

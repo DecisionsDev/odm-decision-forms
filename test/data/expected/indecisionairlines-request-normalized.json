@@ -67,17 +67,20 @@
   "type": "object",
   "properties": {
     "Booking": {
-      "$ref": "#/definitions/Booking"
+      "$ref": "#/definitions/Booking",
+      "title": "Booking"
     },
     "Customer": {
-      "$ref": "#/definitions/Customer"
+      "$ref": "#/definitions/Customer",
+      "title": "Customer"
     },
     "Fee_per_extra_kilogram": {
       "type": "number",
       "title": "Fee Per Extra Kilogram"
     },
     "Maximum_spec_for_a_piece": {
-      "$ref": "#/definitions/BaggageItem"
+      "$ref": "#/definitions/BaggageItem",
+      "title": "Maximum Spec For A Piece"
     }
   }
 }

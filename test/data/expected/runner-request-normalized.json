@@ -70,7 +70,8 @@
       "title": "Races"
     },
     "Runner": {
-      "$ref": "#/definitions/Runner"
+      "$ref": "#/definitions/Runner",
+      "title": "Runner"
     }
   }
 }

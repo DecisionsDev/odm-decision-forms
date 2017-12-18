@@ -39,7 +39,8 @@
           "title": "Brand"
         },
         "car black box": {
-          "$ref": "#/definitions/CarBlackBox"
+          "$ref": "#/definitions/CarBlackBox",
+          "title": "Car Black Box"
         }
       },
       "title": "Car"
@@ -52,7 +53,8 @@
           "title": "Max Engine Temperature"
         },
         "last maintenance record": {
-          "$ref": "#/definitions/CarMaintenanceRecord"
+          "$ref": "#/definitions/CarMaintenanceRecord",
+          "title": "Last Maintenance Record"
         },
         "distance driven last week": {
           "type": "number",
@@ -141,13 +143,16 @@
   "type": "object",
   "properties": {
     "Car": {
-      "$ref": "#/definitions/Car"
+      "$ref": "#/definitions/Car",
+      "title": "Car"
     },
     "Car_Maintenance_Record": {
-      "$ref": "#/definitions/CarMaintenanceRecord"
+      "$ref": "#/definitions/CarMaintenanceRecord",
+      "title": "Car Maintenance Record"
     },
     "Car_Return_Record": {
-      "$ref": "#/definitions/CarReturnRecord"
+      "$ref": "#/definitions/CarReturnRecord",
+      "title": "Car Return Record"
     }
   }
 }

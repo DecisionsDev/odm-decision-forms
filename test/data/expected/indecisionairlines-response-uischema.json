@@ -2,12 +2,14 @@
   "ui:order": [
     "*"
   ],
+  "classNames": "field-depth-0",
   "Fee": {
     "ui:order": [
       "discount",
       "status",
       "totalBaggageFee",
       "*"
-    ]
+    ],
+    "classNames": "field-depth-1"
   }
 }

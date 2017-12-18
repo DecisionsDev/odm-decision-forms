@@ -3,11 +3,13 @@
     "Fee_per_extra_kilogram",
     "*"
   ],
+  "classNames": "field-depth-0",
   "Booking": {
     "ui:order": [
       "fareClass",
       "*"
     ],
+    "classNames": "field-depth-1",
     "baggageItems": {
       "items": {
         "ui:order": [
@@ -16,7 +18,8 @@
           "width",
           "depth",
           "*"
-        ]
+        ],
+        "classNames": "field-depth-2"
       }
     }
   },
@@ -24,7 +27,8 @@
     "ui:order": [
       "status",
       "*"
-    ]
+    ],
+    "classNames": "field-depth-1"
   },
   "Maximum_spec_for_a_piece": {
     "ui:order": [
@@ -33,6 +37,7 @@
       "width",
       "depth",
       "*"
-    ]
+    ],
+    "classNames": "field-depth-1"
   }
 }

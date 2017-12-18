@@ -19,6 +19,7 @@ export type SchemaPatternProperties = { [s: string]: SchemaPatternProperty | Sch
 
 export interface SchemaElementRef {
 	$ref: string;
+	title?: string;
 }
 
 export interface SchemaElement {

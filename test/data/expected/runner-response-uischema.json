@@ -2,11 +2,13 @@
   "ui:order": [
     "*"
   ],
+  "classNames": "field-depth-0",
   "Matching_race": {
     "items": {
       "ui:order": [
         "*"
-      ]
+      ],
+      "classNames": "field-depth-1"
     }
   }
 }

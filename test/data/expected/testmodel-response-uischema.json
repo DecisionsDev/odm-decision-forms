@@ -1,6 +1,6 @@
 {
   "ui:order": [
-    "Car_Return_dispatch",
+    "Result",
     "*"
   ],
   "classNames": "field-depth-0"

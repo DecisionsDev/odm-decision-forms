@@ -2,11 +2,13 @@
   "ui:order": [
     "*"
   ],
+  "classNames": "field-depth-0",
   "filtered_instances": {
     "items": {
       "ui:order": [
         "*"
-      ]
+      ],
+      "classNames": "field-depth-1"
     }
   }
 }

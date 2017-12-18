@@ -108,6 +108,7 @@ runTest('indecisionairlines');
 runTest('loanvalidation');
 runTest('runner');
 runTest('br4bxfilter');
+runTest('testmodel');
 
 test('Verifying overwrite is false', () => {
 	// Reminder: fail at the end as lon as overwrite is true
