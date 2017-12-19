@@ -1,7 +1,9 @@
 
 import {ActionTypes, DefaultAction, DisplayErrorAction, ReceiveResultAction} from "./actions";
 import {RootSchemaElement, Type} from "./schema";
-import {WebRequest, ResState} from "./state";
+import {
+	WebRequest, ResState, DecisionState, decisionStatusNotRun, decisionStatusResult, decisionStatusError, DecisionResult, DecisionError, DecisionNotRun
+} from "./state";
 
 export const schemaReducer = (state : RootSchemaElement = { $schema: '',  type: Type.TObject },
 															action : DefaultAction) => {
@@ -13,20 +15,22 @@ export const requestReducer = (state : WebRequest = { url: '',  headers: {}, tra
 	return state;
 };
 
-export const resultReducer = (state : any = null,
-															action : ReceiveResultAction | DefaultAction) => {
+export const responseReducer = (state : DecisionState = { status: decisionStatusNotRun },
+																action : ReceiveResultAction | DisplayErrorAction | DefaultAction) : DecisionState => {
 	switch (action.type) {
 		case ActionTypes.RECEIVE_RESULT:
-			return action.payload;
-		default:
-			return state;
-	}
-};
-
-export const errorReducer = (state : any = null, action : DisplayErrorAction | DefaultAction) => {
-	switch (action.type) {
+			return {
+				status: decisionStatusResult,
+				result: action.payload,
+				start: action.startDate,
+				end: action.endDate
+			};
 		case ActionTypes.DISPLAY_ERROR:
-			return { title: action.title, status: action.status, message: action.message };
+			return {
+				status: decisionStatusError,
+				error: { title: action.title, status: action.status, message: action.message },
+				start: action.executionStart
+			};
 		default:
 			return state;
 	}

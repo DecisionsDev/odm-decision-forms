@@ -16,8 +16,8 @@ import thunkMiddleware from 'redux-thunk';
 import {ConnectedRouter, routerReducer, routerMiddleware, RouterState} from 'react-router-redux'
 import createHistory from 'history/createBrowserHistory';
 import {loadRulesetPaths, loadSwagger} from "./resapi";
-import {ResState, State} from "./state";
-import {errorReducer, requestReducer, resReducer, resultReducer, schemaReducer} from "./reducers";
+import {decisionStatusNotRun, ResState, State} from "./state";
+import { requestReducer, resReducer, responseReducer, schemaReducer } from "./reducers";
 
 const history = createHistory();
 const historyMiddleware = routerMiddleware(history);
@@ -37,18 +37,16 @@ loadRulesetPaths()
 								transformPayload: payload => ({ request: payload }),
 								transformResult: result => result
 							},
-							result: null,
+							executeResponse: { status : decisionStatusNotRun },
 							res: resState,
-							error: null,
 							router: {}
 						};
 						const store = createStore<State>(combineReducers({
 								requestSchema: schemaReducer,
 								responseSchema: schemaReducer,
 								executeRequest: requestReducer,
-								result: resultReducer,
+								executeResponse: responseReducer,
 								res: resReducer,
-								error: errorReducer,
 								router: routerReducer
 							}),
 							initialState,
@@ -70,17 +68,15 @@ loadRulesetPaths()
 			requestSchema: null,
 			responseSchema: null,
 			executeRequest: { url: '', transformResult: x=>x, transformPayload: x=>x, headers: {} },
-			result: null,
+			executeResponse: { status : decisionStatusNotRun },
 			res: resState,
-			error: null,
 			router: {}
 		};
 		const store = createStore<State>(combineReducers({
 				requestSchema: schemaReducer,
 				responseSchema: schemaReducer,
 				executeRequest: requestReducer,
-				result: resultReducer,
-				error: errorReducer,
+				executeResponse: responseReducer,
 				res: resReducer,
 				router: routerReducer
 			}),

@@ -27,6 +27,7 @@ $gl-version:          "1.0" !default;
   color: #333333;
   background-color: #ffffff;
   @import 'bootstrap/bootstrap';
-  @import "app";
 }
+
+@import "app";
 

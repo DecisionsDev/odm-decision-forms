@@ -1,19 +1,21 @@
 import * as React from 'react';
-import {connect, Dispatch} from 'react-redux';
-import {State, Error} from "../state";
+import { connect, Dispatch } from 'react-redux';
+import {
+	State, DecisionState, decisionStatusError, decisionStatusResult, decisionStatusNotRun
+} from "../state";
 import Form from "react-jsonschema-form";
-import {execute} from "../actions";
-import {RootSchemaElement} from "../schema";
-import {RouterState} from 'react-router-redux'
-import {buildUiSchema} from "../resapi";
+import { execute } from "../actions";
+import { RootSchemaElement } from "../schema";
+import { RouterState } from 'react-router-redux'
+import { buildUiSchema } from "../resapi";
+import moment from 'moment';
 
 require('es6-object-assign').polyfill();
 
 export interface Props {
 	requestSchema: RootSchemaElement;
 	responseSchema: RootSchemaElement;
-	result: object | null;
-	error: Error | null;
+	executeResponse: DecisionState;
 }
 
 export interface DProps extends Props {
@@ -21,6 +23,11 @@ export interface DProps extends Props {
 }
 
 const log = (type) => console.log.bind(console, type);
+
+interface MessageField {
+	name: string;
+	value: string;
+}
 
 class Forms extends React.Component<DProps, any> {
 	form: any;
@@ -36,7 +43,7 @@ class Forms extends React.Component<DProps, any> {
 	}
 
 	render() {
-		const {requestSchema, responseSchema, result, error, dispatch} = this.props;
+		const {requestSchema, responseSchema, executeResponse, dispatch} = this.props;
 		const inuiSchema = {
 			...buildUiSchema(requestSchema),
 			"ui:rootFieldId": "in"
@@ -45,6 +52,14 @@ class Forms extends React.Component<DProps, any> {
 			...buildUiSchema(responseSchema),
 			"ui:rootFieldId": "out",
 			"ui:readonly": true
+		};
+		const makeFooterMessage = (fields: MessageField[]) => {
+			return <span>{ fields.map((f, i) => (
+				<span>
+					<span className="message-field-name">{f.name}: </span>
+					<span className="message-field-value">{f.value}</span>{ (i < fields.length - 1) ? ' - ': ''}
+				</span>
+			))}</span>
 		};
 		return <div className="odm-decision-forms">
 			<div id="input" className="form-container">
@@ -78,21 +93,44 @@ class Forms extends React.Component<DProps, any> {
 				</div>
 				<div className="form-body">
 					{
-						error ?
-							<div className="decision-error">
-								<h3>{error.title}</h3>
-								{error.status && <div><b>Status:</b> {error.status.toUpperCase()}</div>}
-								<div><b>Message:</b> {error.message}</div>
-							</div>
-							: <Form uiSchema={outuiSchema}
-											ObjectFieldTemplate={MyObjectFieldTemplate}
-											formData={result}
-											schema={responseSchema}/>
+						(() => {
+							switch (executeResponse.status) {
+								case decisionStatusResult:
+								case decisionStatusNotRun:
+									return (
+										<Form uiSchema={outuiSchema}
+																ObjectFieldTemplate={MyObjectFieldTemplate}
+																formData={(executeResponse.status === decisionStatusResult) ? executeResponse.result : null}
+																schema={responseSchema}/>
+									);
+								case decisionStatusError:
+									return (
+										<div className="decision-error">
+											<h3>{executeResponse.error.title}</h3>
+											{executeResponse.error.status && <div><b>Status:</b> {executeResponse.error.status.toUpperCase()}</div>}
+											<div><b>Message:</b> {executeResponse.error.message}</div>
+										</div>
+									);
+							}
+						})()
 					}
 				</div>
 				<div className="form-footer">
-					{result ? <span>Decision ID: {result['__DecisionID__']}</span>
-						: <span>No output yet. Hit the 'Run' button to trigger the Decision.</span>}
+					{
+						(() => {
+							switch (executeResponse.status) {
+								case decisionStatusResult:
+									return makeFooterMessage([
+										{ name: 'Last run', value: moment(executeResponse.start).format('LTS') },
+										{ name: 'Decision ID', value: executeResponse.result['__DecisionID__'] },
+									]);
+								case decisionStatusNotRun:
+									return <span>No output yet. Hit the 'Run' button to trigger the Decision.</span>;
+								case decisionStatusError:
+									return makeFooterMessage([ { name: 'Last run', value: moment(executeResponse.start).format('LTS') } ]);
+							}
+						})()
+					}
 				</div>
 			</div>
 		</div>
@@ -132,8 +170,7 @@ const mapStateToProps = (state: State): Props => {
 	return {
 		requestSchema: state.requestSchema!,
 		responseSchema: state.responseSchema!,
-		result: state.result ? state.result : null,
-		error: state.error
+		executeResponse: state.executeResponse
 	};
 };
 

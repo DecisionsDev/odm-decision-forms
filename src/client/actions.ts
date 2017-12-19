@@ -16,11 +16,15 @@ export interface DefaultAction extends Action {
 export interface ReceiveResultAction extends Action {
 	type: ActionTypes.RECEIVE_RESULT;
 	payload: object;
+	startDate: Date;
+	endDate: Date;
 }
 
-export const receiveResult: ActionCreator<ReceiveResultAction> = (payload) : ReceiveResultAction => ({
+export const receiveResult: ActionCreator<ReceiveResultAction> = (payload: object, startDate: Date, endDate: Date) : ReceiveResultAction => ({
 	type: ActionTypes.RECEIVE_RESULT,
-	payload: payload
+	payload: payload,
+	startDate: startDate,
+	endDate: endDate
 });
 
 export const execute: any = (payload) => {
@@ -31,10 +35,12 @@ export const execute: any = (payload) => {
 		let transformPayload = executeRequest!.transformPayload || identity;
 		let transformResult = executeRequest!.transformResult || identity;
 		let headers = executeRequest!.headers || {};
+		const startDate = new Date();
 		axios.post(executeRequest!.url, transformPayload(payload), { headers: headers }).then(res => {
-			dispatch(receiveResult(transformResult(res.data)));
+			const endDate = new Date();
+			dispatch(receiveResult(transformResult(res.data), startDate, endDate));
 		}).catch(err => {
-			dispatch(displayError("Error executing Rule Service", err.response.data, err.response.statusText));
+			dispatch(displayError("Error invoking Decision", err.response.data, err.response.statusText, startDate));
 			console.log('Error while invoking decision service: ' + err);
 		});
 	};
@@ -42,13 +48,15 @@ export const execute: any = (payload) => {
 
 export interface DisplayErrorAction extends Action {
 	type: ActionTypes.DISPLAY_ERROR;
+	executionStart: Date;
 	title: string;
 	status: string;
 	message: string;
 }
 
-export const displayError: ActionCreator<DisplayErrorAction> = (title: string, message: string, status: string) : DisplayErrorAction => ({
+export const displayError: ActionCreator<DisplayErrorAction> = (title: string, message: string, status: string, executionStart: Date) : DisplayErrorAction => ({
 	type: ActionTypes.DISPLAY_ERROR,
+	executionStart: executionStart,
 	title: title,
 	message: message,
 	status: status
