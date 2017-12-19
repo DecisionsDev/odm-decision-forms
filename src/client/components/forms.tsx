@@ -48,6 +48,7 @@ class Forms extends React.Component<DProps, any> {
 			...buildUiSchema(requestSchema),
 			"ui:rootFieldId": "in"
 		};
+		console.log(inuiSchema);
 		const outuiSchema = {
 			...buildUiSchema(responseSchema),
 			"ui:rootFieldId": "out",

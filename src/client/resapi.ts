@@ -52,15 +52,10 @@ export const normalizeSchema = (schema: RootSchemaElement): void => {
 		definitions: {},
 		schema: schema
 	};
-	// if (schema.definitions) {
-	// 	if (schema.definitions.Request) {
-	// 		delete (schema.definitions.Request as SchemaElement)!.properties!['__DecisionID__'];
-	// 	}
-	// 	if (schema.definitions.Response) {
-	// 		delete (schema.definitions.Response as SchemaElement)!.properties!['__DecisionID__'];
-	// 	}
-	// }
 	_normalizeSchema(schema, context);
+	if (schema.properties && schema.properties.__DecisionID__) {
+		(schema.properties.__DecisionID__ as SchemaElement).CustomSchemaAttributeHidden = true;
+	}
 	schema.definitions = context.definitions;
 };
 
@@ -115,7 +110,8 @@ const _normalizeSchema = (schema: SchemaElement, context: Context, title?: strin
 						schema.properties[key] = {
 							type: Type.TString,
 							title: propertyTitle,
-							description: message
+							description: message,
+							CustomSchemaAttributeCyclic: true
 						} as SchemaElement;
 					} else {
 						if (context.dependencies[current]) {
@@ -137,13 +133,17 @@ const resolveRef = ($ref: string): string => {
 	return $ref.substr("#/definitions/".length);
 };
 
-const isPrimitive = (t: Type): boolean => {
-	switch (t) {
-		case Type.TNumber:
-		case Type.TInteger:
-		case Type.TBoolean:
-		case Type.TString:
-			return true;
+const isPrimitive = (x: Type | SchemaElement | SchemaElementRef): boolean => {
+	if (typeof x === "string") {
+		switch (x) {
+			case Type.TNumber:
+			case Type.TInteger:
+			case Type.TBoolean:
+			case Type.TString:
+				return true;
+		}
+	} else if ((x as any).type) {
+		return isPrimitive((x as SchemaElement).type);
 	}
 	return false;
 };
@@ -156,6 +156,28 @@ export const buildUiSchema = (root: RootSchemaElement): object => {
 	};
 	_buildUiSchema(root, root, null, uiSchema, 0);
 	return uiSchema;
+};
+
+const addClass = (uiSchema, key, className) => {
+	if (uiSchema[key]) {
+		if (uiSchema[key].classNames) {
+			uiSchema[key].classNames = uiSchema[key].classNames + ' ' + className;
+		} else {
+			uiSchema[key].classNames = className;
+		}
+	} else {
+		uiSchema[key] = { classNames: className };
+	}
+};
+
+const isSmallTextField = (schemaOrRef: SchemaElement | SchemaElementRef): boolean => {
+	if (!(schemaOrRef as any).$ref) {
+		const schemaElement: SchemaElement = schemaOrRef as SchemaElement;
+		return [ Type.TString, Type.TNumber, Type.TInteger ].indexOf(schemaElement.type) != -1
+			&& !schemaElement.CustomSchemaAttributeCyclic
+			&& !schemaElement.CustomSchemaAttributeHidden;
+	}
+	return false;
 };
 
 const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: RootSchemaElement, key: string | null, uiSchema: object, depth: number): void => {
@@ -175,7 +197,7 @@ const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: Roo
 		const type: Type = schema.type;
 		if (isPrimitive(type)) {
 			if (key) {
-				uiSchema["ui:order"].splice(0, 0, key);
+				uiSchema["ui:order"].splice(uiSchema["ui:order"].length - 1, 0, key);
 			}
 		} else if (type === Type.TObject) {
 			if (key) {
@@ -185,9 +207,29 @@ const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: Roo
 				};
 			}
 			if (schema.properties) {
+				let childUiSchema = key ? uiSchema[key] : uiSchema;
+				let lastTextFieldKey : string | null = null;
+				let textFieldEven = false;
 				for (const k in schema.properties) {
 					const schemaOrRefChild = schema.properties[k];
-					_buildUiSchema(schemaOrRefChild, root, k, key ? uiSchema[key] : uiSchema, depth + 1);
+					_buildUiSchema(schemaOrRefChild, root, k, childUiSchema, depth + 1);
+					if (isPrimitive(schemaOrRefChild)) {
+						if (isSmallTextField(schemaOrRefChild)) {
+							addClass(childUiSchema, k, 'field-small-textfield');
+							// Mark the last odd text field so that we can make it span on 2 columns in CSS
+							lastTextFieldKey = k;
+							textFieldEven = !textFieldEven;
+						} else {
+							if (textFieldEven && lastTextFieldKey) {
+								addClass(childUiSchema, lastTextFieldKey, 'field-last-textfield');
+							}
+							lastTextFieldKey = null;
+							textFieldEven = false;
+						}
+					}
+				}
+				if (textFieldEven && lastTextFieldKey) {
+					addClass(childUiSchema, lastTextFieldKey, 'field-last-textfield');
 				}
 			}
 		} else if (type === Type.TArray && schema.items) {
@@ -210,13 +252,6 @@ const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: Roo
 const _title = (key: string) => {
 	return startCase(decamelize(key, ' '));
 };
-
-interface LocalTime {
-	hour: number;
-	minute: number;
-	second: number;
-	nano: number;
-}
 
 export const loadRulesetPaths = (): Promise<ResState> => {
 	return axios.get(`/rulesets`).then(res => {

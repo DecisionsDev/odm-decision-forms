@@ -32,7 +32,9 @@ export interface SchemaElement {
 	required?: string[],
 	items?: SchemaElement | SchemaElementRef,
 	format?: Format,
-	className?: string // custom extension
+//	className?: string, // custom extension
+	CustomSchemaAttributeHidden?: boolean, // custom extension
+	CustomSchemaAttributeCyclic?: boolean, // custom extension
 }
 
 export interface SchemaPatternProperty extends SchemaElement{

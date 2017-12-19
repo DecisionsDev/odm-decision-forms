@@ -72,8 +72,11 @@
       }
       .field-depth-0, .field-depth-1, .field-depth-2, .field-depth-3 {
         & > fieldset > .form-grid {
-          & > .field-integer, & > .field-number, & > .field-string, & > .field-boolean {
+          & > .field-small-textfield {
             grid-column-start: span 1;
+          }
+          & > .field-last-textfield {
+            grid-column-start: span 2;
           }
         }
       }
