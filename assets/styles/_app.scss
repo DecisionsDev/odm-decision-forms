@@ -5,16 +5,47 @@
   width: calc(50% - 40px);
   margin-bottom: 10px;
   h1 {
-    font-size: 28px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-family: inherit;
+    color: inherit;
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .form-header {
+    display: flex;
+    h1 {
+      flex-grow: 1;
+    }
+    button[type="submit"] {
+      line-height: 1;
+      margin-top: 5px;
+      margin-bottom: 5px;
+      border-radius: 0;
+      font-size: 14px;
+      font-weight: 500;
+      i.fa {
+        margin-left: 10px;
+        font-size: 14px;
+      }
+    }
+  }
+  .form-footer {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #aaa;
+  }
+  .form-body {
+    border: 1px solid #aaa;
   }
   form {
-    border: 1px solid #7f7f7f;
-    border-radius: 10px;
     padding: 20px;
-    button[type="submit"] {
-      i.fa {
-        margin-right: 10px;
-        font-size: 18px;
+    & > .form-group.field-object .form-group.field-object {
+      padding: 10px;
+      border: 1px solid #dddddd;
+      border-radius: 10px;
+      &:hover {
+        border: 1px solid darken(#dddddd, 20%);
       }
     }
     .form-grid {
@@ -47,17 +78,15 @@
   &#input {
     margin-right: 20px;
     margin-left: 20px;
-    form {
-      & > .form-group {
-        border-bottom: 1px solid #aaa;
-      }
-    }
   }
   &#output {
     margin-left: 20px;
     margin-right: 20px;
-    form {
+    .form-body {
       background-color: #f3f3f3;
+      .decision-error {
+        padding: 0 20px 20px;
+      }
       .array-item .col-xs-9 {
         width: 100%;
       }

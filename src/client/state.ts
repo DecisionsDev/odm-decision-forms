@@ -35,6 +35,12 @@ export interface WebRequest {
 	transformResult: (result) => {}
 }
 
+export interface WebResponse {
+	result: object | null;
+	lastStart: Date;
+	lastEnd: Date
+}
+
 export interface State {
 	requestSchema: RootSchemaElement | null;
 	responseSchema: RootSchemaElement | null;

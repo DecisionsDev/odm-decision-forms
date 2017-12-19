@@ -24,7 +24,7 @@ export const readSwagger = (swagger) => {
 		properties: swagger.definitions.Request.properties
 	} as RootSchemaElement;
 	const normalizedRequest = JSON.parse(JSON.stringify(requestSchema));
-	delete (normalizedRequest as SchemaElement)!.properties!['__DecisionID__'];
+//	delete (normalizedRequest as SchemaElement)!.properties!['__DecisionID__'];
 	normalizeSchema(normalizedRequest);
 	const responseSchema = {
 		$schema: "http://json-schema.org/draft-06/schema#",
@@ -33,7 +33,7 @@ export const readSwagger = (swagger) => {
 		properties: swagger.definitions.Response.properties
 	} as RootSchemaElement;
 	const normalizedResponse = JSON.parse(JSON.stringify(responseSchema));
-	delete (normalizedResponse as SchemaElement)!.properties!['__DecisionID__'];
+//	delete (normalizedResponse as SchemaElement)!.properties!['__DecisionID__'];
 	normalizeSchema(normalizedResponse);
 	return {request: normalizedRequest, response: normalizedResponse};
 };
@@ -52,14 +52,14 @@ export const normalizeSchema = (schema: RootSchemaElement): void => {
 		definitions: {},
 		schema: schema
 	};
-	if (schema.definitions) {
-		if (schema.definitions.Request) {
-			delete (schema.definitions.Request as SchemaElement)!.properties!['__DecisionID__'];
-		}
-		if (schema.definitions.Response) {
-			delete (schema.definitions.Response as SchemaElement)!.properties!['__DecisionID__'];
-		}
-	}
+	// if (schema.definitions) {
+	// 	if (schema.definitions.Request) {
+	// 		delete (schema.definitions.Request as SchemaElement)!.properties!['__DecisionID__'];
+	// 	}
+	// 	if (schema.definitions.Response) {
+	// 		delete (schema.definitions.Response as SchemaElement)!.properties!['__DecisionID__'];
+	// 	}
+	// }
 	_normalizeSchema(schema, context);
 	schema.definitions = context.definitions;
 };
@@ -151,7 +151,8 @@ const isPrimitive = (t: Type): boolean => {
 export const buildUiSchema = (root: RootSchemaElement): object => {
 	const uiSchema = {
 		"ui:order": ["*"],
-		"classNames": `field-depth-0`
+		"classNames": `field-depth-0`,
+		"__DecisionID__": {"ui:widget": "hidden"}
 	};
 	_buildUiSchema(root, root, null, uiSchema, 0);
 	return uiSchema;
