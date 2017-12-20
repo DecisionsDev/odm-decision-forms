@@ -1,10 +1,25 @@
 {
   "ui:order": [
     "Name",
-    "Hour",
-    "Gender",
     "Degree",
-    "*"
+    "Gender",
+    "Hour",
+    "__DecisionID__"
   ],
-  "classNames": "field-depth-0"
+  "classNames": "field-depth-0",
+  "__DecisionID__": {
+    "ui:widget": "hidden"
+  },
+  "Name": {
+    "classNames": "field-small-textfield"
+  },
+  "Degree": {
+    "classNames": "field-small-textfield"
+  },
+  "Gender": {
+    "classNames": "field-small-textfield"
+  },
+  "Hour": {
+    "classNames": "field-small-textfield"
+  }
 }

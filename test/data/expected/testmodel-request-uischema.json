@@ -1,155 +1,257 @@
 {
   "ui:order": [
-    "An_Enum",
     "A_String",
-    "*"
+    "An_Enum",
+    "__DecisionID__",
+    "An_Object"
   ],
   "classNames": "field-depth-0",
+  "__DecisionID__": {
+    "ui:widget": "hidden"
+  },
   "An_Object": {
     "ui:order": [
-      "aNumber",
-      "aString",
-      "aCharacter",
-      "anInteger",
-      "aDayOfWeek",
-      "anEnum",
-      "aDate",
-      "aBoolean",
-      "aDateTime",
-      "anObject",
       "aMonthOfYear",
-      "*"
+      "anEnum",
+      "aDayOfWeek",
+      "aCharacter",
+      "aString",
+      "aBoolean",
+      "anInteger",
+      "aNumber",
+      "aDateTime",
+      "aDate",
+      "anObject",
+      "aTime",
+      "aStringList",
+      "depth 1 array",
+      "depth 1",
+      "aYear"
     ],
     "classNames": "field-depth-1",
+    "anObject": {
+      "classNames": "field-warning",
+      "ui:widget": "textarea",
+      "ui:options": {
+        "rows": 2
+      },
+      "ui:placeholder": "{...}"
+    },
     "aTime": {
       "ui:order": [
-        "nano",
-        "second",
-        "minute",
         "hour",
-        "*"
+        "minute",
+        "second",
+        "nano"
       ],
-      "classNames": "field-depth-2"
+      "classNames": "field-depth-2",
+      "hour": {
+        "classNames": "field-small-textfield"
+      },
+      "minute": {
+        "classNames": "field-small-textfield"
+      },
+      "second": {
+        "classNames": "field-small-textfield"
+      },
+      "nano": {
+        "classNames": "field-small-textfield"
+      }
     },
     "depth 1 array": {
       "items": {
         "ui:order": [
           "new attribute",
-          "*"
+          "depth 2",
+          "depth 2 array"
         ],
         "classNames": "field-depth-2",
         "depth 2": {
           "ui:order": [
             "foo",
-            "*"
+            "depth 3 array",
+            "depth 3"
           ],
           "classNames": "field-depth-4",
           "depth 3 array": {
             "items": {
               "ui:order": [
-                "bar",
-                "*"
+                "bar"
               ],
-              "classNames": "field-depth-5"
+              "classNames": "field-depth-5",
+              "bar": {
+                "classNames": "field-small-textfield field-last-textfield"
+              }
             }
           },
           "depth 3": {
             "ui:order": [
-              "bar",
-              "*"
+              "bar"
             ],
-            "classNames": "field-depth-5"
+            "classNames": "field-depth-5",
+            "bar": {
+              "classNames": "field-small-textfield field-last-textfield"
+            }
+          },
+          "foo": {
+            "classNames": "field-small-textfield field-last-textfield"
           }
         },
         "depth 2 array": {
           "items": {
             "ui:order": [
               "foo",
-              "*"
+              "depth 3 array",
+              "depth 3"
             ],
             "classNames": "field-depth-4",
             "depth 3 array": {
               "items": {
                 "ui:order": [
-                  "bar",
-                  "*"
+                  "bar"
                 ],
-                "classNames": "field-depth-6"
+                "classNames": "field-depth-6",
+                "bar": {
+                  "classNames": "field-small-textfield field-last-textfield"
+                }
               }
             },
             "depth 3": {
               "ui:order": [
-                "bar",
-                "*"
+                "bar"
               ],
-              "classNames": "field-depth-6"
+              "classNames": "field-depth-6",
+              "bar": {
+                "classNames": "field-small-textfield field-last-textfield"
+              }
+            },
+            "foo": {
+              "classNames": "field-small-textfield field-last-textfield"
             }
           }
+        },
+        "new attribute": {
+          "classNames": "field-small-textfield field-last-textfield"
         }
       }
     },
     "depth 1": {
       "ui:order": [
         "new attribute",
-        "*"
+        "depth 2",
+        "depth 2 array"
       ],
       "classNames": "field-depth-2",
       "depth 2": {
         "ui:order": [
           "foo",
-          "*"
+          "depth 3 array",
+          "depth 3"
         ],
         "classNames": "field-depth-3",
         "depth 3 array": {
           "items": {
             "ui:order": [
-              "bar",
-              "*"
+              "bar"
             ],
-            "classNames": "field-depth-4"
+            "classNames": "field-depth-4",
+            "bar": {
+              "classNames": "field-small-textfield field-last-textfield"
+            }
           }
         },
         "depth 3": {
           "ui:order": [
-            "bar",
-            "*"
+            "bar"
           ],
-          "classNames": "field-depth-4"
+          "classNames": "field-depth-4",
+          "bar": {
+            "classNames": "field-small-textfield field-last-textfield"
+          }
+        },
+        "foo": {
+          "classNames": "field-small-textfield field-last-textfield"
         }
       },
       "depth 2 array": {
         "items": {
           "ui:order": [
             "foo",
-            "*"
+            "depth 3 array",
+            "depth 3"
           ],
           "classNames": "field-depth-3",
           "depth 3 array": {
             "items": {
               "ui:order": [
-                "bar",
-                "*"
+                "bar"
               ],
-              "classNames": "field-depth-5"
+              "classNames": "field-depth-5",
+              "bar": {
+                "classNames": "field-small-textfield field-last-textfield"
+              }
             }
           },
           "depth 3": {
             "ui:order": [
-              "bar",
-              "*"
+              "bar"
             ],
-            "classNames": "field-depth-5"
+            "classNames": "field-depth-5",
+            "bar": {
+              "classNames": "field-small-textfield field-last-textfield"
+            }
+          },
+          "foo": {
+            "classNames": "field-small-textfield field-last-textfield"
           }
         }
+      },
+      "new attribute": {
+        "classNames": "field-small-textfield field-last-textfield"
       }
     },
     "aYear": {
       "ui:order": [
         "leap",
-        "value",
-        "*"
+        "value"
       ],
-      "classNames": "field-depth-2"
+      "classNames": "field-depth-2",
+      "value": {
+        "classNames": "field-small-textfield field-last-textfield"
+      }
+    },
+    "aMonthOfYear": {
+      "classNames": "field-small-textfield"
+    },
+    "anEnum": {
+      "classNames": "field-small-textfield"
+    },
+    "aDayOfWeek": {
+      "classNames": "field-small-textfield"
+    },
+    "aCharacter": {
+      "classNames": "field-small-textfield"
+    },
+    "aString": {
+      "classNames": "field-small-textfield field-last-textfield"
+    },
+    "anInteger": {
+      "classNames": "field-small-textfield"
+    },
+    "aNumber": {
+      "classNames": "field-small-textfield"
+    },
+    "aDateTime": {
+      "classNames": "field-small-textfield"
+    },
+    "aDate": {
+      "classNames": "field-small-textfield"
     }
+  },
+  "A_String": {
+    "classNames": "field-small-textfield"
+  },
+  "An_Enum": {
+    "classNames": "field-small-textfield"
   }
 }

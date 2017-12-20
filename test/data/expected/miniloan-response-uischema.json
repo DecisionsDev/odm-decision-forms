@@ -1,17 +1,33 @@
 {
   "ui:order": [
-    "*"
+    "__DecisionID__",
+    "loan"
   ],
   "classNames": "field-depth-0",
+  "__DecisionID__": {
+    "ui:widget": "hidden"
+  },
   "loan": {
     "ui:order": [
       "approved",
-      "yearlyRepayment",
-      "yearlyInterestRate",
-      "duration",
       "amount",
-      "*"
+      "duration",
+      "yearlyInterestRate",
+      "yearlyRepayment",
+      "messages"
     ],
-    "classNames": "field-depth-1"
+    "classNames": "field-depth-1",
+    "amount": {
+      "classNames": "field-small-textfield"
+    },
+    "duration": {
+      "classNames": "field-small-textfield"
+    },
+    "yearlyInterestRate": {
+      "classNames": "field-small-textfield"
+    },
+    "yearlyRepayment": {
+      "classNames": "field-small-textfield"
+    }
   }
 }

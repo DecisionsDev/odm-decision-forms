@@ -1,22 +1,31 @@
 {
   "ui:order": [
-    "*"
+    "__DecisionID__",
+    "Approval",
+    "Insurance"
   ],
   "classNames": "field-depth-0",
+  "__DecisionID__": {
+    "ui:widget": "hidden"
+  },
   "Approval": {
     "ui:order": [
       "message",
-      "approved",
-      "*"
+      "approved"
     ],
-    "classNames": "field-depth-1"
+    "classNames": "field-depth-1",
+    "message": {
+      "classNames": "field-small-textfield field-last-textfield"
+    }
   },
   "Insurance": {
     "ui:order": [
-      "rate",
       "required",
-      "*"
+      "rate"
     ],
-    "classNames": "field-depth-1"
+    "classNames": "field-depth-1",
+    "rate": {
+      "classNames": "field-small-textfield field-last-textfield"
+    }
   }
 }

@@ -1,8 +1,12 @@
 {
   "ui:order": [
-    "*"
+    "__DecisionID__",
+    "filtered_instances"
   ],
   "classNames": "field-depth-0",
+  "__DecisionID__": {
+    "ui:widget": "hidden"
+  },
   "filtered_instances": {
     "items": {
       "ui:order": [

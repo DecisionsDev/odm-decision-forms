@@ -1,43 +1,79 @@
 {
   "ui:order": [
     "Fee_per_extra_kilogram",
-    "*"
+    "__DecisionID__",
+    "Booking",
+    "Customer",
+    "Maximum_spec_for_a_piece"
   ],
   "classNames": "field-depth-0",
+  "__DecisionID__": {
+    "ui:widget": "hidden"
+  },
   "Booking": {
     "ui:order": [
       "fareClass",
-      "*"
+      "baggageItems"
     ],
     "classNames": "field-depth-1",
     "baggageItems": {
       "items": {
         "ui:order": [
-          "weight",
-          "height",
-          "width",
           "depth",
-          "*"
+          "width",
+          "height",
+          "weight"
         ],
-        "classNames": "field-depth-2"
+        "classNames": "field-depth-2",
+        "depth": {
+          "classNames": "field-small-textfield"
+        },
+        "width": {
+          "classNames": "field-small-textfield"
+        },
+        "height": {
+          "classNames": "field-small-textfield"
+        },
+        "weight": {
+          "classNames": "field-small-textfield"
+        }
       }
+    },
+    "fareClass": {
+      "classNames": "field-small-textfield field-last-textfield"
     }
   },
   "Customer": {
     "ui:order": [
-      "status",
-      "*"
+      "status"
     ],
-    "classNames": "field-depth-1"
+    "classNames": "field-depth-1",
+    "status": {
+      "classNames": "field-small-textfield field-last-textfield"
+    }
   },
   "Maximum_spec_for_a_piece": {
     "ui:order": [
-      "weight",
-      "height",
-      "width",
       "depth",
-      "*"
+      "width",
+      "height",
+      "weight"
     ],
-    "classNames": "field-depth-1"
+    "classNames": "field-depth-1",
+    "depth": {
+      "classNames": "field-small-textfield"
+    },
+    "width": {
+      "classNames": "field-small-textfield"
+    },
+    "height": {
+      "classNames": "field-small-textfield"
+    },
+    "weight": {
+      "classNames": "field-small-textfield"
+    }
+  },
+  "Fee_per_extra_kilogram": {
+    "classNames": "field-small-textfield field-last-textfield"
   }
 }
