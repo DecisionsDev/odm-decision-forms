@@ -2,6 +2,7 @@ import {Action} from "redux";
 import {State} from "./state";
 import axios from 'axios';
 import {ActionCreator} from "react-redux";
+import {normalizePayload} from "./resapi";
 
 export const enum ActionTypes {
 	RECEIVE_RESULT,
@@ -36,7 +37,7 @@ export const execute: any = (payload) => {
 		let transformResult = executeRequest!.transformResult || identity;
 		let headers = executeRequest!.headers || {};
 		const startDate = new Date();
-		axios.post(executeRequest!.url, transformPayload(payload), { headers: headers }).then(res => {
+		axios.post(executeRequest!.url, transformPayload(normalizePayload(getState().requestSchema!, payload)), { headers: headers }).then(res => {
 			const endDate = new Date();
 			dispatch(receiveResult(transformResult(res.data), startDate, endDate));
 		}).catch(err => {

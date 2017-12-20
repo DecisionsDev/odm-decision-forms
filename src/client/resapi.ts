@@ -106,7 +106,7 @@ const _normalizeSchema = (schema: SchemaElement, context: Context, title?: strin
 						// If the current definition being explored is already a dependency of the referenced definition,
 						// we have a cyclic dependency.
 						// Replace by a string, with a warning in the description
-						const message = `Warning: replaced cyclic reference (${current} => ${key}: ${name}) with a string property`;
+						const message = `Warning: replaced cyclic reference (${current} => ${key}: ${name}) with a JSON string property.`;
 						console.log(message);
 						schema.properties[key] = {
 							type: Type.TString,
@@ -132,6 +132,36 @@ const _normalizeSchema = (schema: SchemaElement, context: Context, title?: strin
 
 const resolveRef = ($ref: string): string => {
 	return $ref.substr("#/definitions/".length);
+};
+
+export const normalizePayload = (schema: RootSchemaElement, result: any): any => {
+	return _normalizePayload(schema, schema, result);
+};
+
+const _normalizePayload = (schema: RootSchemaElement, schemaElementOrRef: SchemaElement | SchemaElementRef, result: any): any => {
+	let schemaElement: SchemaElement;
+	if ((schemaElementOrRef as any).$ref) {
+		const schemaRef = schemaElementOrRef as SchemaElementRef;
+		schemaElement = schema.definitions![resolveRef(schemaRef.$ref)];
+	} else {
+		schemaElement = schemaElementOrRef as SchemaElement;
+	}
+	if (schemaElement.CustomSchemaAttributeCyclic) {
+		// Convert result to object
+		return JSON.parse(result);
+	}
+	if (schemaElement.type === Type.TObject) {
+		const newResult = {};
+		Object.keys(schemaElement.properties || {}).filter(k => result[k]).forEach(k => {
+			newResult[k] = _normalizePayload(schema, schemaElement.properties![k], result[k]);
+		});
+		return newResult;
+	} else if (schemaElement.type === Type.TArray) {
+		if (result) {
+			return result.map(item => _normalizePayload(schema, schemaElement.items!, item));
+		}
+	}
+	return result;
 };
 
 const isPrimitive = (x: Type | SchemaElement | SchemaElementRef): boolean => {
@@ -170,11 +200,27 @@ const addClass = (uiSchema, key, className) => {
 	}
 };
 
+const setOption = (uiSchema, key, name, value) => {
+	if (!uiSchema[key]) {
+		uiSchema[key] = {};
+	}
+	if (!uiSchema[key]['ui:options']) {
+		uiSchema[key]['ui:options'] = {};
+	}
+	uiSchema[key]['ui:options'][name] = value;
+};
+
 const setWidget = (uiSchema, key, widget) => {
 	if (!uiSchema[key]) {
 		uiSchema[key] = {};
 	}
 	uiSchema[key]["ui:widget"] = widget;
+};
+const setPlaceHolder = (uiSchema, key, placeholder) => {
+	if (!uiSchema[key]) {
+		uiSchema[key] = {};
+	}
+	uiSchema[key]["ui:placeholder"] = placeholder;
 };
 
 const isSmallTextField = (schemaOrRef: SchemaElement | SchemaElementRef): boolean => {
@@ -207,15 +253,16 @@ const containsWord = (str: string, word: string) : boolean => {
 	return !!str && !!word && new RegExp('\\b' + word.toLowerCase() + '\\b').test(str.toLowerCase());
 };
 
+let rk = 0;
 enum Rank {
-	Id = 0,
-	Name = 1,
-	String = 2,
-	Boolean = 3,
-	Number = 4,
-	Date = 5,
-	Other = 6,
-	Max = 100
+	Id = rk++,
+	Name = rk++,
+	String = rk++,
+	Boolean = rk++,
+	Number = rk++,
+	Date = rk++,
+	Other = rk++,
+	Max = rk++
 }
 
 const rank = (schemaOrRef: SchemaElement | SchemaElementRef) : Rank => {
@@ -252,6 +299,9 @@ const rank = (schemaOrRef: SchemaElement | SchemaElementRef) : Rank => {
 				return Rank.Boolean;
 			case Type.TInteger:
 			case Type.TNumber:
+				if (title && containsWord(title, "id")) {
+					return Rank.Id;
+				}
 				return Rank.Number;
 		}
 	}
@@ -296,6 +346,9 @@ const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: Roo
 					}
 					if (isCyclic(schemaOrRefChild)) {
 						addClass(childUiSchema, k, "field-warning");
+						setWidget(childUiSchema, k, "textarea");
+						setOption(childUiSchema, k, "rows", 2);
+						setPlaceHolder(childUiSchema, k, "{...}")
 					}
 					rankToProperties[rank(schemaOrRefChild)].push(k);
 				}
