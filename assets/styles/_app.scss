@@ -1,82 +1,140 @@
 @import "variables";
 
-.form-container {
-  float: left;
-  width: calc(50% - 40px);
-  margin-bottom: 10px;
-  h1 {
-    font-size: 28px;
-  }
-  form {
-    border: 1px solid #7f7f7f;
-    border-radius: 10px;
-    padding: 20px;
-    button[type="submit"] {
-      i.fa {
-        margin-right: 10px;
-        font-size: 18px;
-      }
+.odm-decision-forms {
+  .form-container {
+    float: left;
+    width: calc(50% - 40px);
+    margin-bottom: 10px;
+    h1 {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      font-family: inherit;
+      color: inherit;
+      font-size: 20px;
+      font-weight: 700;
     }
-    .form-grid {
-      display: grid;
-      grid-template-columns: 50% 50%;
-      grid-gap: 10px;
-      padding-right: 10px;
-      .field {
-        grid-column-start: span 2;
+    .form-header {
+      display: flex;
+      h1 {
+        flex-grow: 1;
       }
-    }
-    .field-depth-0, .field-depth-1, .field-depth-2, .field-depth-3 {
-      & > fieldset > .form-grid {
-        & > .field-integer, & > .field-number, & > .field-string, & > .field-boolean {
-          grid-column-start: span 1;
+      button[type="submit"] {
+        line-height: 1;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        border-radius: 0;
+        font-size: 14px;
+        font-weight: 500;
+        i.fa {
+          margin-left: 10px;
+          font-size: 14px;
+        }
+        &:active, &:focus {
+          outline: none;
         }
       }
     }
-    .field-array {
-      .array-item {
-        width: 100%;
+    .form-footer {
+      margin-top: 5px;
+      font-size: 12px;
+      color: #aaa;
+      .message-field-name {
+        //color: darken(#aaa, 30%);
+//        font-weight: 400;
+        font-style: italic;
+      }
+      .message-field-value {
+        //color: darken(#aaa, 30%);
+//        font-weight: 600;
       }
     }
-  }
-  &#output {
-    [type="submit"] {
-      display: none;
+    .form-body {
+      border: 1px solid #aaa;
     }
-  }
-  &#input {
-    margin-right: 20px;
-    margin-left: 20px;
     form {
-      & > .form-group {
-        border-bottom: 1px solid #aaa;
+      padding: 20px;
+      & > .form-group.field-object .form-group.field-object {
+        padding: 10px;
+        border: 1px solid #dddddd;
+        border-radius: 10px;
+        &:hover {
+          border: 1px solid darken(#dddddd, 20%);
+        }
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: 50% 50%;
+        grid-gap: 10px;
+        padding-right: 10px;
+        .field {
+          grid-column-start: span 2;
+        }
+      }
+      .field-depth-0, .field-depth-1, .field-depth-2, .field-depth-3 {
+        & > fieldset > .form-grid {
+          & > .field-small-textfield {
+            grid-column-start: span 1;
+          }
+          & > .field-last-textfield {
+            grid-column-start: span 2;
+          }
+        }
+      }
+      .field-array {
+        .array-item {
+          width: 100%;
+        }
+      }
+      .field-description {
+        margin-top: 0;
+        margin-bottom: 3px;
+        font-size: 12px;
+      }
+      .field.field-warning {
+        .field-description {
+          color: #db7093;
+        }
       }
     }
-  }
-  &#output {
-    margin-left: 20px;
-    margin-right: 20px;
-    form {
-      background-color: #f3f3f3;
-      .array-item .col-xs-9 {
-        width: 100%;
-      }
-      .array-item-toolbox {
+    &#output {
+      [type="submit"] {
         display: none;
       }
-      .array-item-add {
-        display: none;
+    }
+    &#input {
+      margin-right: 20px;
+      margin-left: 20px;
+    }
+    &#output {
+      margin-left: 20px;
+      margin-right: 20px;
+      .form-body {
+        background-color: #f3f3f3;
+        .decision-error {
+          padding: 0 20px 20px;
+        }
+        .array-item .col-xs-9 {
+          width: 100%;
+        }
+        .array-item-toolbox {
+          display: none;
+        }
+        .array-item-add {
+          display: none;
+        }
       }
     }
   }
 }
 
 @media (max-width: 1024px) {
-  .form-container {
-    form {
-      .form-grid {
-        .field-integer, .field-number, .field-string, .field-boolean {
-          grid-column-start: span 2;
+  .odm-decision-forms {
+    .form-container {
+      form {
+        .form-grid {
+          .field-integer, .field-number, .field-string, .field-boolean {
+            grid-column-start: span 2;
+          }
         }
       }
     }

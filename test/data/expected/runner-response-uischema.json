@@ -1,8 +1,12 @@
 {
   "ui:order": [
-    "*"
+    "__DecisionID__",
+    "Matching_race"
   ],
   "classNames": "field-depth-0",
+  "__DecisionID__": {
+    "ui:widget": "hidden"
+  },
   "Matching_race": {
     "items": {
       "ui:order": [

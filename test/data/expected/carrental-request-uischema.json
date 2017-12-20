@@ -1,62 +1,140 @@
 {
   "ui:order": [
-    "*"
+    "__DecisionID__",
+    "Car",
+    "Car_Maintenance_Record",
+    "Car_Return_Record"
   ],
   "classNames": "field-depth-0",
+  "__DecisionID__": {
+    "ui:widget": "hidden"
+  },
   "Car": {
     "ui:order": [
-      "brand",
-      "model",
-      "status",
       "ID",
-      "category",
       "serial number",
-      "*"
+      "category",
+      "status",
+      "model",
+      "brand",
+      "car black box"
     ],
     "classNames": "field-depth-1",
     "car black box": {
       "ui:order": [
-        "max speed last Week",
-        "tyre pressure",
-        "average speed last week",
-        "current mileage",
-        "oil level",
         "ID",
-        "distance driven last week",
         "max engine temperature",
-        "*"
+        "distance driven last week",
+        "oil level",
+        "current mileage",
+        "average speed last week",
+        "tyre pressure",
+        "max speed last Week",
+        "last maintenance record"
       ],
       "classNames": "field-depth-2",
       "last maintenance record": {
         "ui:order": [
-          "last full service date",
-          "last oil change date",
           "ID",
           "service mileage",
-          "*"
+          "last oil change date",
+          "last full service date"
         ],
-        "classNames": "field-depth-3"
+        "classNames": "field-depth-3",
+        "ID": {
+          "classNames": "field-small-textfield"
+        },
+        "service mileage": {
+          "classNames": "field-small-textfield"
+        },
+        "last oil change date": {
+          "classNames": "field-small-textfield"
+        },
+        "last full service date": {
+          "classNames": "field-small-textfield"
+        }
+      },
+      "ID": {
+        "classNames": "field-small-textfield"
+      },
+      "max engine temperature": {
+        "classNames": "field-small-textfield"
+      },
+      "distance driven last week": {
+        "classNames": "field-small-textfield"
+      },
+      "oil level": {
+        "classNames": "field-small-textfield"
+      },
+      "current mileage": {
+        "classNames": "field-small-textfield"
+      },
+      "average speed last week": {
+        "classNames": "field-small-textfield"
+      },
+      "tyre pressure": {
+        "classNames": "field-small-textfield"
+      },
+      "max speed last Week": {
+        "classNames": "field-small-textfield"
       }
+    },
+    "ID": {
+      "classNames": "field-small-textfield"
+    },
+    "serial number": {
+      "classNames": "field-small-textfield"
+    },
+    "category": {
+      "classNames": "field-small-textfield"
+    },
+    "status": {
+      "classNames": "field-small-textfield"
+    },
+    "model": {
+      "classNames": "field-small-textfield"
+    },
+    "brand": {
+      "classNames": "field-small-textfield"
     }
   },
   "Car_Maintenance_Record": {
     "ui:order": [
-      "last full service date",
-      "last oil change date",
       "ID",
       "service mileage",
-      "*"
+      "last oil change date",
+      "last full service date"
     ],
-    "classNames": "field-depth-1"
+    "classNames": "field-depth-1",
+    "ID": {
+      "classNames": "field-small-textfield"
+    },
+    "service mileage": {
+      "classNames": "field-small-textfield"
+    },
+    "last oil change date": {
+      "classNames": "field-small-textfield"
+    },
+    "last full service date": {
+      "classNames": "field-small-textfield"
+    }
   },
   "Car_Return_Record": {
     "ui:order": [
-      "fuel level",
       "ID",
-      "body is dirty",
       "interior condition",
-      "*"
+      "body is dirty",
+      "fuel level"
     ],
-    "classNames": "field-depth-1"
+    "classNames": "field-depth-1",
+    "ID": {
+      "classNames": "field-small-textfield"
+    },
+    "interior condition": {
+      "classNames": "field-small-textfield"
+    },
+    "fuel level": {
+      "classNames": "field-small-textfield field-last-textfield"
+    }
   }
 }

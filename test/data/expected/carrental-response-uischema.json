@@ -1,7 +1,13 @@
 {
   "ui:order": [
     "Car_Return_dispatch",
-    "*"
+    "__DecisionID__"
   ],
-  "classNames": "field-depth-0"
+  "classNames": "field-depth-0",
+  "__DecisionID__": {
+    "ui:widget": "hidden"
+  },
+  "Car_Return_dispatch": {
+    "classNames": "field-small-textfield field-last-textfield"
+  }
 }

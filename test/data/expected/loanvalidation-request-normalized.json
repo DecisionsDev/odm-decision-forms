@@ -32,7 +32,8 @@
         "spouse": {
           "type": "string",
           "title": "Spouse",
-          "description": "Warning: replaced cyclic reference (Borrower => spouse: Borrower) with a string property"
+          "description": "Warning: replaced cyclic reference (Borrower => spouse: Borrower) with a JSON string property.",
+          "CustomSchemaAttributeCyclic": true
         },
         "latestBankruptcy": {
           "$ref": "#/definitions/Bankruptcy",
@@ -108,6 +109,12 @@
   },
   "type": "object",
   "properties": {
+    "__DecisionID__": {
+      "type": "string",
+      "description": "Unique identifier representing the execution of the decision service operation. If it is not specified, it will be computed automatically.",
+      "title": "Decision Id",
+      "CustomSchemaAttributeHidden": true
+    },
     "Borrower": {
       "$ref": "#/definitions/Borrower",
       "title": "Borrower"

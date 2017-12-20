@@ -7,6 +7,7 @@ const Promise = require('bluebird');
 import {
 	Format, RootSchemaElement, SchemaElement, Type, SchemaElementRef, SchemaDefinitions
 } from "./schema";
+import {enumValues, flatMap, sortNumbers, valuesPolyfill} from "./utils";
 
 export const loadSwagger = (rulesetPath: string): Promise<any> => {
 	return axios.get(`/swagger` + rulesetPath).then(res => {
@@ -24,7 +25,7 @@ export const readSwagger = (swagger) => {
 		properties: swagger.definitions.Request.properties
 	} as RootSchemaElement;
 	const normalizedRequest = JSON.parse(JSON.stringify(requestSchema));
-	delete (normalizedRequest as SchemaElement)!.properties!['__DecisionID__'];
+//	delete (normalizedRequest as SchemaElement)!.properties!['__DecisionID__'];
 	normalizeSchema(normalizedRequest);
 	const responseSchema = {
 		$schema: "http://json-schema.org/draft-06/schema#",
@@ -33,7 +34,7 @@ export const readSwagger = (swagger) => {
 		properties: swagger.definitions.Response.properties
 	} as RootSchemaElement;
 	const normalizedResponse = JSON.parse(JSON.stringify(responseSchema));
-	delete (normalizedResponse as SchemaElement)!.properties!['__DecisionID__'];
+//	delete (normalizedResponse as SchemaElement)!.properties!['__DecisionID__'];
 	normalizeSchema(normalizedResponse);
 	return {request: normalizedRequest, response: normalizedResponse};
 };
@@ -52,15 +53,10 @@ export const normalizeSchema = (schema: RootSchemaElement): void => {
 		definitions: {},
 		schema: schema
 	};
-	if (schema.definitions) {
-		if (schema.definitions.Request) {
-			delete (schema.definitions.Request as SchemaElement)!.properties!['__DecisionID__'];
-		}
-		if (schema.definitions.Response) {
-			delete (schema.definitions.Response as SchemaElement)!.properties!['__DecisionID__'];
-		}
-	}
 	_normalizeSchema(schema, context);
+	if (schema.properties && schema.properties.__DecisionID__) {
+		(schema.properties.__DecisionID__ as SchemaElement).CustomSchemaAttributeHidden = true;
+	}
 	schema.definitions = context.definitions;
 };
 
@@ -110,12 +106,13 @@ const _normalizeSchema = (schema: SchemaElement, context: Context, title?: strin
 						// If the current definition being explored is already a dependency of the referenced definition,
 						// we have a cyclic dependency.
 						// Replace by a string, with a warning in the description
-						const message = `Warning: replaced cyclic reference (${current} => ${key}: ${name}) with a string property`;
+						const message = `Warning: replaced cyclic reference (${current} => ${key}: ${name}) with a JSON string property.`;
 						console.log(message);
 						schema.properties[key] = {
 							type: Type.TString,
 							title: propertyTitle,
-							description: message
+							description: message,
+							CustomSchemaAttributeCyclic: true
 						} as SchemaElement;
 					} else {
 						if (context.dependencies[current]) {
@@ -137,13 +134,47 @@ const resolveRef = ($ref: string): string => {
 	return $ref.substr("#/definitions/".length);
 };
 
-const isPrimitive = (t: Type): boolean => {
-	switch (t) {
-		case Type.TNumber:
-		case Type.TInteger:
-		case Type.TBoolean:
-		case Type.TString:
-			return true;
+export const normalizePayload = (schema: RootSchemaElement, result: any): any => {
+	return _normalizePayload(schema, schema, result);
+};
+
+const _normalizePayload = (schema: RootSchemaElement, schemaElementOrRef: SchemaElement | SchemaElementRef, result: any): any => {
+	let schemaElement: SchemaElement;
+	if ((schemaElementOrRef as any).$ref) {
+		const schemaRef = schemaElementOrRef as SchemaElementRef;
+		schemaElement = schema.definitions![resolveRef(schemaRef.$ref)];
+	} else {
+		schemaElement = schemaElementOrRef as SchemaElement;
+	}
+	if (schemaElement.CustomSchemaAttributeCyclic) {
+		// Convert result to object
+		return JSON.parse(result);
+	}
+	if (schemaElement.type === Type.TObject) {
+		const newResult = {};
+		Object.keys(schemaElement.properties || {}).filter(k => result[k]).forEach(k => {
+			newResult[k] = _normalizePayload(schema, schemaElement.properties![k], result[k]);
+		});
+		return newResult;
+	} else if (schemaElement.type === Type.TArray) {
+		if (result) {
+			return result.map(item => _normalizePayload(schema, schemaElement.items!, item));
+		}
+	}
+	return result;
+};
+
+const isPrimitive = (x: Type | SchemaElement | SchemaElementRef): boolean => {
+	if (typeof x === "string") {
+		switch (x) {
+			case Type.TNumber:
+			case Type.TInteger:
+			case Type.TBoolean:
+			case Type.TString:
+				return true;
+		}
+	} else if ((x as any).type) {
+		return isPrimitive((x as SchemaElement).type);
 	}
 	return false;
 };
@@ -155,6 +186,126 @@ export const buildUiSchema = (root: RootSchemaElement): object => {
 	};
 	_buildUiSchema(root, root, null, uiSchema, 0);
 	return uiSchema;
+};
+
+const addClass = (uiSchema, key, className) => {
+	if (uiSchema[key]) {
+		if (uiSchema[key].classNames) {
+			uiSchema[key].classNames = uiSchema[key].classNames + ' ' + className;
+		} else {
+			uiSchema[key].classNames = className;
+		}
+	} else {
+		uiSchema[key] = { classNames: className };
+	}
+};
+
+const setOption = (uiSchema, key, name, value) => {
+	if (!uiSchema[key]) {
+		uiSchema[key] = {};
+	}
+	if (!uiSchema[key]['ui:options']) {
+		uiSchema[key]['ui:options'] = {};
+	}
+	uiSchema[key]['ui:options'][name] = value;
+};
+
+const setWidget = (uiSchema, key, widget) => {
+	if (!uiSchema[key]) {
+		uiSchema[key] = {};
+	}
+	uiSchema[key]["ui:widget"] = widget;
+};
+const setPlaceHolder = (uiSchema, key, placeholder) => {
+	if (!uiSchema[key]) {
+		uiSchema[key] = {};
+	}
+	uiSchema[key]["ui:placeholder"] = placeholder;
+};
+
+const isSmallTextField = (schemaOrRef: SchemaElement | SchemaElementRef): boolean => {
+	if (!(schemaOrRef as any).$ref) {
+		const schemaElement: SchemaElement = schemaOrRef as SchemaElement;
+		return [ Type.TString, Type.TNumber, Type.TInteger ].indexOf(schemaElement.type) != -1
+			&& !schemaElement.CustomSchemaAttributeCyclic
+			&& !schemaElement.CustomSchemaAttributeHidden;
+	}
+	return false;
+};
+
+const isHidden = (schemaOrRef: SchemaElement | SchemaElementRef): boolean => {
+	if (!(schemaOrRef as any).$ref) {
+		const schemaElement: SchemaElement = schemaOrRef as SchemaElement;
+		return schemaElement.CustomSchemaAttributeHidden === true;
+	}
+	return false;
+};
+
+const isCyclic = (schemaOrRef: SchemaElement | SchemaElementRef): boolean => {
+	if (!(schemaOrRef as any).$ref) {
+		const schemaElement: SchemaElement = schemaOrRef as SchemaElement;
+		return schemaElement.CustomSchemaAttributeCyclic === true;
+	}
+	return false;
+};
+
+const containsWord = (str: string, word: string) : boolean => {
+	return !!str && !!word && new RegExp('\\b' + word.toLowerCase() + '\\b').test(str.toLowerCase());
+};
+
+let rk = 0;
+enum Rank {
+	Id = rk++,
+	Name = rk++,
+	String = rk++,
+	Boolean = rk++,
+	Number = rk++,
+	Date = rk++,
+	Other = rk++,
+	Max = rk++
+}
+
+const rank = (schemaOrRef: SchemaElement | SchemaElementRef) : Rank => {
+	if (!(schemaOrRef as any).$ref) {
+		const schemaElement: SchemaElement = schemaOrRef as SchemaElement;
+		const type = schemaElement.type;
+		const title = schemaElement.title;
+		if (schemaElement.CustomSchemaAttributeCyclic) {
+			return Rank.Other;
+		}
+		if (schemaElement.CustomSchemaAttributeHidden) {
+			return Rank.Max;
+		}
+		switch (type) {
+			case Type.TString:
+				if (schemaElement.format) {
+					switch (schemaElement.format) {
+						case Format.Date:
+						case Format.Time:
+						case Format.DateTime:
+							return Rank.Date;
+					}
+				}
+				if (title) {
+					if (containsWord(title, "id") || containsWord(title, "uuid")) {
+						return Rank.Id;
+					}
+					if (containsWord(title, "name")) {
+						return Rank.Name;
+					}
+				}
+				return Rank.String;
+			case Type.TBoolean:
+				return Rank.Boolean;
+			case Type.TInteger:
+			case Type.TNumber:
+				if (title && containsWord(title, "id")) {
+					return Rank.Id;
+				}
+				return Rank.Number;
+		}
+	}
+	return Rank.Max;
 };
 
 const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: RootSchemaElement, key: string | null, uiSchema: object, depth: number): void => {
@@ -174,7 +325,7 @@ const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: Roo
 		const type: Type = schema.type;
 		if (isPrimitive(type)) {
 			if (key) {
-				uiSchema["ui:order"].splice(0, 0, key);
+				uiSchema["ui:order"].splice(uiSchema["ui:order"].length - 1, 0, key);
 			}
 		} else if (type === Type.TObject) {
 			if (key) {
@@ -184,9 +335,49 @@ const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: Roo
 				};
 			}
 			if (schema.properties) {
+				let childUiSchema = key ? uiSchema[key] : uiSchema;
+				const rankToProperties : { [r: number]: string[]; } = {};
+				enumValues(Rank).map(rankValue => (rankToProperties[rankValue] = []));
 				for (const k in schema.properties) {
 					const schemaOrRefChild = schema.properties[k];
-					_buildUiSchema(schemaOrRefChild, root, k, key ? uiSchema[key] : uiSchema, depth + 1);
+					_buildUiSchema(schemaOrRefChild, root, k, childUiSchema, depth + 1);
+					if (isHidden(schemaOrRefChild)) {
+						setWidget(childUiSchema, k, "hidden");
+					}
+					if (isCyclic(schemaOrRefChild)) {
+						addClass(childUiSchema, k, "field-warning");
+						setWidget(childUiSchema, k, "textarea");
+						setOption(childUiSchema, k, "rows", 2);
+						setPlaceHolder(childUiSchema, k, "{...}")
+					}
+					rankToProperties[rank(schemaOrRefChild)].push(k);
+				}
+				childUiSchema["ui:order"] = flatMap(
+					rankValue => rankToProperties[rankValue],
+					sortNumbers(Object.keys(rankToProperties))
+				);
+				let lastTextFieldKey : string | null = null;
+				let textFieldEven = false;
+				// Now mark small text field and last text field - used in CSS
+				childUiSchema["ui:order"].map(k => {
+					const schemaOrRefChild = schema.properties![k];
+					if (isPrimitive(schemaOrRefChild)) {
+						if (isSmallTextField(schemaOrRefChild)) {
+							addClass(childUiSchema, k, 'field-small-textfield');
+							// Mark the last odd text field so that we can make it span on 2 columns in CSS
+							lastTextFieldKey = k;
+							textFieldEven = !textFieldEven;
+						} else {
+							if (textFieldEven && lastTextFieldKey) {
+								addClass(childUiSchema, lastTextFieldKey, 'field-last-textfield');
+							}
+							lastTextFieldKey = null;
+							textFieldEven = false;
+						}
+					}
+				});
+				if (textFieldEven && lastTextFieldKey) {
+					addClass(childUiSchema, lastTextFieldKey, 'field-last-textfield');
 				}
 			}
 		} else if (type === Type.TArray && schema.items) {
@@ -209,13 +400,6 @@ const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: Roo
 const _title = (key: string) => {
 	return startCase(decamelize(key, ' '));
 };
-
-interface LocalTime {
-	hour: number;
-	minute: number;
-	second: number;
-	nano: number;
-}
 
 export const loadRulesetPaths = (): Promise<ResState> => {
 	return axios.get(`/rulesets`).then(res => {

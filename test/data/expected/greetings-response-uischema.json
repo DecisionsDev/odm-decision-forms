@@ -1,7 +1,13 @@
 {
   "ui:order": [
     "Salutation",
-    "*"
+    "__DecisionID__"
   ],
-  "classNames": "field-depth-0"
+  "classNames": "field-depth-0",
+  "__DecisionID__": {
+    "ui:widget": "hidden"
+  },
+  "Salutation": {
+    "classNames": "field-small-textfield field-last-textfield"
+  }
 }

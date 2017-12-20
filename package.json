@@ -71,6 +71,7 @@
     "express": "^4.15.4",
     "history": "^4.7.2",
     "lodash.startcase": "^4.4.0",
+    "moment": "^2.20.1",
     "prop-types": "^15.6.0",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",

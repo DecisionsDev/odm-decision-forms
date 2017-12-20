@@ -1,15 +1,28 @@
 {
   "ui:order": [
-    "*"
+    "__DecisionID__",
+    "Fee"
   ],
   "classNames": "field-depth-0",
+  "__DecisionID__": {
+    "ui:widget": "hidden"
+  },
   "Fee": {
     "ui:order": [
-      "discount",
       "status",
+      "discount",
       "totalBaggageFee",
-      "*"
+      "reasons"
     ],
-    "classNames": "field-depth-1"
+    "classNames": "field-depth-1",
+    "status": {
+      "classNames": "field-small-textfield"
+    },
+    "discount": {
+      "classNames": "field-small-textfield"
+    },
+    "totalBaggageFee": {
+      "classNames": "field-small-textfield field-last-textfield"
+    }
   }
 }

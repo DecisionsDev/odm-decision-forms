@@ -1,5 +1,4 @@
 @import "variables";
-@import "app";
 @import 'fontawesome/font-awesome';
 
 $gl-font-path:        "../../assets/fonts/glyphicons" !default;
@@ -28,20 +27,7 @@ $gl-version:          "1.0" !default;
   color: #333333;
   background-color: #ffffff;
   @import 'bootstrap/bootstrap';
-  h1 {
-    margin-top: 20px;
-    margin-bottom: 10px;
-    font-family: inherit;
-    font-weight: 500;
-    line-height: 1.1;
-    color: inherit;
-  }
-  form > .form-group.field-object .form-group.field-object {
-    padding: 10px;
-    border: 1px solid #dddddd;
-    border-radius: 10px;
-    &:hover {
-      border: 1px solid darken(#dddddd, 20%);
-    }
-  }
 }
+
+@import "app";
+

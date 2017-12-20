@@ -2,15 +2,12 @@ import * as React from 'react';
 import {connect, Dispatch} from 'react-redux';
 import {ResState, RuleApp, Ruleset, RulesetVersion, State} from "../state";
 import {ReactElement} from "react";
+import {flatMap, valuesPolyfill} from "../utils";
 require('es6-map/implement');
 
 export interface Props {
 	res: ResState;
 }
-
-const valuesPolyfill = function values (object) {
-	return Object.keys(object).map(key => object[key]);
-};
 
 const Home: React.SFC<Props> = ({res}) => {
 	const ruleapps = flatMap(ruleapp => renderRuleApp(ruleapp), valuesPolyfill(res));
@@ -29,8 +26,6 @@ const Home: React.SFC<Props> = ({res}) => {
 		</table>
 	</div>;
 };
-
-const flatMap = (f,xs) => xs.reduce((acc,x) => acc.concat(f(x)), []);
 
 const renderRuleApp = (ruleapp: RuleApp) => {
 	let rulesets = valuesPolyfill(ruleapp.rulesets);

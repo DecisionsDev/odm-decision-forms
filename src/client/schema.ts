@@ -10,7 +10,15 @@ export enum Type {
 }
 
 export enum Format {
-	Html = "html", Markdown = "markdown", TextArea = "textarea", Double = "double", Int32 = "int32", Int64 = "int64"
+	Html = "html",
+	Markdown = "markdown",
+	TextArea = "textarea",
+	Double = "double",
+	Int32 = "int32",
+	Int64 = "int64",
+	DateTime = "date-time",
+	Date = "date",
+	Time = "time"
 }
 
 export type SchemaDefinitions = { [s: string]: SchemaElement; };
@@ -32,7 +40,9 @@ export interface SchemaElement {
 	required?: string[],
 	items?: SchemaElement | SchemaElementRef,
 	format?: Format,
-	className?: string // custom extension
+//	className?: string, // custom extension
+	CustomSchemaAttributeHidden?: boolean, // custom extension
+	CustomSchemaAttributeCyclic?: boolean, // custom extension
 }
 
 export interface SchemaPatternProperty extends SchemaElement{

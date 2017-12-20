@@ -35,12 +35,37 @@ export interface WebRequest {
 	transformResult: (result) => {}
 }
 
+export type DecisionStatusNotRun = "not-runyet";
+export type DecisionStatusResult = "decision-has-result";
+export type DecisionStatusError = "decision-threw-error";
+export const decisionStatusNotRun : DecisionStatusNotRun = "not-runyet";
+export const decisionStatusResult : DecisionStatusResult = "decision-has-result";
+export const decisionStatusError : DecisionStatusError = "decision-threw-error";
+
+export interface DecisionResult {
+	status: DecisionStatusResult;
+	result: object;
+	start: Date;
+	end: Date;
+}
+
+export interface DecisionError {
+	status: DecisionStatusError;
+	error: Error;
+	start: Date;
+}
+
+export interface DecisionNotRun {
+	status: DecisionStatusNotRun;
+}
+
+export type DecisionState = DecisionResult | DecisionError | DecisionNotRun;
+
 export interface State {
 	requestSchema: RootSchemaElement | null;
 	responseSchema: RootSchemaElement | null;
 	executeRequest: WebRequest;
-	result: object | null;
-	error: Error | null;
+	executeResponse: DecisionState;
 	router: RouterState;
 	res: ResState;
 }

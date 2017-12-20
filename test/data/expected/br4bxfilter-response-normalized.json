@@ -3,6 +3,12 @@
   "definitions": {},
   "type": "object",
   "properties": {
+    "__DecisionID__": {
+      "type": "string",
+      "description": "Unique identifier representing the execution of the decision service operation. If it is not specified, it will be computed automatically.",
+      "title": "Decision Id",
+      "CustomSchemaAttributeHidden": true
+    },
     "filtered_instances": {
       "type": "array",
       "items": {

@@ -1,48 +1,110 @@
 {
   "ui:order": [
     "current_time",
-    "*"
+    "__DecisionID__",
+    "Borrower",
+    "Loan"
   ],
   "classNames": "field-depth-0",
+  "__DecisionID__": {
+    "ui:widget": "hidden"
+  },
   "Borrower": {
     "ui:order": [
-      "spouse",
-      "creditScore",
+      "firstName",
+      "lastName",
       "zipCode",
       "yearlyIncome",
+      "creditScore",
       "birthDate",
-      "lastName",
-      "firstName",
-      "*"
+      "spouse",
+      "latestBankruptcy",
+      "SSN"
     ],
     "classNames": "field-depth-1",
+    "spouse": {
+      "classNames": "field-warning",
+      "ui:widget": "textarea",
+      "ui:options": {
+        "rows": 2
+      },
+      "ui:placeholder": "{...}"
+    },
     "latestBankruptcy": {
       "ui:order": [
         "reason",
         "chapter",
-        "date",
-        "*"
+        "date"
       ],
-      "classNames": "field-depth-2"
+      "classNames": "field-depth-2",
+      "reason": {
+        "classNames": "field-small-textfield"
+      },
+      "chapter": {
+        "classNames": "field-small-textfield"
+      },
+      "date": {
+        "classNames": "field-small-textfield field-last-textfield"
+      }
     },
     "SSN": {
       "ui:order": [
-        "serialNumber",
-        "groupCode",
         "areaNumber",
-        "*"
+        "groupCode",
+        "serialNumber"
       ],
-      "classNames": "field-depth-2"
+      "classNames": "field-depth-2",
+      "areaNumber": {
+        "classNames": "field-small-textfield"
+      },
+      "groupCode": {
+        "classNames": "field-small-textfield"
+      },
+      "serialNumber": {
+        "classNames": "field-small-textfield field-last-textfield"
+      }
+    },
+    "firstName": {
+      "classNames": "field-small-textfield"
+    },
+    "lastName": {
+      "classNames": "field-small-textfield"
+    },
+    "zipCode": {
+      "classNames": "field-small-textfield"
+    },
+    "yearlyIncome": {
+      "classNames": "field-small-textfield"
+    },
+    "creditScore": {
+      "classNames": "field-small-textfield"
+    },
+    "birthDate": {
+      "classNames": "field-small-textfield"
     }
   },
   "Loan": {
     "ui:order": [
-      "loanToValue",
-      "amount",
-      "startDate",
       "numberOfMonthlyPayments",
-      "*"
+      "amount",
+      "loanToValue",
+      "startDate"
     ],
-    "classNames": "field-depth-1"
+    "classNames": "field-depth-1",
+    "numberOfMonthlyPayments": {
+      "classNames": "field-small-textfield"
+    },
+    "amount": {
+      "classNames": "field-small-textfield"
+    },
+    "loanToValue": {
+      "classNames": "field-small-textfield"
+    },
+    "startDate": {
+      "classNames": "field-small-textfield"
+    }
+  },
+  "current_time": {
+    "classNames": "field-small-textfield field-last-textfield"
   }
 }

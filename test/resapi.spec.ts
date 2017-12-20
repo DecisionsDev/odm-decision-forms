@@ -1,7 +1,7 @@
 const decamelize = require('decamelize');
 import * as fs from 'fs';
 import * as BPromise from 'bluebird';
-import {buildUiSchema, normalizeSchema, readSwagger} from '../src/client/resapi';
+import {buildUiSchema, normalizeSchema, readSwagger, normalizePayload} from '../src/client/resapi';
 
 const readFile = BPromise.promisify(fs.readFile);
 
@@ -82,6 +82,50 @@ const testNormalize = (name) => {
 	});
 };
 
+const testNormalizeResponse = () => {
+	test(`testNormalizeResponse()`, async () => {
+		const data = await fetch('loanvalidation');
+		const { request, response } = readSwagger(data.swagger.json);
+		const input = {
+			"Borrower": {
+				"firstName": "John",
+				"lastName": "Doe",
+				"birthDate": "2000-01-01T11:34:00.000Z",
+				"yearlyIncome": 50000,
+				"zipCode": "92000",
+				"creditScore": 300,
+				"latestBankruptcy": {},
+				"SSN": {
+					"areaNumber": "123",
+					"groupCode": "12",
+					"serialNumber": "1234"
+				},
+				"spouse": "{\n" +
+				"\t\t\t\"firstName\": \"Jane\",\n" +
+				"\t\t\t\"lastName\": \"Doe\",\n" +
+				"\t\t\t\"creditScore\": 400\n" +
+				"\t\t}"
+			},
+			"Loan": {
+				"numberOfMonthlyPayments": 300,
+				"startDate": "2018-01-01T11:02:00.000Z",
+				"amount": 10000
+			},
+			"current_time": "2017-12-20T10:00:00.000Z"
+		};
+		const normalizedInput = normalizePayload(request, input);
+		expect(typeof input.Borrower.spouse).toBe("string");
+		expect(typeof normalizedInput.Borrower.spouse).toBe("object");
+		expect(normalizedInput.Borrower.spouse.firstName).toBe("Jane");
+		expect(normalizedInput.Borrower.spouse.lastName).toBe("Doe");
+		expect(normalizedInput.Borrower.spouse.creditScore).toBe(400);
+		// Compare expected and actual without spouse field
+		delete normalizedInput.Borrower.spouse;
+		delete input.Borrower.spouse;
+		expect(JSON.stringify(normalizedInput)).toBe(JSON.stringify(input));
+	});
+};
+
 const testBuildUISchema = (name) => {
 	test(`testBuildUISchema(${name})`, async () => {
 		const data = await fetch(name);
@@ -109,6 +153,7 @@ runTest('loanvalidation');
 runTest('runner');
 runTest('br4bxfilter');
 runTest('testmodel');
+testNormalizeResponse();
 
 test('Verifying overwrite is false', () => {
 	// Reminder: fail at the end as lon as overwrite is true

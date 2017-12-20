@@ -1,28 +1,55 @@
 {
   "ui:order": [
-    "*"
+    "__DecisionID__",
+    "Races",
+    "Runner"
   ],
   "classNames": "field-depth-0",
+  "__DecisionID__": {
+    "ui:widget": "hidden"
+  },
   "Races": {
     "items": {
       "ui:order": [
         "name",
-        "category",
         "area",
-        "*"
+        "category"
       ],
-      "classNames": "field-depth-1"
+      "classNames": "field-depth-1",
+      "name": {
+        "classNames": "field-small-textfield"
+      },
+      "area": {
+        "classNames": "field-small-textfield"
+      },
+      "category": {
+        "classNames": "field-small-textfield field-last-textfield"
+      }
     }
   },
   "Runner": {
     "ui:order": [
       "name",
-      "weekly mileage",
-      "category",
       "area",
+      "category",
       "average speed",
-      "*"
+      "weekly mileage"
     ],
-    "classNames": "field-depth-1"
+    "classNames": "field-depth-1",
+    "name": {
+      "classNames": "field-small-textfield"
+    },
+    "area": {
+      "classNames": "field-small-textfield"
+    },
+    "category": {
+      "classNames": "field-small-textfield"
+    },
+    "average speed": {
+      "classNames": "field-small-textfield"
+    },
+    "weekly mileage": {
+      "classNames": "field-small-textfield field-last-textfield"
+    }
   }
 }

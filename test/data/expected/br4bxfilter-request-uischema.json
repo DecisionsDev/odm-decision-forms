@@ -1,28 +1,73 @@
 {
   "ui:order": [
     "cutOffDay",
-    "*"
+    "__DecisionID__",
+    "Instances"
   ],
   "classNames": "field-depth-0",
+  "__DecisionID__": {
+    "ui:widget": "hidden"
+  },
   "Instances": {
     "items": {
       "ui:order": [
-        "executions",
-        "last_start",
+        "instanceId",
+        "uuid",
+        "name",
+        "status",
+        "org",
+        "version",
+        "appbind",
         "user",
         "rulesets",
-        "last_used",
-        "name",
-        "appbind",
+        "executions",
         "provisioned",
-        "uuid",
-        "version",
-        "org",
-        "instanceId",
-        "status",
-        "*"
+        "last_used",
+        "last_start"
       ],
-      "classNames": "field-depth-1"
+      "classNames": "field-depth-1",
+      "instanceId": {
+        "classNames": "field-small-textfield"
+      },
+      "uuid": {
+        "classNames": "field-small-textfield"
+      },
+      "name": {
+        "classNames": "field-small-textfield"
+      },
+      "status": {
+        "classNames": "field-small-textfield"
+      },
+      "org": {
+        "classNames": "field-small-textfield"
+      },
+      "version": {
+        "classNames": "field-small-textfield"
+      },
+      "appbind": {
+        "classNames": "field-small-textfield"
+      },
+      "user": {
+        "classNames": "field-small-textfield"
+      },
+      "rulesets": {
+        "classNames": "field-small-textfield"
+      },
+      "executions": {
+        "classNames": "field-small-textfield"
+      },
+      "provisioned": {
+        "classNames": "field-small-textfield"
+      },
+      "last_used": {
+        "classNames": "field-small-textfield"
+      },
+      "last_start": {
+        "classNames": "field-small-textfield field-last-textfield"
+      }
     }
+  },
+  "cutOffDay": {
+    "classNames": "field-small-textfield field-last-textfield"
   }
 }
