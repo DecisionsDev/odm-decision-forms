@@ -7,6 +7,7 @@ const Promise = require('bluebird');
 import {
 	Format, RootSchemaElement, SchemaElement, Type, SchemaElementRef, SchemaDefinitions
 } from "./schema";
+import {enumValues, flatMap, sortNumbers, valuesPolyfill} from "./utils";
 
 export const loadSwagger = (rulesetPath: string): Promise<any> => {
 	return axios.get(`/swagger` + rulesetPath).then(res => {
@@ -151,8 +152,7 @@ const isPrimitive = (x: Type | SchemaElement | SchemaElementRef): boolean => {
 export const buildUiSchema = (root: RootSchemaElement): object => {
 	const uiSchema = {
 		"ui:order": ["*"],
-		"classNames": `field-depth-0`,
-		"__DecisionID__": {"ui:widget": "hidden"}
+		"classNames": `field-depth-0`
 	};
 	_buildUiSchema(root, root, null, uiSchema, 0);
 	return uiSchema;
@@ -170,6 +170,13 @@ const addClass = (uiSchema, key, className) => {
 	}
 };
 
+const setWidget = (uiSchema, key, widget) => {
+	if (!uiSchema[key]) {
+		uiSchema[key] = {};
+	}
+	uiSchema[key]["ui:widget"] = widget;
+};
+
 const isSmallTextField = (schemaOrRef: SchemaElement | SchemaElementRef): boolean => {
 	if (!(schemaOrRef as any).$ref) {
 		const schemaElement: SchemaElement = schemaOrRef as SchemaElement;
@@ -178,6 +185,77 @@ const isSmallTextField = (schemaOrRef: SchemaElement | SchemaElementRef): boolea
 			&& !schemaElement.CustomSchemaAttributeHidden;
 	}
 	return false;
+};
+
+const isHidden = (schemaOrRef: SchemaElement | SchemaElementRef): boolean => {
+	if (!(schemaOrRef as any).$ref) {
+		const schemaElement: SchemaElement = schemaOrRef as SchemaElement;
+		return schemaElement.CustomSchemaAttributeHidden === true;
+	}
+	return false;
+};
+
+const isCyclic = (schemaOrRef: SchemaElement | SchemaElementRef): boolean => {
+	if (!(schemaOrRef as any).$ref) {
+		const schemaElement: SchemaElement = schemaOrRef as SchemaElement;
+		return schemaElement.CustomSchemaAttributeCyclic === true;
+	}
+	return false;
+};
+
+const containsWord = (str: string, word: string) : boolean => {
+	return !!str && !!word && new RegExp('\\b' + word.toLowerCase() + '\\b').test(str.toLowerCase());
+};
+
+enum Rank {
+	Id = 0,
+	Name = 1,
+	String = 2,
+	Boolean = 3,
+	Number = 4,
+	Date = 5,
+	Other = 6,
+	Max = 100
+}
+
+const rank = (schemaOrRef: SchemaElement | SchemaElementRef) : Rank => {
+	if (!(schemaOrRef as any).$ref) {
+		const schemaElement: SchemaElement = schemaOrRef as SchemaElement;
+		const type = schemaElement.type;
+		const title = schemaElement.title;
+		if (schemaElement.CustomSchemaAttributeCyclic) {
+			return Rank.Other;
+		}
+		if (schemaElement.CustomSchemaAttributeHidden) {
+			return Rank.Max;
+		}
+		switch (type) {
+			case Type.TString:
+				if (schemaElement.format) {
+					switch (schemaElement.format) {
+						case Format.Date:
+						case Format.Time:
+						case Format.DateTime:
+							return Rank.Date;
+					}
+				}
+				if (title) {
+					if (containsWord(title, "id") || containsWord(title, "uuid")) {
+						return Rank.Id;
+					}
+					if (containsWord(title, "name")) {
+						return Rank.Name;
+					}
+				}
+				return Rank.String;
+			case Type.TBoolean:
+				return Rank.Boolean;
+			case Type.TInteger:
+			case Type.TNumber:
+				return Rank.Number;
+		}
+	}
+	return Rank.Max;
 };
 
 const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: RootSchemaElement, key: string | null, uiSchema: object, depth: number): void => {
@@ -208,11 +286,28 @@ const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: Roo
 			}
 			if (schema.properties) {
 				let childUiSchema = key ? uiSchema[key] : uiSchema;
-				let lastTextFieldKey : string | null = null;
-				let textFieldEven = false;
+				const rankToProperties : { [r: number]: string[]; } = {};
+				enumValues(Rank).map(rankValue => (rankToProperties[rankValue] = []));
 				for (const k in schema.properties) {
 					const schemaOrRefChild = schema.properties[k];
 					_buildUiSchema(schemaOrRefChild, root, k, childUiSchema, depth + 1);
+					if (isHidden(schemaOrRefChild)) {
+						setWidget(childUiSchema, k, "hidden");
+					}
+					if (isCyclic(schemaOrRefChild)) {
+						addClass(childUiSchema, k, "field-warning");
+					}
+					rankToProperties[rank(schemaOrRefChild)].push(k);
+				}
+				childUiSchema["ui:order"] = flatMap(
+					rankValue => rankToProperties[rankValue],
+					sortNumbers(Object.keys(rankToProperties))
+				);
+				let lastTextFieldKey : string | null = null;
+				let textFieldEven = false;
+				// Now mark small text field and last text field - used in CSS
+				childUiSchema["ui:order"].map(k => {
+					const schemaOrRefChild = schema.properties![k];
 					if (isPrimitive(schemaOrRefChild)) {
 						if (isSmallTextField(schemaOrRefChild)) {
 							addClass(childUiSchema, k, 'field-small-textfield');
@@ -227,7 +322,7 @@ const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: Roo
 							textFieldEven = false;
 						}
 					}
-				}
+				});
 				if (textFieldEven && lastTextFieldKey) {
 					addClass(childUiSchema, lastTextFieldKey, 'field-last-textfield');
 				}

@@ -10,7 +10,15 @@ export enum Type {
 }
 
 export enum Format {
-	Html = "html", Markdown = "markdown", TextArea = "textarea", Double = "double", Int32 = "int32", Int64 = "int64"
+	Html = "html",
+	Markdown = "markdown",
+	TextArea = "textarea",
+	Double = "double",
+	Int32 = "int32",
+	Int64 = "int64",
+	DateTime = "date-time",
+	Date = "date",
+	Time = "time"
 }
 
 export type SchemaDefinitions = { [s: string]: SchemaElement; };

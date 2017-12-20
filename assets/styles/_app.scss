@@ -85,6 +85,16 @@
           width: 100%;
         }
       }
+      .field-description {
+        margin-top: 0;
+        margin-bottom: 3px;
+        font-size: 12px;
+      }
+      .field.field-warning {
+        .field-description {
+          color: #db7093;
+        }
+      }
     }
     &#output {
       [type="submit"] {
