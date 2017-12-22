@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import {
-	State, DecisionState, decisionStatusError, decisionStatusResult, decisionStatusNotRun
+	State, DecisionState, DecisionStatus
 } from "../state";
 import Form from "react-jsonschema-form";
 import { execute } from "../actions";
@@ -95,15 +95,15 @@ class Forms extends React.Component<DProps, any> {
 					{
 						(() => {
 							switch (executeResponse.status) {
-								case decisionStatusResult:
-								case decisionStatusNotRun:
+								case DecisionStatus.Result:
+								case DecisionStatus.NotRun:
 									return (
 										<Form uiSchema={outuiSchema}
 																ObjectFieldTemplate={MyObjectFieldTemplate}
-																formData={(executeResponse.status === decisionStatusResult) ? executeResponse.result : null}
+																formData={(executeResponse.status === DecisionStatus.Result) ? executeResponse.result : null}
 																schema={responseSchema}/>
 									);
-								case decisionStatusError:
+								case DecisionStatus.Error:
 									return (
 										<div className="decision-error">
 											<h3>{executeResponse.error.title}</h3>
@@ -119,14 +119,14 @@ class Forms extends React.Component<DProps, any> {
 					{
 						(() => {
 							switch (executeResponse.status) {
-								case decisionStatusResult:
+								case DecisionStatus.Result:
 									return makeFooterMessage([
 										{ name: 'Last run', value: moment(executeResponse.start).format('LTS') },
 										{ name: 'Decision ID', value: executeResponse.result['__DecisionID__'] },
 									]);
-								case decisionStatusNotRun:
+								case DecisionStatus.NotRun:
 									return <span>No output yet. Hit the 'Run' button to trigger the Decision.</span>;
-								case decisionStatusError:
+								case DecisionStatus.Error:
 									return makeFooterMessage([ { name: 'Last run', value: moment(executeResponse.start).format('LTS') } ]);
 							}
 						})()

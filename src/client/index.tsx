@@ -16,7 +16,7 @@ import thunkMiddleware from 'redux-thunk';
 import {ConnectedRouter, routerReducer, routerMiddleware, RouterState} from 'react-router-redux'
 import createHistory from 'history/createBrowserHistory';
 import {loadRulesetPaths, loadSwagger} from "./resapi";
-import {decisionStatusNotRun, ResState, State} from "./state";
+import {DecisionStatus, ResState, State} from "./state";
 import { requestReducer, resReducer, responseReducer, schemaReducer } from "./reducers";
 
 const history = createHistory();
@@ -37,7 +37,7 @@ loadRulesetPaths()
 								transformPayload: payload => ({ request: payload }),
 								transformResult: result => result
 							},
-							executeResponse: { status : decisionStatusNotRun },
+							executeResponse: { status : DecisionStatus.NotRun },
 							res: resState,
 							router: {}
 						};
@@ -68,7 +68,7 @@ loadRulesetPaths()
 			requestSchema: null,
 			responseSchema: null,
 			executeRequest: { url: '', transformResult: x=>x, transformPayload: x=>x, headers: {} },
-			executeResponse: { status : decisionStatusNotRun },
+			executeResponse: { status : DecisionStatus.NotRun },
 			res: resState,
 			router: {}
 		};

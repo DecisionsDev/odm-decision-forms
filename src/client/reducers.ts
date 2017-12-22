@@ -2,7 +2,8 @@
 import {ActionTypes, DefaultAction, DisplayErrorAction, ReceiveResultAction} from "./actions";
 import {RootSchemaElement, Type} from "./schema";
 import {
-	WebRequest, ResState, DecisionState, decisionStatusNotRun, decisionStatusResult, decisionStatusError, DecisionResult, DecisionError, DecisionNotRun
+	WebRequest, ResState, DecisionState, DecisionResult,
+	DecisionError, DecisionNotRun, DecisionStatus
 } from "./state";
 
 export const schemaReducer = (state : RootSchemaElement = { $schema: '',  type: Type.TObject },
@@ -15,19 +16,19 @@ export const requestReducer = (state : WebRequest = { url: '',  headers: {}, tra
 	return state;
 };
 
-export const responseReducer = (state : DecisionState = { status: decisionStatusNotRun },
+export const responseReducer = (state : DecisionState = { status: DecisionStatus.NotRun },
 																action : ReceiveResultAction | DisplayErrorAction | DefaultAction) : DecisionState => {
 	switch (action.type) {
 		case ActionTypes.RECEIVE_RESULT:
 			return {
-				status: decisionStatusResult,
+				status: DecisionStatus.Result,
 				result: action.payload,
 				start: action.startDate,
 				end: action.endDate
 			};
 		case ActionTypes.DISPLAY_ERROR:
 			return {
-				status: decisionStatusError,
+				status: DecisionStatus.Error,
 				error: { title: action.title, status: action.status, message: action.message },
 				start: action.executionStart
 			};
