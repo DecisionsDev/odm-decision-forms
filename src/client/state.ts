@@ -69,12 +69,19 @@ export interface DecisionNotRun extends WithDecisionStatus {
 
 export type DecisionState = DecisionResult | DecisionError | DecisionNotRun;
 
-export interface State {
-	requestSchema: RootSchemaElement | null;
-	responseSchema: RootSchemaElement | null;
-	executeRequest: WebRequest;
-	executeResponse: DecisionState;
+export interface PageState {
 	router: RouterState;
+}
+
+export interface HomeState extends PageState{
 	res: ResState;
 }
 
+export interface FormsState extends PageState {
+	requestSchema: RootSchemaElement;
+	responseSchema: RootSchemaElement;
+	executeRequest: WebRequest;
+	executeResponse: DecisionState;
+}
+
+export type State = HomeState | FormsState;

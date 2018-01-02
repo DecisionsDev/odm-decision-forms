@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import {
-	State, DecisionState, DecisionStatus
+	DecisionState, DecisionStatus, FormsState
 } from "../state";
 import Form from "react-jsonschema-form";
 import { execute } from "../actions";
@@ -166,10 +166,10 @@ function MyObjectFieldTemplate(props) {
 }
 
 
-const mapStateToProps = (state: State): Props => {
+const mapStateToProps = (state: FormsState): Props => {
 	return {
-		requestSchema: state.requestSchema!,
-		responseSchema: state.responseSchema!,
+		requestSchema: state.requestSchema,
+		responseSchema: state.responseSchema,
 		executeResponse: state.executeResponse
 	};
 };

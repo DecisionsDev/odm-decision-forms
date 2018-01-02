@@ -1,5 +1,5 @@
 import {Action} from "redux";
-import {State} from "./state";
+import {FormsState} from "./state";
 import axios from 'axios';
 import {ActionCreator} from "react-redux";
 import {normalizePayload} from "./resapi";
@@ -29,7 +29,7 @@ export const receiveResult: ActionCreator<ReceiveResultAction> = (payload: objec
 });
 
 export const execute: any = (payload) => {
-	return (dispatch: (a: ReceiveResultAction | DisplayErrorAction) => ReceiveResultAction, getState: () => State) => {
+	return (dispatch: (a: ReceiveResultAction | DisplayErrorAction) => ReceiveResultAction, getState: () => FormsState) => {
 		// axios.post(getState().executeRequest!.url, { request: payload }).then(res => {
 		const executeRequest = getState().executeRequest;
 		let identity = a => a;
@@ -37,7 +37,7 @@ export const execute: any = (payload) => {
 		let transformResult = executeRequest!.transformResult || identity;
 		let headers = executeRequest!.headers || {};
 		const startDate = new Date();
-		axios.post(executeRequest!.url, transformPayload(normalizePayload(getState().requestSchema!, payload)), { headers: headers }).then(res => {
+		axios.post(executeRequest!.url, transformPayload(normalizePayload(getState().requestSchema, payload)), { headers: headers }).then(res => {
 			const endDate = new Date();
 			dispatch(receiveResult(transformResult(res.data), startDate, endDate));
 		}).catch(err => {

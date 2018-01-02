@@ -1,7 +1,6 @@
 import * as React from 'react';
-import {connect, Dispatch} from 'react-redux';
-import {ResState, RuleApp, Ruleset, RulesetVersion, State} from "../state";
-import {ReactElement} from "react";
+import {connect} from 'react-redux';
+import {HomeState, ResState, RuleApp, Ruleset} from "../state";
 import {flatMap, valuesPolyfill} from "../utils";
 require('es6-map/implement');
 
@@ -72,7 +71,7 @@ const RulesetVersionSFC: React.SFC<RulesetVersionProps> = ({ name, path, ruleapp
 	</tr>;
 };
 
-const mapStateToProps = (state: State): Props => {
+const mapStateToProps = (state: HomeState): Props => {
 	return {
 		res: state.res
 	};

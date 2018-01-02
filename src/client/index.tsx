@@ -16,8 +16,8 @@ import thunkMiddleware from 'redux-thunk';
 import {ConnectedRouter, routerReducer, routerMiddleware, RouterState} from 'react-router-redux'
 import createHistory from 'history/createBrowserHistory';
 import {loadRulesetPaths, loadSwagger} from "./resapi";
-import {DecisionStatus, ResState, State} from "./state";
-import { requestReducer, resReducer, responseReducer, schemaReducer } from "./reducers";
+import {DecisionStatus, FormsState, HomeState, ResState} from "./state";
+import { responseReducer, emptyReducer} from "./reducers";
 
 const history = createHistory();
 const historyMiddleware = routerMiddleware(history);
@@ -29,7 +29,7 @@ loadRulesetPaths()
 			if (rulesetPath.indexOf('/ruleapp') == 0) {
 				return loadSwagger(rulesetPath.substr('/ruleapp'.length))
 					.then(({request, response}) => {
-						const initialState: State = {
+						const initialState: FormsState = {
 							requestSchema: request,
 							responseSchema: response,
 							executeRequest: {
@@ -38,15 +38,13 @@ loadRulesetPaths()
 								transformResult: result => result
 							},
 							executeResponse: { status : DecisionStatus.NotRun },
-							res: resState,
 							router: {}
 						};
-						const store = createStore<State>(combineReducers({
-								requestSchema: schemaReducer,
-								responseSchema: schemaReducer,
-								executeRequest: requestReducer,
+						const store = createStore<FormsState>(combineReducers({
+								requestSchema: emptyReducer,
+								responseSchema: emptyReducer,
+								executeRequest: emptyReducer,
 								executeResponse: responseReducer,
-								res: resReducer,
 								router: routerReducer
 							}),
 							initialState,
@@ -64,20 +62,12 @@ loadRulesetPaths()
 					});
 			}
 		}
-		const initialState: State = {
-			requestSchema: null,
-			responseSchema: null,
-			executeRequest: { url: '', transformResult: x=>x, transformPayload: x=>x, headers: {} },
-			executeResponse: { status : DecisionStatus.NotRun },
+		const initialState: HomeState = {
 			res: resState,
 			router: {}
 		};
-		const store = createStore<State>(combineReducers({
-				requestSchema: schemaReducer,
-				responseSchema: schemaReducer,
-				executeRequest: requestReducer,
-				executeResponse: responseReducer,
-				res: resReducer,
+		const store = createStore<HomeState>(combineReducers({
+				res: emptyReducer,
 				router: routerReducer
 			}),
 			initialState,

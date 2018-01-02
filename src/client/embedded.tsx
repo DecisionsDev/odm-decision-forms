@@ -17,8 +17,8 @@ const styles = require('./main.scss');
 
 import axios from "axios";
 import { readSwagger } from "./resapi";
-import { requestReducer, resReducer, responseReducer, schemaReducer} from "./reducers";
-import {DecisionStatus, WebRequest} from "./state";
+import {emptyReducer, responseReducer} from "./reducers";
+import {DecisionStatus, FormsState, WebRequest} from "./state";
 
 const renderForms = (rootId : string, swaggerRequest: WebRequest, executeRequest: WebRequest) => {
 	let identity = a => a;
@@ -27,20 +27,18 @@ const renderForms = (rootId : string, swaggerRequest: WebRequest, executeRequest
 	axios.get(swaggerRequest.url, { headers }).then(({data}) => {
 		const swagger = transformResult(data);
 		let res = readSwagger(swagger);
-		const initialState = {
+		const initialState : FormsState = {
 			requestSchema: res.request,
 			responseSchema: res.response,
 			executeRequest: executeRequest,
 			executeResponse: { status : DecisionStatus.NotRun },
-			res: {ruleapps: {}},
 			router: {}
 		};
 		const store = createStore<any>(combineReducers({
-				requestSchema: schemaReducer,
-				responseSchema: schemaReducer,
-				executeRequest: requestReducer,
+				requestSchema: emptyReducer,
+				responseSchema: emptyReducer,
+				executeRequest: emptyReducer,
 				executeResponse: responseReducer,
-				res: resReducer,
 				router: routerReducer
 			}),
 			initialState,
