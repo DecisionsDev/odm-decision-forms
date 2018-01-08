@@ -36,7 +36,8 @@ export interface WebRequest {
 }
 
 export enum DateFormat {
-	Widget, TextField
+	Widget = "Widget",
+	TextField = "TextField"
 }
 
 export interface Options {
