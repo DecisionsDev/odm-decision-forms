@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import {
-	DecisionState, DecisionStatus, FormsState
+	DecisionState, DecisionStatus, FormsState, Options
 } from "../state";
 import Form from "react-jsonschema-form";
 import { execute } from "../actions";
@@ -16,6 +16,7 @@ export interface Props {
 	requestSchema: RootSchemaElement;
 	responseSchema: RootSchemaElement;
 	executeResponse: DecisionState;
+	options: Options
 }
 
 export interface DProps extends Props {
@@ -43,13 +44,13 @@ class Forms extends React.Component<DProps, any> {
 	}
 
 	render() {
-		const {requestSchema, responseSchema, executeResponse, dispatch} = this.props;
+		const {requestSchema, responseSchema, executeResponse, options, dispatch} = this.props;
 		const inuiSchema = {
-			...buildUiSchema(requestSchema),
+			...buildUiSchema(requestSchema, options),
 			"ui:rootFieldId": "in"
 		};
 		const outuiSchema = {
-			...buildUiSchema(responseSchema),
+			...buildUiSchema(responseSchema, options),
 			"ui:rootFieldId": "out",
 			"ui:readonly": true
 		};
@@ -74,7 +75,7 @@ class Forms extends React.Component<DProps, any> {
 					<Form schema={requestSchema}
 								uiSchema={inuiSchema}
 								ObjectFieldTemplate={MyObjectFieldTemplate}
-								liveValidate={true}
+								liveValidate={options.liveValidation}
 								formData={this.state}
 								onChange={({formData}) => this.setState(formData)}
 								onSubmit={data => this.handleOnSubtmit(data)}
@@ -170,7 +171,8 @@ const mapStateToProps = (state: FormsState): Props => {
 	return {
 		requestSchema: state.requestSchema,
 		responseSchema: state.responseSchema,
-		executeResponse: state.executeResponse
+		executeResponse: state.executeResponse,
+		options: state.options
 	};
 };
 

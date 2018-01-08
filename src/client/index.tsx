@@ -16,7 +16,7 @@ import thunkMiddleware from 'redux-thunk';
 import {ConnectedRouter, routerReducer, routerMiddleware, RouterState} from 'react-router-redux'
 import createHistory from 'history/createBrowserHistory';
 import {loadRulesetPaths, loadSwagger} from "./resapi";
-import {DecisionStatus, FormsState, HomeState, ResState} from "./state";
+import {DateFormat, DecisionStatus, defaultOptions, FormsState, HomeState, ResState} from "./state";
 import { responseReducer, emptyReducer} from "./reducers";
 
 const history = createHistory();
@@ -27,7 +27,7 @@ loadRulesetPaths()
 		if (history && (history as any).location && ((history as any).location as any).pathname) {
 			const rulesetPath = ((history as any).location as any).pathname!;
 			if (rulesetPath.indexOf('/ruleapp') == 0) {
-				return loadSwagger(rulesetPath.substr('/ruleapp'.length))
+				return loadSwagger(rulesetPath.substr('/ruleapp'.length), defaultOptions)
 					.then(({request, response}) => {
 						const initialState: FormsState = {
 							requestSchema: request,
@@ -38,12 +38,14 @@ loadRulesetPaths()
 								transformResult: result => result
 							},
 							executeResponse: { status : DecisionStatus.NotRun },
-							router: {}
+							router: {},
+							options: defaultOptions
 						};
 						const store = createStore<FormsState>(combineReducers({
 								requestSchema: emptyReducer,
 								responseSchema: emptyReducer,
 								executeRequest: emptyReducer,
+								options: emptyReducer,
 								executeResponse: responseReducer,
 								router: routerReducer
 							}),

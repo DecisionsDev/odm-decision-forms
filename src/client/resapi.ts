@@ -1,4 +1,4 @@
-import {ResState} from "./state";
+import {DateFormat, defaultOptions, Options, ResState} from "./state";
 
 const startCase = require('lodash.startcase');
 
@@ -9,15 +9,15 @@ import {
 } from "./schema";
 import {enumValues, flatMap, sortNumbers, valuesPolyfill} from "./utils";
 
-export const loadSwagger = (rulesetPath: string): Promise<any> => {
+export const loadSwagger = (rulesetPath, options: Options = defaultOptions): Promise<any> => {
 	return axios.get(`/swagger` + rulesetPath).then(res => {
 		const swagger = res.data;
 		document.title = swagger.info.title.substr(0, swagger.info.title.length - ' API'.length);
-		return Promise.resolve(readSwagger(swagger));
+		return Promise.resolve(readSwagger(swagger, options));
 	})
 };
 
-export const readSwagger = (swagger) => {
+export const readSwagger = (swagger, options: Options = defaultOptions) => {
 	const requestSchema = {
 		$schema: "http://json-schema.org/draft-06/schema#",
 		definitions: swagger.definitions,
@@ -26,7 +26,7 @@ export const readSwagger = (swagger) => {
 	} as RootSchemaElement;
 	const normalizedRequest = JSON.parse(JSON.stringify(requestSchema));
 //	delete (normalizedRequest as SchemaElement)!.properties!['__DecisionID__'];
-	normalizeSchema(normalizedRequest);
+	normalizeSchema(normalizedRequest, options);
 	const responseSchema = {
 		$schema: "http://json-schema.org/draft-06/schema#",
 		definitions: swagger.definitions,
@@ -35,7 +35,7 @@ export const readSwagger = (swagger) => {
 	} as RootSchemaElement;
 	const normalizedResponse = JSON.parse(JSON.stringify(responseSchema));
 //	delete (normalizedResponse as SchemaElement)!.properties!['__DecisionID__'];
-	normalizeSchema(normalizedResponse);
+	normalizeSchema(normalizedResponse, options);
 	return {request: normalizedRequest, response: normalizedResponse};
 };
 
@@ -43,15 +43,17 @@ interface Context {
 	dependencies: { [s: string]: string[]; },
 	current: string | null,
 	definitions: SchemaDefinitions,
-	schema: RootSchemaElement
+	schema: RootSchemaElement,
+	options: Options
 }
 
-export const normalizeSchema = (schema: RootSchemaElement): void => {
+export const normalizeSchema = (schema, options): void => {
 	const context: Context = {
 		dependencies: {},
 		current: null,
 		definitions: {},
-		schema: schema
+		schema: schema,
+		options: options
 	};
 	_normalizeSchema(schema, context);
 	if (schema.properties && schema.properties.__DecisionID__) {
@@ -179,12 +181,12 @@ const isPrimitive = (x: Type | SchemaElement | SchemaElementRef): boolean => {
 	return false;
 };
 
-export const buildUiSchema = (root: RootSchemaElement): object => {
+export const buildUiSchema = (root: RootSchemaElement, options: Options): object => {
 	const uiSchema = {
 		"ui:order": ["*"],
 		"classNames": `field-depth-0`
 	};
-	_buildUiSchema(root, root, null, uiSchema, 0);
+	_buildUiSchema(root, root, null, uiSchema, 0, options);
 	return uiSchema;
 };
 
@@ -216,6 +218,12 @@ const setWidget = (uiSchema, key, widget) => {
 	}
 	uiSchema[key]["ui:widget"] = widget;
 };
+const setHelp = (uiSchema, key, text) => {
+	if (!uiSchema[key]) {
+		uiSchema[key] = {};
+	}
+	uiSchema[key]["ui:help"] = text;
+};
 const setPlaceHolder = (uiSchema, key, placeholder) => {
 	if (!uiSchema[key]) {
 		uiSchema[key] = {};
@@ -245,6 +253,16 @@ const isCyclic = (schemaOrRef: SchemaElement | SchemaElementRef): boolean => {
 	if (!(schemaOrRef as any).$ref) {
 		const schemaElement: SchemaElement = schemaOrRef as SchemaElement;
 		return schemaElement.CustomSchemaAttributeCyclic === true;
+	}
+	return false;
+};
+
+const isDate = (schemaOrRef: SchemaElement | SchemaElementRef): boolean => {
+	if (!(schemaOrRef as any).$ref) {
+		const schemaElement: SchemaElement = schemaOrRef as SchemaElement;
+		return schemaElement.format === Format.Date
+			|| schemaElement.format === Format.DateTime
+			|| schemaElement.format === Format.Time;
 	}
 	return false;
 };
@@ -308,7 +326,12 @@ const rank = (schemaOrRef: SchemaElement | SchemaElementRef) : Rank => {
 	return Rank.Max;
 };
 
-const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: RootSchemaElement, key: string | null, uiSchema: object, depth: number): void => {
+const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef,
+												root: RootSchemaElement,
+												key: string | null,
+												uiSchema: object,
+												depth: number,
+												options: Options): void => {
 	if ((schemaOrRef as any).$ref) {
 		const ref: SchemaElementRef = schemaOrRef as SchemaElementRef;
 		if (key) {
@@ -319,7 +342,7 @@ const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: Roo
 		}
 		const definitionName = resolveRef(ref.$ref);
 		const definition: SchemaElement | SchemaElementRef = root.definitions![definitionName];
-		_buildUiSchema(definition, root, key, uiSchema, depth);
+		_buildUiSchema(definition, root, key, uiSchema, depth, options);
 	} else {
 		const schema: SchemaElement = schemaOrRef as SchemaElement;
 		const type: Type = schema.type;
@@ -340,7 +363,7 @@ const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: Roo
 				enumValues(Rank).map(rankValue => (rankToProperties[rankValue] = []));
 				for (const k in schema.properties) {
 					const schemaOrRefChild = schema.properties[k];
-					_buildUiSchema(schemaOrRefChild, root, k, childUiSchema, depth + 1);
+					_buildUiSchema(schemaOrRefChild, root, k, childUiSchema, depth + 1, options);
 					if (isHidden(schemaOrRefChild)) {
 						setWidget(childUiSchema, k, "hidden");
 					}
@@ -349,6 +372,11 @@ const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: Roo
 						setWidget(childUiSchema, k, "textarea");
 						setOption(childUiSchema, k, "rows", 2);
 						setPlaceHolder(childUiSchema, k, "{...}")
+					}
+					if (options && options.dateFormat === DateFormat.TextField
+						&& isDate(schemaOrRefChild)) {
+						setWidget(childUiSchema, k, "text");
+						setHelp(childUiSchema, k, "Enter a date. eg: 2018-01-11T03:05:00.000Z");
 					}
 					rankToProperties[rank(schemaOrRefChild)].push(k);
 				}
@@ -391,7 +419,7 @@ const _buildUiSchema = (schemaOrRef: SchemaElement | SchemaElementRef, root: Roo
 					};
 				}
 				const schemaOrRefItem: SchemaElement | SchemaElementRef = schema.items;
-				_buildUiSchema(schemaOrRefItem, root, null, key ? uiSchema[key].items : uiSchema, depth +1);
+				_buildUiSchema(schemaOrRefItem, root, null, key ? uiSchema[key].items : uiSchema, depth +1, options);
 			}
 		}
 	}

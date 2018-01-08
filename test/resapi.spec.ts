@@ -1,7 +1,9 @@
+import {DateFormat, Options} from "../src/client/state";
+
 const decamelize = require('decamelize');
 import * as fs from 'fs';
 import * as BPromise from 'bluebird';
-import {buildUiSchema, normalizeSchema, readSwagger, normalizePayload} from '../src/client/resapi';
+import {buildUiSchema, readSwagger, normalizePayload} from '../src/client/resapi';
 
 const readFile = BPromise.promisify(fs.readFile);
 
@@ -30,6 +32,11 @@ interface Data {
 	request: SchemaData,
 	response: SchemaData
 }
+
+const defaultOptions : Options = {
+	liveValidation: true,
+	dateFormat: DateFormat.Widget
+};
 
 const allData: Map<string, Data> = {};
 
@@ -71,7 +78,11 @@ const fetch = (name: string): Promise<Data> => {
 const testNormalize = (name) => {
 	test(`testNormalize(${name})`, async () => {
 		const data = await fetch(name);
-		const { request, response } = readSwagger(data.swagger.json);
+		const options: Options = {
+			liveValidation: true,
+			dateFormat: DateFormat.Widget
+		};
+		const { request, response } = readSwagger(data.swagger.json, options);
 		if (overwrite) {
 			fs.writeFile(data.request.normalized.name, JSON.stringify(request, null, 2));
 			fs.writeFile(data.response.normalized.name, JSON.stringify(response, null, 2));
@@ -131,11 +142,11 @@ const testBuildUISchema = (name) => {
 		const data = await fetch(name);
 		const { request, response } = readSwagger(data.swagger.json);
 		if (overwrite) {
-			fs.writeFile(data.request.uischema.name, JSON.stringify(buildUiSchema(request), null, 2));
-			fs.writeFile(data.response.uischema.name, JSON.stringify(buildUiSchema(response), null, 2));
+			fs.writeFile(data.request.uischema.name, JSON.stringify(buildUiSchema(request, defaultOptions), null, 2));
+			fs.writeFile(data.response.uischema.name, JSON.stringify(buildUiSchema(response, defaultOptions), null, 2));
 		} else {
-			expect(JSON.stringify(buildUiSchema(request), null, 2)).toBe(data.request.uischema.content);
-			expect(JSON.stringify(buildUiSchema(response), null, 2)).toBe(data.response.uischema.content);
+			expect(JSON.stringify(buildUiSchema(request, defaultOptions), null, 2)).toBe(data.request.uischema.content);
+			expect(JSON.stringify(buildUiSchema(response, defaultOptions), null, 2)).toBe(data.response.uischema.content);
 		}
 	});
 };

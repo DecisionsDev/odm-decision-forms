@@ -35,6 +35,20 @@ export interface WebRequest {
 	transformResult: (result) => {}
 }
 
+export enum DateFormat {
+	Widget, TextField
+}
+
+export interface Options {
+	liveValidation: boolean;
+	dateFormat: DateFormat;
+}
+
+export const defaultOptions : Options = {
+	liveValidation: true,
+	dateFormat: DateFormat.TextField
+};
+
 export type DecisionStatusNotRun = "not-runyet";
 export type DecisionStatusResult = "decision-has-result";
 export type DecisionStatusError = "decision-threw-error";
@@ -73,7 +87,7 @@ export interface PageState {
 	router: RouterState;
 }
 
-export interface HomeState extends PageState{
+export interface HomeState extends PageState {
 	res: ResState;
 }
 
@@ -82,6 +96,7 @@ export interface FormsState extends PageState {
 	responseSchema: RootSchemaElement;
 	executeRequest: WebRequest;
 	executeResponse: DecisionState;
+	options: Options;
 }
 
 export type State = HomeState | FormsState;

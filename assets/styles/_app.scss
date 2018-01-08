@@ -61,6 +61,9 @@
           border: 1px solid darken(#dddddd, 20%);
         }
       }
+      .field p.help-block {
+        font-size: 12px;
+      }
       .form-grid {
         display: grid;
         grid-template-columns: 50% 50%;
