@@ -46,6 +46,7 @@ const renderForms = (rootId : string, swaggerRequest: WebRequest, executeRequest
 			initialState,
 			applyMiddleware(historyMiddleware, thunkMiddleware)
 		);
+		console.log('Rendering forms with options: ' + JSON.stringify(options));
 		ReactDOM.render(
 			<Provider store={store}>
 				<Forms/>
