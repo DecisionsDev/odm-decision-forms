@@ -62,6 +62,7 @@ class Forms extends React.Component<DProps, any> {
 				</span>
 			))}</span>
 		};
+		console.log("In Forms#render: " + JSON.stringify(options));
 		return <div className="odm-decision-forms">
 			<div id="input" className="form-container">
 				<div className="form-header">
