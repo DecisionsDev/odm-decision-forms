@@ -39,6 +39,7 @@ const renderForms = (rootId : string, swaggerRequest: WebRequest, executeRequest
 				requestSchema: emptyReducer,
 				responseSchema: emptyReducer,
 				executeRequest: emptyReducer,
+				options: emptyReducer,
 				executeResponse: responseReducer,
 				router: routerReducer
 			}),
