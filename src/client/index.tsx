@@ -17,7 +17,7 @@ import {ConnectedRouter, routerReducer, routerMiddleware, RouterState} from 'rea
 import createHistory from 'history/createBrowserHistory';
 import {loadRulesetPaths, loadSwagger} from "./resapi";
 import {DateFormat, DecisionStatus, defaultOptions, FormsState, HomeState, ResState} from "./state";
-import { responseReducer, emptyReducer} from "./reducers";
+import {responseReducer, emptyReducer, optionsReducer} from "./reducers";
 
 const history = createHistory();
 const historyMiddleware = routerMiddleware(history);
@@ -45,7 +45,7 @@ loadRulesetPaths()
 								requestSchema: emptyReducer,
 								responseSchema: emptyReducer,
 								executeRequest: emptyReducer,
-								options: emptyReducer,
+								options: optionsReducer,
 								executeResponse: responseReducer,
 								router: routerReducer
 							}),

@@ -10,13 +10,13 @@ module.exports = {
 			path.join(__dirname, 'src/client/embedded.tsx')
 		]
 	},
-	target: "node",
+	target: "web",
 	output: {
 		path: path.join(__dirname, '/lib/'),
 		filename: '[name].js',
 		libraryTarget: 'umd',
-		umdNamedDefine: true,
-		library: 'FormExec'
+//		umdNamedDefine: true,
+		library: 'OdmDecisionForms'
 	},
 	resolve: {
 		// Add '.ts' and '.tsx' as resolvable extensions.

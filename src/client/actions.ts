@@ -1,5 +1,5 @@
 import {Action} from "redux";
-import {FormsState} from "./state";
+import {FormsState, Options} from "./state";
 import axios from 'axios';
 import {ActionCreator} from "react-redux";
 import {normalizePayload} from "./resapi";
@@ -7,6 +7,7 @@ import {normalizePayload} from "./resapi";
 export const enum ActionTypes {
 	RECEIVE_RESULT,
 	DISPLAY_ERROR,
+	SET_OPTIONS,
 	DEFAULT_ACTION = "__any_other_action_type__"
 }
 
@@ -63,3 +64,12 @@ export const displayError: ActionCreator<DisplayErrorAction> = (title: string, m
 	status: status
 });
 
+export interface SetOptionsAction extends Action {
+	type: ActionTypes.SET_OPTIONS;
+	options: Options;
+}
+
+export const setOptions: ActionCreator<SetOptionsAction> = (options: Options) : SetOptionsAction => ({
+	type: ActionTypes.SET_OPTIONS,
+	options: options
+});
