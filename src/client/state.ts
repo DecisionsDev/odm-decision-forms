@@ -47,7 +47,7 @@ export interface Options {
 
 export const defaultOptions : Options = {
 	liveValidation: true,
-	dateFormat: DateFormat.TextField
+	dateFormat: DateFormat.Widget
 };
 
 export type DecisionStatusNotRun = "not-runyet";

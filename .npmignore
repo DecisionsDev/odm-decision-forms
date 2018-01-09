@@ -9,3 +9,4 @@ coverage
 **/webpack.*.config.js
 _output
 screenshots
+stats

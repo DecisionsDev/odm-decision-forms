@@ -7,4 +7,5 @@ coverage
 dist
 lib
 lib-esm
+stats
 _bundles

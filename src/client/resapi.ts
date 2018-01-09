@@ -3,7 +3,6 @@ import {DateFormat, defaultOptions, Options, ResState} from "./state";
 const startCase = require('lodash.startcase');
 
 const axios = require("axios");
-const Promise = require('bluebird');
 import {
 	Format, RootSchemaElement, SchemaElement, Type, SchemaElementRef, SchemaDefinitions
 } from "./schema";

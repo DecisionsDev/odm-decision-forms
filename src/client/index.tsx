@@ -1,9 +1,5 @@
 import * as React from "react";
 import * as ReactDOM from 'react-dom';
-var PropTypes = require('prop-types'); // ES5 with npm
-
-var ES6Promise = require("es6-promise");
-ES6Promise.polyfill();
 import {applyMiddleware, combineReducers, createStore} from "redux";
 import {Provider} from "react-redux";
 import App from "./components/App";
@@ -11,7 +7,6 @@ import Error from "./components/Error";
 
 const styles = require('./main.scss');
 
-var Promise = require('bluebird');
 import thunkMiddleware from 'redux-thunk';
 import {ConnectedRouter, routerReducer, routerMiddleware, RouterState} from 'react-router-redux'
 import createHistory from 'history/createBrowserHistory';

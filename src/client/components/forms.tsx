@@ -8,7 +8,7 @@ import { execute } from "../actions";
 import { RootSchemaElement } from "../schema";
 import { RouterState } from 'react-router-redux'
 import { buildUiSchema } from "../resapi";
-import moment from 'moment';
+import format from 'date-fns/format'
 
 require('es6-object-assign').polyfill();
 
@@ -123,13 +123,13 @@ class Forms extends React.Component<DProps, any> {
 							switch (executeResponse.status) {
 								case DecisionStatus.Result:
 									return makeFooterMessage([
-										{ name: 'Last run', value: moment(executeResponse.start).format('LTS') },
+										{ name: 'Last run', value: format(executeResponse.start, 'h:mm:ss A') },
 										{ name: 'Decision ID', value: executeResponse.result['__DecisionID__'] },
 									]);
 								case DecisionStatus.NotRun:
 									return <span>No output yet. Hit the 'Run' button to trigger the Decision.</span>;
 								case DecisionStatus.Error:
-									return makeFooterMessage([ { name: 'Last run', value: moment(executeResponse.start).format('LTS') } ]);
+									return makeFooterMessage([ { name: 'Last run', value: format(executeResponse.start, 'h:mm:ss A') } ]);
 							}
 						})()
 					}
