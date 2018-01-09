@@ -8,10 +8,10 @@ import Error from "./components/Error";
 const styles = require('./main.scss');
 
 import thunkMiddleware from 'redux-thunk';
-import {ConnectedRouter, routerReducer, routerMiddleware, RouterState} from 'react-router-redux'
+import {ConnectedRouter, routerMiddleware} from 'react-router-redux'
 import createHistory from 'history/createBrowserHistory';
 import {loadRulesetPaths, loadSwagger} from "./resapi";
-import {DateFormat, DecisionStatus, defaultOptions, FormsState, HomeState, ResState} from "./state";
+import {DecisionStatus, defaultOptions, FormsState, HomeState, ResState} from "./state";
 import {responseReducer, emptyReducer, optionsReducer} from "./reducers";
 
 const history = createHistory();
@@ -33,7 +33,6 @@ loadRulesetPaths()
 								transformResult: result => result
 							},
 							executeResponse: { status : DecisionStatus.NotRun },
-							router: {},
 							options: defaultOptions
 						};
 						const store = createStore<FormsState>(combineReducers({
@@ -42,7 +41,6 @@ loadRulesetPaths()
 								executeRequest: emptyReducer,
 								options: optionsReducer,
 								executeResponse: responseReducer,
-								router: routerReducer
 							}),
 							initialState,
 							applyMiddleware(historyMiddleware, thunkMiddleware)
@@ -61,11 +59,9 @@ loadRulesetPaths()
 		}
 		const initialState: HomeState = {
 			res: resState,
-			router: {}
 		};
 		const store = createStore<HomeState>(combineReducers({
 				res: emptyReducer,
-				router: routerReducer
 			}),
 			initialState,
 			applyMiddleware(historyMiddleware, thunkMiddleware)

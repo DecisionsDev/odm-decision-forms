@@ -85,7 +85,6 @@ export interface DecisionNotRun extends WithDecisionStatus {
 export type DecisionState = DecisionResult | DecisionError | DecisionNotRun;
 
 export interface PageState {
-	router: RouterState;
 }
 
 export interface HomeState extends PageState {

@@ -7,11 +7,7 @@ import Error from './components/error';
 import {applyMiddleware, combineReducers, createStore, Store} from "redux";
 import {Provider} from "react-redux";
 import thunkMiddleware from 'redux-thunk';
-import {ConnectedRouter, routerReducer, routerMiddleware, RouterState} from 'react-router-redux'
-import createHistory from 'history/createBrowserHistory';
-
-const history = createHistory();
-const historyMiddleware = routerMiddleware(history);
+import {ConnectedRouter, routerMiddleware, RouterState} from 'react-router-redux'
 
 const styles = require('./main.scss');
 
@@ -37,19 +33,17 @@ export const init = (rootId : string, swaggerRequest: WebRequest, executeRequest
 			responseSchema: res.response,
 			executeRequest: executeRequest,
 			executeResponse: { status : DecisionStatus.NotRun },
-			options: options,
-			router: {}
+			options: options
 		};
 		const store = createStore<any>(combineReducers({
 				requestSchema: emptyReducer,
 				responseSchema: emptyReducer,
 				executeRequest: emptyReducer,
 				options: optionsReducer,
-				executeResponse: responseReducer,
-				router: routerReducer
+				executeResponse: responseReducer
 			}),
 			initialState,
-			applyMiddleware(historyMiddleware, thunkMiddleware)
+			applyMiddleware(thunkMiddleware)
 		);
 		ReactDOM.render(
 			<Provider store={store}>
