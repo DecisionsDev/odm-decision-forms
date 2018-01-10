@@ -21,7 +21,16 @@ export const setFormOptions = (store: Store<any>, options: Options) => {
 	store.dispatch(setOptions(options));
 };
 
-export const init = (rootId : string, swaggerRequest: WebRequest, executeRequest: WebRequest, options: Options = defaultOptions) => {
+/**
+ * Create the store with the given swagger and execution request and return a Promise that will resolve with the newly
+ * create store
+ *
+ * @param {WebRequest} swaggerRequest
+ * @param {WebRequest} executeRequest
+ * @param {Options} options
+ * @returns {Promise<Store<any>>}
+ */
+export const init = (swaggerRequest: WebRequest, executeRequest: WebRequest, options: Options = defaultOptions) => {
 	let identity = a => a;
 	let transformResult = swaggerRequest.transformResult || identity;
 	let headers = swaggerRequest.headers || {};
@@ -35,7 +44,7 @@ export const init = (rootId : string, swaggerRequest: WebRequest, executeRequest
 			executeResponse: { status : DecisionStatus.NotRun },
 			options: options
 		};
-		const store = createStore<any>(combineReducers({
+		return createStore<any>(combineReducers({
 				requestSchema: emptyReducer,
 				responseSchema: emptyReducer,
 				executeRequest: emptyReducer,
@@ -45,15 +54,30 @@ export const init = (rootId : string, swaggerRequest: WebRequest, executeRequest
 			initialState,
 			applyMiddleware(thunkMiddleware)
 		);
-		ReactDOM.render(
-			<Provider store={store}>
-				<Forms/>
-			</Provider>
-			,
-			document.getElementById(rootId)
-		);
-		return store;
-	}).catch(error => {
-		ReactDOM.render(<Error error={error}/>, document.getElementById(rootId));
 	});
+};
+
+/**
+ * Once the store is fully initialized, render the forms.
+ * @param {Store<any>} store
+ * @param {string} rootId
+ */
+export const renderForms = (store: Store<any>, rootId : string) => {
+	ReactDOM.render(
+		<Provider store={store}>
+			<Forms/>
+		</Provider>
+		,
+		document.getElementById(rootId)
+	);
+};
+
+/**
+ * Once the store is fully initialized, render the forms.
+ * @param {Store<any>} store
+ * @param {string} rootId
+ * @param error
+ */
+export const renderError = (store: Store<any>, rootId : string, error) => {
+	ReactDOM.render(<Error error={error}/>, document.getElementById(rootId));
 };
