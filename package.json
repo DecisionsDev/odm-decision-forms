@@ -1,6 +1,6 @@
 {
   "name": "odm-decision-forms",
-  "version": "0.2.28",
+  "version": "0.2.29",
   "author": "Antoine Melki",
   "license": "Apache-2.0",
   "description": "A React-based UI to init and run Hosted Transparent Decision Services",
@@ -66,8 +66,7 @@
     "stats:dist": "rimraf dist && cross-env NODE_ENV=production webpack --config ./webpack.production.config.js --json > stats/stats.dist.json",
     "stats": "rimraf stats && mkdirp stats && npm run stats:dist && npm run stats:lib"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/es6-promise": "0.0.33",
     "@types/jest": "^20.0.8",
