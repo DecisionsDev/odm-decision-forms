@@ -17,6 +17,12 @@ import {emptyReducer, optionsReducer, responseReducer} from "./reducers";
 import {DecisionStatus, defaultOptions, FormsState, Options, WebRequest} from "./state";
 import {setOptions} from "./actions";
 
+/**
+ * Set options
+ *
+ * @param {Store<any>} store
+ * @param {Options} options
+ */
 export const setFormOptions = (store: Store<any>, options: Options) => {
 	store.dispatch(setOptions(options));
 };
@@ -30,7 +36,9 @@ export const setFormOptions = (store: Store<any>, options: Options) => {
  * @param {Options} options
  * @returns {Promise<Store<any>>}
  */
-export const init = (swaggerRequest: WebRequest, executeRequest: WebRequest, options: Options = defaultOptions) => {
+export const init = (swaggerRequest: WebRequest,
+										 executeRequest: WebRequest,
+										 options: Options = defaultOptions) : Promise<Store<any>> => {
 	let identity = a => a;
 	let transformResult = swaggerRequest.transformResult || identity;
 	let headers = swaggerRequest.headers || {};
@@ -62,7 +70,7 @@ export const init = (swaggerRequest: WebRequest, executeRequest: WebRequest, opt
  * @param {Store<any>} store
  * @param {string} rootId
  */
-export const renderForms = (store: Store<any>, rootId : string) => {
+export const renderForms = (rootId : string, store: Store<any>) => {
 	ReactDOM.render(
 		<Provider store={store}>
 			<Forms/>
@@ -78,6 +86,30 @@ export const renderForms = (store: Store<any>, rootId : string) => {
  * @param {string} rootId
  * @param error
  */
-export const renderError = (store: Store<any>, rootId : string, error) => {
+export const renderError = (rootId : string, error) => {
 	ReactDOM.render(<Error error={error}/>, document.getElementById(rootId));
+};
+
+/**
+ * Init the store and render the forms all at once.
+ *
+ * @param {string} rootId
+ * @param {WebRequest} swaggerRequest
+ * @param {WebRequest} executeRequest
+ * @param {Options} options
+ * @returns {Promise<Store<any>>}
+ */
+export const initAndRender = (rootId : string,
+															swaggerRequest: WebRequest,
+															executeRequest: WebRequest,
+															options: Options = defaultOptions) : Promise<Store<any> | null> => {
+	return init(swaggerRequest, executeRequest, options)
+		.then((store : Store<any>) => {
+			renderForms(rootId, store);
+			return store;
+		})
+		.catch(error => {
+			renderError(rootId, error);
+			return null;
+		});
 };
