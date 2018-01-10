@@ -15,7 +15,7 @@
     "node": ">= 8.0.0"
   },
   "bin": {
-    "odm-decision-forms": "./src/server/index.js"
+    "odm-decision-forms": "./dist/server/index.js"
   },
   "main": "./lib/lib.js",
   "module": "./lib/lib.js",
@@ -54,7 +54,8 @@
     "dev": "node src/server/index --env development",
     "start": "node src/server/index --env production",
     "clean": "shx rm -rf lib dist _output stats",
-    "build:dist": "rimraf dist && cross-env NODE_ENV=production webpack --config ./webpack.production.config.js --progress --profile --colors",
+    "build:dist:server": "mkdirp dist && cp -R ./src/server ./dist/server",
+    "build:dist": "rimraf dist && npm run build:dist:server && cross-env NODE_ENV=production webpack --config ./webpack.production.config.js --progress --profile --colors",
     "build:lib": "rimraf lib && cross-env NODE_ENV=production webpack --config ./webpack.lib.config.js --progress --profile --colors",
     "build": "npm run clean && npm run compile && npm run build:dist && npm run build:lib",
     "patch": "npm build && npm version patch && npm publish",
@@ -66,7 +67,13 @@
     "stats:dist": "rimraf dist && cross-env NODE_ENV=production webpack --config ./webpack.production.config.js --json > stats/stats.dist.json",
     "stats": "rimraf stats && mkdirp stats && npm run stats:dist && npm run stats:lib"
   },
-  "dependencies": {},
+  "dependencies": {
+    "axios": "^0.16.2",
+    "body-parser": "^1.18.1",
+    "commander": "^2.9.0",
+    "cors": "^2.8.4",
+    "express": "^4.15.4"
+  },
   "devDependencies": {
     "@types/es6-promise": "0.0.33",
     "@types/jest": "^20.0.8",
@@ -108,14 +115,9 @@
     "webpack": "^3.10.0",
     "webpack-dev-middleware": "^1.12.0",
     "webpack-hot-middleware": "^2.13.1",
-    "axios": "^0.16.2",
-    "body-parser": "^1.18.1",
-    "commander": "^2.9.0",
-    "cors": "^2.8.4",
     "date-fns": "^1.29.0",
     "event-source-polyfill": "0.0.11",
     "es6-promise-promise": "^1.0.0",
-    "express": "^4.15.4",
     "history": "^4.7.2",
     "lodash.startcase": "^4.4.0",
     "react": "^16.1.1",

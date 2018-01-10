@@ -88,9 +88,9 @@ module.exports.run = function (config, options) {
 		var withWebpack = require('./with-webpack');
 		withWebpack(app);
 	} else {
-		app.use(express.static(__dirname + '/../../dist'));
+		app.use(express.static(__dirname + '/../../dist/client'));
 		app.get('*', function response(req, res) {
-			res.sendFile(path.join(__dirname, '../../dist/index.html'));
+			res.sendFile(path.join(__dirname, '../../dist/client/index.html'));
 		});
 	}
 	app.listen(port, '0.0.0.0', function onStart(err) {
