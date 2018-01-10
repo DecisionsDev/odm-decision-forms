@@ -19,6 +19,10 @@
   },
   "main": "./lib/lib.js",
   "module": "./lib/lib.js",
+  "files": [
+    "dist",
+    "lib"
+  ],
   "keywords": [
     "odm",
     "ibm",
@@ -63,26 +67,6 @@
     "stats": "rimraf stats && mkdirp stats && npm run stats:dist && npm run stats:lib"
   },
   "dependencies": {
-    "axios": "^0.16.2",
-    "body-parser": "^1.18.1",
-    "commander": "^2.9.0",
-    "cors": "^2.8.4",
-    "date-fns": "^1.29.0",
-    "event-source-polyfill": "0.0.11",
-    "es6-promise-promise": "^1.0.0",
-    "express": "^4.15.4",
-    "history": "^4.7.2",
-    "lodash.startcase": "^4.4.0",
-    "react": "^16.1.1",
-    "react-dom": "^16.1.1",
-    "react-json-pretty": "^1.6.3",
-    "react-jsonschema-form": "^1.0.0",
-    "react-redux": "^5.0.6",
-    "react-router": "^4.1.2",
-    "react-router-dom": "^4.2.2",
-    "react-router-redux": "^5.0.0-alpha.8",
-    "redux": "^3.7.2",
-    "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
     "@types/es6-promise": "0.0.33",
@@ -124,6 +108,26 @@
     "typescript": "^2.5.2",
     "webpack": "^3.10.0",
     "webpack-dev-middleware": "^1.12.0",
-    "webpack-hot-middleware": "^2.13.1"
+    "webpack-hot-middleware": "^2.13.1",
+    "axios": "^0.16.2",
+    "body-parser": "^1.18.1",
+    "commander": "^2.9.0",
+    "cors": "^2.8.4",
+    "date-fns": "^1.29.0",
+    "event-source-polyfill": "0.0.11",
+    "es6-promise-promise": "^1.0.0",
+    "express": "^4.15.4",
+    "history": "^4.7.2",
+    "lodash.startcase": "^4.4.0",
+    "react": "^16.1.1",
+    "react-dom": "^16.1.1",
+    "react-json-pretty": "^1.6.3",
+    "react-jsonschema-form": "^1.0.0",
+    "react-redux": "^5.0.6",
+    "react-router": "^4.1.2",
+    "react-router-dom": "^4.2.2",
+    "react-router-redux": "^5.0.0-alpha.8",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0"
   }
 }
