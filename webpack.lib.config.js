@@ -34,7 +34,7 @@ module.exports = {
         new webpack.optimize.UglifyJsPlugin({
             compressor: {
                 warnings: false,
-                screw_ie8: true
+                screw_ie8: false
             }
         })
     ],
@@ -83,7 +83,7 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        plugins: ['lodash'],
+                        plugins: ['lodash', 'transform-es3-member-expression-literals'],
                         presets: [['env', {'modules': false, 'targets': {'node': 4}}]]
                     }
                 },
