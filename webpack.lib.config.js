@@ -19,7 +19,7 @@ module.exports = {
         filename: '[name].js',
         libraryTarget: 'amd',
 //		umdNamedDefine: true,
-        library: 'OdmDecisionForms'
+//        library: 'OdmDecisionForms'
     },
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
