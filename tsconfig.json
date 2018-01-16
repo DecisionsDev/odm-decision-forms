@@ -17,6 +17,17 @@
   },
   "awesomeTypescriptLoaderOptions": {
     "useBabel": true,
+    "babelOptions": {
+      "babelrc": false, /* Important line */
+      "plugins": [
+        "lodash",
+        "transform-es3-property-literals",
+        "transform-es3-member-expression-literals"
+      ],
+      "presets": [
+        ["env", { "targets": "ie 8", "modules": false }]
+      ]
+    },
     "useCache": true,
     "useTranspileModule": true
   }

@@ -4,6 +4,7 @@ var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+var es3ifyPlugin = require('es3ify-webpack-plugin');
 
 module.exports = {
     entry: {
@@ -30,8 +31,13 @@ module.exports = {
             'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
         }),
         new ExtractTextPlugin("styles.css"),
+        new es3ifyPlugin(),
         new LodashModuleReplacementPlugin,
         new webpack.optimize.UglifyJsPlugin({
+            uglifyOptions: {
+                ie8: true,
+                ecma: 5
+            },
             compressor: {
                 warnings: false,
                 screw_ie8: false
@@ -83,12 +89,20 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        plugins: ['lodash', 'transform-es3-member-expression-literals'],
-                        presets: [['env', {'modules': false, 'targets': {'node': 4}}]]
+                        plugins: [
+                            'lodash',
+                            'transform-es3-member-expression-literals',
+                            'transform-es3-property-literals'
+                        ]
+                        // presets: [['env', {
+                        //     'modules': false,
+                        //     'targets': {
+                        //         'browsers': 'ie >= 8'
+                        //     }
+                        // }]]
                     }
                 },
-                test: /\.js$/,
-                exclude: /node_modules/
+                test: /\.js$/
             }
         ]
     },
