@@ -18,9 +18,9 @@ module.exports = {
     output: {
         path: path.join(__dirname, '/lib/'),
         filename: '[name].js',
-        libraryTarget: 'amd',
+        libraryTarget: 'umd',
 //		umdNamedDefine: true,
-//        library: 'OdmDecisionForms'
+        library: 'OdmDecisionForms'
     },
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
@@ -34,13 +34,9 @@ module.exports = {
         new es3ifyPlugin(),
         new LodashModuleReplacementPlugin,
         new webpack.optimize.UglifyJsPlugin({
-            uglifyOptions: {
-                ie8: true,
-                ecma: 5
-            },
             compressor: {
                 warnings: false,
-                screw_ie8: false
+                screw_ie8: true
             }
         })
     ],

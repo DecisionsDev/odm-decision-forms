@@ -7,7 +7,7 @@
     "noImplicitAny": false,
     "noFallthroughCasesInSwitch": true,
     "jsx": "react",
-    "target": "es3",
+    "target": "es5",
     "module": "es6",
     "experimentalDecorators": true,
     "moduleResolution": "node",
@@ -20,12 +20,7 @@
     "babelOptions": {
       "babelrc": false, /* Important line */
       "plugins": [
-        "lodash",
-        "transform-es3-property-literals",
-        "transform-es3-member-expression-literals"
-      ],
-      "presets": [
-        ["env", { "targets": "ie 8", "modules": false }]
+        "lodash"
       ]
     },
     "useCache": true,

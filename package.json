@@ -56,7 +56,7 @@
     "clean": "shx rm -rf lib dist _output stats",
     "build:dist:server": "mkdirp dist && cp -R ./src/server ./dist/server",
     "build:dist": "rimraf dist && npm run build:dist:server && cross-env NODE_ENV=production webpack --config ./webpack.production.config.js --progress --profile --colors",
-    "build:lib": "rimraf lib && cross-env NODE_ENV=production webpack --config ./webpack.lib.config.js --progress --profile --colors --display verbose && npx babel lib/form.js --out-file lib/form.js",
+    "build:lib": "rimraf lib && cross-env NODE_ENV=production webpack --config ./webpack.lib.config.js --progress --profile --colors",
     "build": "npm run clean && npm run compile && npm run build:dist && npm run build:lib",
     "patch": "npm build && npm version patch && npm publish",
     "test": "npm run test-only",
