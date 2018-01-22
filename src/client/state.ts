@@ -1,5 +1,6 @@
-import { RootSchemaElement } from "./schema";
-import { RouterState } from 'react-router-redux';
+import {RootSchemaElement} from "./schema";
+import {RouterState} from 'react-router-redux';
+
 require('es6-map/implement');
 
 export interface Error {
@@ -9,18 +10,18 @@ export interface Error {
 }
 
 export interface ResState {
-	ruleapps: { [key:string]:RuleApp; }
+	ruleapps: { [key: string]: RuleApp; }
 }
 
 export interface RuleApp {
 	name: string;
-	rulesets: { [key:string]:Ruleset; };
+	rulesets: { [key: string]: Ruleset; };
 }
 
 export interface Ruleset {
 	name: string;
 	path: string;
-	versions: { [key:string]:RulesetVersion; }
+	versions: { [key: string]: RulesetVersion; }
 }
 
 export interface RulesetVersion {
@@ -30,7 +31,7 @@ export interface RulesetVersion {
 
 export interface WebRequest {
 	url: string;
-	headers?: { [key:string]:string; },
+	headers?: { [key: string]: string; },
 	transformPayload: (payload) => {},
 	transformResult: (result) => {}
 }
@@ -45,7 +46,7 @@ export interface Options {
 	dateFormat: DateFormat;
 }
 
-export const defaultOptions : Options = {
+export const defaultOptions: Options = {
 	liveValidation: true,
 	dateFormat: DateFormat.Widget
 };
@@ -85,10 +86,12 @@ export interface DecisionNotRun extends WithDecisionStatus {
 export type DecisionState = DecisionResult | DecisionError | DecisionNotRun;
 
 export interface PageState {
+	page: Page;
 }
 
 export interface HomeState extends PageState {
 	res: ResState;
+	page: Page.home;
 }
 
 export interface FormsState extends PageState {
@@ -97,6 +100,66 @@ export interface FormsState extends PageState {
 	executeRequest: WebRequest;
 	executeResponse: DecisionState;
 	options: Options;
+	page: Page.inout;
 }
 
-export type State = HomeState | FormsState;
+export interface StandaloneFormState extends PageState {
+	schema: RootSchemaElement;
+	data: object;
+	options: Options;
+	controller: FormController;
+	page: Page.standalone;
+}
+
+export type AppState = HomeState | FormsState;
+
+export enum Page {
+	home, inout, standalone
+}
+
+export type FormDataConsumer = (object) => void;
+
+export interface FormHandlers {
+	onSubmit?: FormDataConsumer;
+	onChange?: FormDataConsumer;
+	onError?: (any) => void;
+}
+
+export class FormController {
+
+	private submitter: () => void;
+	private handlers: FormHandlers;
+
+	constructor(handlers: FormHandlers) {
+		this.handlers = handlers;
+	}
+
+	submit(): void {
+		this.submitter();
+	}
+
+	/*
+	 * Internal methods
+	 */
+	handleOnSubmit(data: object) {
+		if (this.handlers.onSubmit) {
+			this.handlers.onSubmit(data);
+		}
+	}
+
+	handleOnError(error) {
+		if (this.handlers.onError) {
+			this.handlers.onError(error);
+		}
+	}
+
+	handleOnChange(data: object) {
+		if (this.handlers.onChange) {
+			this.handlers.onChange(data);
+		}
+	}
+
+	setSubmitter(f: () => void) {
+		this.submitter = f;
+	}
+}

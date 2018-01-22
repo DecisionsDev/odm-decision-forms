@@ -11,8 +11,8 @@ import thunkMiddleware from 'redux-thunk';
 import {ConnectedRouter, routerMiddleware} from 'react-router-redux'
 import createHistory from 'history/createBrowserHistory';
 import {loadRulesetPaths, loadSwagger} from "./resapi";
-import {DecisionStatus, defaultOptions, FormsState, HomeState, ResState} from "./state";
-import {responseReducer, emptyReducer, optionsReducer} from "./reducers";
+import { defaultOptions, ResState} from "./state";
+import {createFormsStore, createHomeStore} from "./stores";
 
 const history = createHistory();
 const historyMiddleware = routerMiddleware(history);
@@ -24,27 +24,13 @@ loadRulesetPaths()
 			if (rulesetPath.indexOf('/ruleapp') == 0) {
 				return loadSwagger(rulesetPath.substr('/ruleapp'.length), defaultOptions)
 					.then(({request, response}) => {
-						const initialState: FormsState = {
-							requestSchema: request,
-							responseSchema: response,
-							executeRequest: {
-								url: '/execute' + rulesetPath.substr('/ruleapp'.length),
-								transformPayload: payload => ({ request: payload }),
-								transformResult: result => result
-							},
-							executeResponse: { status : DecisionStatus.NotRun },
-							options: defaultOptions
-						};
-						const store = createStore<FormsState>(combineReducers({
-								requestSchema: emptyReducer,
-								responseSchema: emptyReducer,
-								executeRequest: emptyReducer,
-								options: optionsReducer,
-								executeResponse: responseReducer,
-							}),
-							initialState,
-							applyMiddleware(historyMiddleware, thunkMiddleware)
-						);
+						const store = createFormsStore({
+							request: request, response: response
+						}, {
+							url: '/execute' + rulesetPath.substr('/ruleapp'.length),
+							transformPayload: payload => ({ request: payload }),
+							transformResult: result => result
+						}, defaultOptions, applyMiddleware(historyMiddleware, thunkMiddleware));
 						ReactDOM.render(
 							<Provider store={store}>
 								<ConnectedRouter history={history}>
@@ -57,15 +43,7 @@ loadRulesetPaths()
 					});
 			}
 		}
-		const initialState: HomeState = {
-			res: resState,
-		};
-		const store = createStore<HomeState>(combineReducers({
-				res: emptyReducer,
-			}),
-			initialState,
-			applyMiddleware(historyMiddleware, thunkMiddleware)
-		);
+		const store = createHomeStore(resState, applyMiddleware(historyMiddleware, thunkMiddleware));
 		ReactDOM.render(
 			<Provider store={store}>
 				<ConnectedRouter history={history}>

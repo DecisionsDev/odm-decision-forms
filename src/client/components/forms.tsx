@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import {
-	DecisionState, DecisionStatus, FormsState, Options
+	DecisionState, DecisionStatus, FormController, FormsState, Options
 } from "../state";
 import { execute } from "../actions";
 import { RootSchemaElement } from "../schema";
 import { RouterState } from 'react-router-redux'
 import format from 'date-fns/format'
-import {JsonForm, Trigger} from "./gform";
+import {JsonForm} from "./jsonform";
 
 require('es6-object-assign').polyfill();
 
@@ -27,18 +27,26 @@ interface MessageField {
 	value: string;
 }
 
+const log = (type) => console.log.bind(console, type);
+
 class Forms extends React.Component<DProps, any> {
 	form: any;
-	submit: Trigger;
+	inputController: FormController;
+	outputController: FormController;
 
 	constructor(props) {
 		super(props);
-		this.submit = new Trigger();
+		this.inputController = new FormController({
+			onSubmit: formData => props.dispatch(execute(formData)),
+			onError: error => log(error)
+		});
+		this.outputController = new FormController({
+			onError: error => log(error)
+		});
 	}
 
 	doSubmit() {
-		const dispatch = this.props.dispatch;
-		this.submit.run().then(formData => dispatch(execute(formData)));
+		this.inputController.submit();
 	}
 
 	render() {
@@ -65,7 +73,7 @@ class Forms extends React.Component<DProps, any> {
 										data={{}}
 										readonly={false}
 										rootFieldId={"in"}
-										submit={this.submit}
+										controller={this.inputController}
 										options={options}/>
 				</div>
 			</div>
@@ -84,6 +92,7 @@ class Forms extends React.Component<DProps, any> {
 															data={(executeResponse.status === DecisionStatus.Result) ? executeResponse.result : {}}
 															readonly={true}
 															rootFieldId={"out"}
+															controller={this.outputController}
 															options={options}/>
 									);
 								case DecisionStatus.Error:
