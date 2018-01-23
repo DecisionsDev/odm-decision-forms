@@ -17,19 +17,16 @@ import {
 	defaultOptions, Options, WebRequest, PageState, Page, StandaloneFormState, FormsState, FormController,
 	FormHandlers
 } from "./state";
-import {setOptions} from "./actions";
+import {setOptions as setOptionsAction} from "./actions";
 import {NormalizedRequestAndResponse, RootSchemaElement} from "./schema";
 import {createFormsStore, createStandaloneFormStore} from "./stores";
 import thunkMiddleware from 'redux-thunk';
 
 /**
- * Set options
- *
- * @param {Store<any>} store
- * @param {Options} options
+ * @deprecated
  */
 export const setFormOptions = (store: Store<any>, options: Options) => {
-	store.dispatch(setOptions(options));
+	store.dispatch(setOptionsAction(options));
 };
 
 /**
@@ -54,14 +51,17 @@ export const renderForms = (rootId: string, store: Store<FormsState>) => {
 	);
 };
 
-export class Result<T extends PageState> {
+export class FormBasedComponent<T extends FormsState | StandaloneFormState> {
 	store: Store<T>;
 	constructor(store: Store<T>) {
 		this.store = store;
 	}
+	setOptions(options: Options) {
+		this.store.dispatch(setOptionsAction(options));
+	}
 }
 
-export class InOutResult extends Result<FormsState> {
+export class InOutFormsComponent extends FormBasedComponent<FormsState> {
 
 	render(rootId: string) {
 		ReactDOM.render(
@@ -74,7 +74,7 @@ export class InOutResult extends Result<FormsState> {
 
 }
 
-export class StandaloneFormResult extends Result<StandaloneFormState> {
+export class StandaloneFormComponent extends FormBasedComponent<StandaloneFormState> {
 	constructor(store: Store<StandaloneFormState>) {
 		super(store);
 	}
@@ -103,7 +103,7 @@ export class StandaloneFormResult extends Result<StandaloneFormState> {
  */
 export const inout = (swaggerRequest: WebRequest,
 											executeRequest: WebRequest,
-											options: Options = defaultOptions) : Promise<InOutResult> => {
+											options: Options = defaultOptions) : Promise<InOutFormsComponent> => {
 	const identity = a => a;
 	const transformResult = swaggerRequest.transformResult || identity;
 	const headers = swaggerRequest.headers || {};
@@ -111,7 +111,7 @@ export const inout = (swaggerRequest: WebRequest,
 		const swagger = transformResult(data);
 		const res: NormalizedRequestAndResponse = readSwagger(swagger, options);
 		const store = createFormsStore(res, executeRequest, options, applyMiddleware(thunkMiddleware));
-		return new InOutResult(store);
+		return new InOutFormsComponent(store);
 	});
 };
 
@@ -122,7 +122,7 @@ export const inout = (swaggerRequest: WebRequest,
  * @param {Object} data
  * @param {FormHandlers} handlers
  * @param {Options} options
- * @returns {StandaloneFormResult}
+ * @returns {StandaloneFormComponent}
  */
 export const standalone = (schema: RootSchemaElement,
 													 data: object,
@@ -130,7 +130,7 @@ export const standalone = (schema: RootSchemaElement,
 													 options: Options = defaultOptions) => {
 	const controller = new FormController(handlers);
 	const store = createStandaloneFormStore(schema, data, controller, options, applyMiddleware(thunkMiddleware));
-	return new StandaloneFormResult(store);
+	return new StandaloneFormComponent(store);
 };
 
 /**

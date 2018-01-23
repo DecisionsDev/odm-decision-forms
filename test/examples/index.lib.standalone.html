@@ -71,7 +71,7 @@
             netPrice: 45
         }
     };
-    var result = dforms.standalone(swagger, data, {
+    var component = dforms.standalone(swagger, data, {
         onSubmit: function(data) {
             console.log('Submitted: ' + JSON.stringify(data));
         },
@@ -83,13 +83,13 @@
         }
     });
     setTimeout(function() {
-        result.render("root");
+        component.render("root");
     }, 500);
     function changeOptions() {
-        dforms.setFormOptions(result.store, { liveValidation: false, dateFormat: 'Widget' });
+        component.setOptions({ liveValidation: false, dateFormat: 'Widget' });
     }
     function submit() {
-        result.submit();
+        component.submit();
     }
 </script>
 <a href="#" onclick="changeOptions()">Change Options</a>

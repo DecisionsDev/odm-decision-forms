@@ -12,12 +12,12 @@
       { url: "http://localhost:3000/execute/"+rulesetId+"/ruleset",
           transformPayload: function(payload) { return { request: payload }}},
       { liveValidation: true, dateFormat: "TextField" }
-    ).then(function(result) {
-        window.theResult = result;
+    ).then(function(component) {
+        window.theResult = component;
         result.render("root");
     });
     function changeOptions() {
-        dforms.setFormOptions(window.theResult.store, { liveValidation: false, dateFormat: 'Widget' });
+        window.theResult.setOptions({ liveValidation: false, dateFormat: 'Widget' });
     }
 </script>
 <a href="#" onclick="changeOptions()">click me</a>
