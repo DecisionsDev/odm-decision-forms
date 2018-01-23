@@ -1,0 +1,26 @@
+<html>
+<head>
+    <link href="../../lib/styles.css" rel="stylesheet">
+    <script src="../../lib/form.js"></script>
+</head>
+<body>
+<script>
+    const rulesetId = "CompleteInvoice_333d6f29_ccb0_406c_aa8f_83c54954c11f";
+    const dforms = window.OdmDecisionForms;
+    dforms.inout(
+      {url: "http://localhost:3000/swagger/"+rulesetId+"/ruleset"},
+      { url: "http://localhost:3000/execute/"+rulesetId+"/ruleset",
+          transformPayload: function(payload) { return { request: payload }}},
+      { liveValidation: true, dateFormat: "TextField" }
+    ).then(function(result) {
+        window.theResult = result;
+        result.render("root");
+    });
+    function changeOptions() {
+        dforms.setFormOptions(window.theResult.store, { liveValidation: false, dateFormat: 'Widget' });
+    }
+</script>
+<a href="#" onclick="changeOptions()">click me</a>
+<div id="root"></div>
+</body>
+</html>

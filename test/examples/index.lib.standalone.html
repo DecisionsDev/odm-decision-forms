@@ -1,0 +1,99 @@
+<html>
+<head>
+    <link href="../../lib/styles.css" rel="stylesheet">
+    <script src="../../lib/form.js"></script>
+</head>
+<body>
+<script>
+    const dforms = window.OdmDecisionForms;
+    const swagger = {
+        "$schema": "http://json-schema.org/draft-06/schema#",
+        "definitions": {
+            "Result": {
+                "type": "object",
+                "properties": {
+                    "netPrice": {
+                        "type": "number",
+                        "title": "Net Price"
+                    },
+                    "discount": {
+                        "type": "number",
+                        "title": "Discount"
+                    },
+                    "tax": {
+                        "$ref": "#/definitions/Tax",
+                        "title": "Tax"
+                    },
+                    "grossPrice": {
+                        "type": "number",
+                        "title": "Gross Price"
+                    }
+                },
+                "title": "Result"
+            },
+            "Tax": {
+                "type": "object",
+                "properties": {
+                    "label": {
+                        "type": "string",
+                        "enum": [
+                            "VAT10",
+                            "VAT21",
+                            "VAT55",
+                            "VAT20"
+                        ],
+                        "title": "Label"
+                    },
+                    "rate": {
+                        "type": "number",
+                        "title": "Rate"
+                    }
+                },
+                "title": "Tax"
+            }
+        },
+        "type": "object",
+        "properties": {
+            "__DecisionID__": {
+                "type": "string",
+                "description": "Unique identifier representing the execution of the decision service operation. If it is not specified, it will be computed automatically.",
+                "title": "Decision Id",
+                "CustomSchemaAttributeHidden": true
+            },
+            "Result": {
+                "$ref": "#/definitions/Result",
+                "title": "Result"
+            }
+        }
+    };
+    var data = {
+        Result: {
+            netPrice: 45
+        }
+    };
+    var result = dforms.standalone(swagger, data, {
+        onSubmit: function(data) {
+            console.log('Submitted: ' + JSON.stringify(data));
+        },
+        onChange: function(data) {
+            console.log('Changed: ' + JSON.stringify(data));
+        },
+        onError: function(error) {
+            console.log('Error: ' + JSON.stringify(error));
+        }
+    });
+    setTimeout(function() {
+        result.render("root");
+    }, 500);
+    function changeOptions() {
+        dforms.setFormOptions(result.store, { liveValidation: false, dateFormat: 'Widget' });
+    }
+    function submit() {
+        result.submit();
+    }
+</script>
+<a href="#" onclick="changeOptions()">Change Options</a>
+<a href="#" onclick="submit()">Submit</a>
+<div id="root"></div>
+</body>
+</html>
