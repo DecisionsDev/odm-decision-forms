@@ -14,7 +14,7 @@ const styles = require('./main.scss');
 import axios from "axios";
 import {readSwagger} from "./resapi";
 import {
-	defaultOptions, Options, WebRequest, PageState, Page, StandaloneFormState, FormController,
+	defaultOptions, Options, WebRequest, PageState, Page, StandaloneFormState, FormsState, FormController,
 	FormHandlers
 } from "./state";
 import {setOptions} from "./actions";
@@ -37,14 +37,14 @@ export const setFormOptions = (store: Store<any>, options: Options) => {
  */
 export const init = (swaggerRequest: WebRequest,
 										 executeRequest: WebRequest,
-										 options: Options = defaultOptions): Promise<Store<any>> => {
+										 options: Options = defaultOptions): Promise<Store<FormsState>> => {
 	return inout(swaggerRequest, executeRequest, options).then(o => o.store);
 };
 
 /**
  * @deprecated
  */
-export const renderForms = (rootId: string, store: Store<any>) => {
+export const renderForms = (rootId: string, store: Store<FormsState>) => {
 	ReactDOM.render(
 		<Provider store={store}>
 			<Forms/>
@@ -53,6 +53,46 @@ export const renderForms = (rootId: string, store: Store<any>) => {
 		document.getElementById(rootId)
 	);
 };
+
+export class Result<T extends PageState> {
+	store: Store<T>;
+	constructor(store: Store<T>) {
+		this.store = store;
+	}
+}
+
+export class InOutResult extends Result<FormsState> {
+
+	render(rootId: string) {
+		ReactDOM.render(
+		<Provider store={this.store}>
+		<Forms/>
+		</Provider>,
+		document.getElementById(rootId)
+		);
+	}
+
+}
+
+export class StandaloneFormResult extends Result<StandaloneFormState> {
+	private controller: FormController;
+	constructor(store: Store<StandaloneFormState>, handlers: FormHandlers) {
+		super(store);
+		this.controller = new FormController(handlers);
+	}
+	submit() {
+		this.controller.submit();
+	}
+	render(rootId: string) {
+		ReactDOM.render(
+		<Provider store={this.store}>
+		<StandaloneForm/>
+		</Provider>
+		,
+		document.getElementById(rootId)
+		);
+	}
+}
 
 /**
  * Create the store with the given swagger and execution request and return a Promise that will resolve with the newly
@@ -65,49 +105,34 @@ export const renderForms = (rootId: string, store: Store<any>) => {
  */
 export const inout = (swaggerRequest: WebRequest,
 											executeRequest: WebRequest,
-											options: Options = defaultOptions) => {
-	let identity = a => a;
-	let transformResult = swaggerRequest.transformResult || identity;
-	let headers = swaggerRequest.headers || {};
+											options: Options = defaultOptions) : Promise<InOutResult> => {
+	const identity = a => a;
+	const transformResult = swaggerRequest.transformResult || identity;
+	const headers = swaggerRequest.headers || {};
 	return axios.get(swaggerRequest.url, {headers}).then(({data}) => {
 		const swagger = transformResult(data);
-		let res: NormalizedRequestAndResponse = readSwagger(swagger, options);
+		const res: NormalizedRequestAndResponse = readSwagger(swagger, options);
 		const store = createFormsStore(res, executeRequest, options, applyMiddleware(thunkMiddleware));
-		return {
-			store: store,
-			render: (rootId: string) => {
-				ReactDOM.render(
-					<Provider store={store}>
-						<Forms/>
-					</Provider>,
-					document.getElementById(rootId)
-				);
-			}
-		};
+		return new InOutResult(store);
 	});
 };
 
+/**
+ * Create a standalone form from the given schema and data
+ *
+ * @param {RootSchemaElement} schema
+ * @param {Object} data
+ * @param {FormHandlers} handlers
+ * @param {Options} options
+ * @returns {StandaloneFormResult}
+ */
 export const standalone = (schema: RootSchemaElement,
 													 data: object,
 													 handlers: FormHandlers,
 													 options: Options = defaultOptions) => {
 	const controller = new FormController(handlers);
 	const store = createStandaloneFormStore(schema, data, controller, options, applyMiddleware(thunkMiddleware));
-	return {
-		store: store,
-		submit: () => {
-			controller.submit();
-		},
-		render: (rootId: string) => {
-			ReactDOM.render(
-				<Provider store={store}>
-					<StandaloneForm/>
-				</Provider>
-				,
-				document.getElementById(rootId)
-			);
-		}
-	};
+	return new StandaloneFormResult(store, handlers);
 };
 
 /**

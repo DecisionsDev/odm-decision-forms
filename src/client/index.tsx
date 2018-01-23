@@ -2,8 +2,8 @@ import * as React from "react";
 import * as ReactDOM from 'react-dom';
 import {applyMiddleware, combineReducers, createStore} from "redux";
 import {Provider} from "react-redux";
-import App from "./components/App";
-import Error from "./components/Error";
+import App from "./components/app";
+import Error from "./components/error";
 
 const styles = require('./main.scss');
 
@@ -13,6 +13,7 @@ import createHistory from 'history/createBrowserHistory';
 import {loadRulesetPaths, loadSwagger} from "./resapi";
 import { defaultOptions, ResState} from "./state";
 import {createFormsStore, createHomeStore} from "./stores";
+import {standalone} from "./embedded";
 
 const history = createHistory();
 const historyMiddleware = routerMiddleware(history);
@@ -40,6 +41,11 @@ loadRulesetPaths()
 							,
 							document.getElementById('root')
 						);
+					});
+			} else if (rulesetPath.indexOf('/standalone') == 0) { // Test of the standalone mode
+				return loadSwagger(rulesetPath.substr('/standalone'.length), defaultOptions)
+					.then(({request, response}) => {
+						standalone(request, {}, {}, defaultOptions).render('root');
 					});
 			}
 		}

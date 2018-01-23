@@ -9,7 +9,7 @@ import {NormalizedRequestAndResponse, RootSchemaElement} from "./schema";
 export const createFormsStore = (res: NormalizedRequestAndResponse,
 																 executeRequest: WebRequest,
 																 options: Options,
-																 storeEnhancer: GenericStoreEnhancer) => {
+																 storeEnhancer: GenericStoreEnhancer): Store<FormsState> => {
 	const initialState: FormsState = {
 		requestSchema: res.request,
 		responseSchema: res.response,
@@ -31,7 +31,7 @@ export const createFormsStore = (res: NormalizedRequestAndResponse,
 	);
 };
 
-export const createHomeStore = (resState: ResState, storeEnhancer: GenericStoreEnhancer) => {
+export const createHomeStore = (resState: ResState, storeEnhancer: GenericStoreEnhancer): Store<HomeState> => {
 	return createStore<HomeState>(combineReducers({
 			res: emptyReducer,
 			page: emptyReducer
@@ -47,7 +47,7 @@ export const createStandaloneFormStore = (schema: RootSchemaElement,
 																					data: object,
 																					controller: FormController,
 																					options: Options,
-																					storeEnhancer: GenericStoreEnhancer) => {
+																					storeEnhancer: GenericStoreEnhancer) : Store<StandaloneFormState> => {
 	return createStore<StandaloneFormState>(combineReducers({
 			schema: emptyReducer,
 			data: emptyReducer,
