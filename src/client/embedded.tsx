@@ -75,13 +75,11 @@ export class InOutResult extends Result<FormsState> {
 }
 
 export class StandaloneFormResult extends Result<StandaloneFormState> {
-	private controller: FormController;
-	constructor(store: Store<StandaloneFormState>, handlers: FormHandlers) {
+	constructor(store: Store<StandaloneFormState>) {
 		super(store);
-		this.controller = new FormController(handlers);
 	}
 	submit() {
-		this.controller.submit();
+		this.store.getState().controller.submit();
 	}
 	render(rootId: string) {
 		ReactDOM.render(
@@ -132,7 +130,7 @@ export const standalone = (schema: RootSchemaElement,
 													 options: Options = defaultOptions) => {
 	const controller = new FormController(handlers);
 	const store = createStandaloneFormStore(schema, data, controller, options, applyMiddleware(thunkMiddleware));
-	return new StandaloneFormResult(store, handlers);
+	return new StandaloneFormResult(store);
 };
 
 /**

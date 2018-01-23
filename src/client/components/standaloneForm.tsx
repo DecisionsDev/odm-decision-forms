@@ -22,7 +22,6 @@ export interface DProps extends Props {
 
 class StandaloneForm extends React.Component<DProps, any> {
 	form: any;
-	controller: FormController;
 
 	constructor(props) {
 		super(props);
