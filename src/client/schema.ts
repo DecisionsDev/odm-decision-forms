@@ -54,3 +54,8 @@ export interface RootSchemaElement extends SchemaElement {
 	$schema: string,
 	definitions?: SchemaDefinitions
 }
+
+export interface NormalizedRequestAndResponse {
+	request: RootSchemaElement;
+	response: RootSchemaElement;
+}

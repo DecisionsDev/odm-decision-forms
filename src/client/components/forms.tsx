@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import {
-	DecisionState, DecisionStatus, FormsState, Options
+	DecisionState, DecisionStatus, FormController, FormsState, Options
 } from "../state";
-import Form from "react-jsonschema-form";
 import { execute } from "../actions";
 import { RootSchemaElement } from "../schema";
 import { RouterState } from 'react-router-redux'
-import { buildUiSchema } from "../resapi";
 import format from 'date-fns/format'
+import {JsonForm} from "./jsonform";
 
 require('es6-object-assign').polyfill();
 
@@ -23,40 +22,38 @@ export interface DProps extends Props {
 	dispatch: Dispatch<any>;
 }
 
-const log = (type) => console.log.bind(console, type);
-
 interface MessageField {
 	name: string;
 	value: string;
 }
 
+const log = (type) => console.log.bind(console, type);
+
 class Forms extends React.Component<DProps, any> {
 	form: any;
-	submitButton: any;
+	inputController: FormController;
+	outputController: FormController;
 
 	constructor(props) {
 		super(props);
-		this.state = {};
+		this.inputController = new FormController({
+			onSubmit: formData => props.dispatch(execute(formData)),
+			onError: error => log(error)
+		});
+		this.outputController = new FormController({
+			onError: error => log(error)
+		});
 	}
 
-	handleOnSubtmit(data) {
-		return this.props.dispatch(execute(data.formData));
+	doSubmit() {
+		this.inputController.submit();
 	}
 
 	render() {
-		const {requestSchema, responseSchema, executeResponse, options, dispatch} = this.props;
-		const inuiSchema = {
-			...buildUiSchema(requestSchema, options),
-			"ui:rootFieldId": "in"
-		};
-		const outuiSchema = {
-			...buildUiSchema(responseSchema, options),
-			"ui:rootFieldId": "out",
-			"ui:readonly": true
-		};
+		const {requestSchema, responseSchema, executeResponse, options} = this.props;
 		const makeFooterMessage = (fields: MessageField[]) => {
 			return <span>{ fields.map((f, i) => (
-				<span>
+				<span key={"message-field-" + i}>
 					<span className="message-field-name">{f.name}: </span>
 					<span className="message-field-value">{f.value}</span>{ (i < fields.length - 1) ? ' - ': ''}
 				</span>
@@ -66,26 +63,18 @@ class Forms extends React.Component<DProps, any> {
 			<div id="input" className="form-container">
 				<div className="form-header">
 					<h1>Input</h1>
-					<button type="submit" className="btn btn-success btn-lg" onClick={() => this.submitButton.click()}>
+					<button type="submit" className="btn btn-success btn-lg" onClick={() => this.doSubmit()}>
 						<span>Run</span>
 						<i className="fa fa-play" aria-hidden="true"/>
 					</button>
 				</div>
 				<div className="form-body">
-					<Form schema={requestSchema}
-								uiSchema={inuiSchema}
-								ObjectFieldTemplate={MyObjectFieldTemplate}
-								liveValidate={options.liveValidation}
-								formData={this.state}
-								onChange={({formData}) => this.setState(formData)}
-								onSubmit={data => this.handleOnSubtmit(data)}
-								onError={log("errors")} ref={form => {
-						this.form = form;
-					}}>
-						<button ref={(btn) => {
-							this.submitButton = btn;
-						}} className="hidden"/>
-					</Form>
+					<JsonForm schema={requestSchema}
+										data={{}}
+										readonly={false}
+										rootFieldId={"in"}
+										controller={this.inputController}
+										options={options}/>
 				</div>
 			</div>
 			<div id="output" className="form-container">
@@ -99,10 +88,12 @@ class Forms extends React.Component<DProps, any> {
 								case DecisionStatus.Result:
 								case DecisionStatus.NotRun:
 									return (
-										<Form uiSchema={outuiSchema}
-																ObjectFieldTemplate={MyObjectFieldTemplate}
-																formData={(executeResponse.status === DecisionStatus.Result) ? executeResponse.result : null}
-																schema={responseSchema}/>
+										<JsonForm schema={responseSchema}
+															data={(executeResponse.status === DecisionStatus.Result) ? executeResponse.result : {}}
+															readonly={true}
+															rootFieldId={"out"}
+															controller={this.outputController}
+															options={options}/>
 									);
 								case DecisionStatus.Error:
 									return (
@@ -137,35 +128,6 @@ class Forms extends React.Component<DProps, any> {
 		</div>
 	}
 }
-
-// Redefine the object field template to add a 'form-grid' div because CSS directive 'display:grid' does not work
-// on <fieldset>
-function MyObjectFieldTemplate(props) {
-	const {TitleField, DescriptionField} = props;
-	return (
-		<fieldset>
-			{(props.uiSchema["ui:title"] || props.title) && (
-				<TitleField
-					id={`${props.idSchema.$id}__title`}
-					title={props.title || props.uiSchema["ui:title"]}
-					required={props.required}
-					formContext={props.formContext}
-				/>
-			)}
-			{props.description && (
-				<DescriptionField
-					id={`${props.idSchema.$id}__description`}
-					description={props.description}
-					formContext={props.formContext}
-				/>
-			)}
-			<div className="form-grid">
-				{props.properties.map(prop => prop.content)}
-			</div>
-		</fieldset>
-	);
-}
-
 
 const mapStateToProps = (state: FormsState): Props => {
 	return {

@@ -4,7 +4,7 @@ const startCase = require('lodash.startcase');
 
 const axios = require("axios");
 import {
-	Format, RootSchemaElement, SchemaElement, Type, SchemaElementRef, SchemaDefinitions
+	Format, RootSchemaElement, SchemaElement, Type, SchemaElementRef, SchemaDefinitions, NormalizedRequestAndResponse
 } from "./schema";
 import {enumValues, flatMap, sortNumbers, valuesPolyfill} from "./utils";
 
@@ -16,14 +16,14 @@ export const loadSwagger = (rulesetPath, options: Options = defaultOptions): Pro
 	})
 };
 
-export const readSwagger = (swagger, options: Options = defaultOptions) => {
+export const readSwagger = (swagger, options: Options = defaultOptions): NormalizedRequestAndResponse => {
 	const requestSchema = {
 		$schema: "http://json-schema.org/draft-06/schema#",
 		definitions: swagger.definitions,
 		type: Type.TObject,
 		properties: swagger.definitions.Request.properties
 	} as RootSchemaElement;
-	const normalizedRequest = JSON.parse(JSON.stringify(requestSchema));
+	const normalizedRequest : RootSchemaElement = JSON.parse(JSON.stringify(requestSchema));
 //	delete (normalizedRequest as SchemaElement)!.properties!['__DecisionID__'];
 	normalizeSchema(normalizedRequest, options);
 	const responseSchema = {
@@ -32,10 +32,10 @@ export const readSwagger = (swagger, options: Options = defaultOptions) => {
 		type: Type.TObject,
 		properties: swagger.definitions.Response.properties
 	} as RootSchemaElement;
-	const normalizedResponse = JSON.parse(JSON.stringify(responseSchema));
+	const normalizedResponse : RootSchemaElement = JSON.parse(JSON.stringify(responseSchema));
 //	delete (normalizedResponse as SchemaElement)!.properties!['__DecisionID__'];
 	normalizeSchema(normalizedResponse, options);
-	return {request: normalizedRequest, response: normalizedResponse};
+	return { request: normalizedRequest, response: normalizedResponse};
 };
 
 interface Context {
