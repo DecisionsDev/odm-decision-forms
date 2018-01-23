@@ -56,6 +56,22 @@ export class JsonForm extends React.Component<Props, any> {
 		}
 	}
 
+	removeNullFields(data) {
+		// When displaying the output, we remove null 'parameters' (not undefined, but null!), ie first level data fields
+		// Otherwise if set to null by the RES (eg: if decision not taken), they would invalidate the Json schema that
+		// states that any parameter is non nullable
+		if (data) {
+			const clone = JSON.parse(JSON.stringify(data));
+			for (let p in clone) {
+				if (clone[p] == null) {
+					delete clone[p];
+				}
+			}
+			return clone;
+		}
+		return data;
+	}
+
 	render() {
 		const {schema, rootFieldId, readonly, options, data} = this.props;
 		const uiSchema = {
@@ -67,7 +83,7 @@ export class JsonForm extends React.Component<Props, any> {
 								 uiSchema={uiSchema}
 								 ObjectFieldTemplate={MyObjectFieldTemplate}
 								 liveValidate={options.liveValidation}
-								 formData={readonly ? data: this.state}
+								 formData={readonly ? this.removeNullFields(data): this.state}
 								 onChange={({formData}) => this.handleOnChange(formData)}
 								 onSubmit={({formData}) => this.handleOnSubtmit(formData)}
 								 onError={(error) => this.handleOnError(error)} ref={form => {
