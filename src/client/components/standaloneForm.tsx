@@ -5,7 +5,7 @@ import {
 } from "../state";
 import { RootSchemaElement } from "../schema";
 import { RouterState } from 'react-router-redux'
-import {JsonForm} from "./jsonform";
+import {JsonForm} from "./jsonForm";
 
 require('es6-object-assign').polyfill();
 
