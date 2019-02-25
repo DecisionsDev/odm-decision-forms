@@ -7,7 +7,7 @@ import { execute } from "../actions";
 import { RootSchemaElement } from "../schema";
 import { RouterState } from 'react-router-redux'
 import format from 'date-fns/format'
-import {JsonForm} from "./jsonform";
+import {JsonForm} from "./jsonForm";
 
 require('es6-object-assign').polyfill();
 
