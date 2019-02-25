@@ -58,7 +58,7 @@
     "build:dist": "rimraf dist && npm run build:dist:server && cross-env NODE_ENV=production webpack --config ./webpack.production.config.js --progress --profile --colors",
     "build:lib": "rimraf lib && cross-env NODE_ENV=production webpack --config ./webpack.lib.config.js --progress --profile --colors",
     "build": "npm run clean && npm run compile && npm run build:dist && npm run build:lib",
-    "patch": "npm build && npm version patch && npm publish",
+    "patch": "npm run build && npm version patch && npm publish",
     "test": "npm run test-only",
     "test-only": "jest --coverage",
     "test:watch": "jest --watch",
