@@ -27,7 +27,7 @@ export class Deferred<T> {
 		});
 	}
 
-	get promise(): Promise<T> {
+	promise(): Promise<T> {
 		return this._promise;
 	}
 
