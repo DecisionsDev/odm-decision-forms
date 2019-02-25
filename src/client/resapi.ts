@@ -153,11 +153,9 @@ const _normalizePayload = (schema: RootSchemaElement, schemaElementOrRef: Schema
 	}
 	if (schemaElement.type === Type.TObject) {
 		const newResult = {};
-		Object.keys(schemaElement.properties || {})
-			.filter(k => result[k] !== undefined) // to keep values like '0' or 'false' (checkboxes)
-			.forEach(k => {
-                newResult[k] = _normalizePayload(schema, schemaElement.properties![k], result[k]);
-			});
+		Object.keys(schemaElement.properties || {}).filter(k => result[k]).forEach(k => {
+			newResult[k] = _normalizePayload(schema, schemaElement.properties![k], result[k]);
+		});
 		return newResult;
 	} else if (schemaElement.type === Type.TArray) {
 		if (result) {
